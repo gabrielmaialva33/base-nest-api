@@ -13,20 +13,18 @@ datasource db {
 }
 
 
-// generated always as (first_name || ' ' || last_name) stored
-// @default(dbgenerated("0 generated always as (first_name || ' ' || last_name) stored"))
 model User {
   @@map("users")
 
   id        String   @db.Uuid           @map("id")         @default(dbgenerated("uuid_generate_v4()")) @id
   firstName String   @db.VarChar(80)    @map("first_name")
   lastName  String   @db.VarChar(80)    @map("last_name")
-  fullName  String?  @db.VarChar(160)   @map("full_name")  @default(dbgenerated("'' generated always as (first_name || ' ' || last_name) stored"))
+  fullName  String   @db.VarChar(160)   @map("full_name")  @default("concat(first_name, ' ', last_name)")
   email     String   @db.VarChar(255)   @map("email")      @unique
-  username  String   @db.VarChar(50)    @map("user_name")  @unique
+  userName  String   @db.VarChar(50)    @map("user_name")  @unique
   isDeleted Boolean  @db.Boolean        @map("is_deleted") @default(false)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime @default(now())    @map("created_at")
+  updatedAt DateTime @updatedAt         @map("updated_at")
+  deletedAt DateTime?                   @map("deleted_at")
 }
