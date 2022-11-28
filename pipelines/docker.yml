@@ -1,0 +1,48 @@
+parameters:
+  deploymentName: jDeployDocker
+  displayTitle: 'Build & Push Docker Image'
+  containerRegistry: '002ef7b0-d00d-4005-b661-9220b75d085e'
+  dockerImageName: 'base-os-api-dev'
+  dockerImageTag: latest
+
+jobs:
+  - job: ${{ parameters.deploymentName }}
+    displayName: ${{ parameters.displayTitle }}
+    pool:
+      vmImage: 'ubuntu-latest'
+    continueOnError: false
+
+    steps:
+      - task: DockerInstaller@0
+        displayName: 'Install Docker Cli'
+        inputs:
+          dockerVersion: '17.09.0-ce'
+
+      - task: Docker@2
+        displayName: 'Login into ${{ parameters.containerRegistry }}'
+        inputs:
+          containerRegistry: ${{ parameters.containerRegistry }}
+          command: 'login'
+
+      - task: Docker@2
+        displayName: 'Build Docker Image'
+        inputs:
+          containerRegistry: ${{ parameters.containerRegistry }}
+          repository: ${{ parameters.dockerImageName }}
+          command: 'build'
+          Dockerfile: '**/Dockerfile'
+          tags: latest
+
+      - task: Docker@2
+        displayName: 'Push Docker Image to Registry'
+        inputs:
+          containerRegistry: ${{ parameters.containerRegistry }}
+          repository: ${{ parameters.dockerImageName }}
+          command: 'push'
+          tags: latest
+
+      - task: Docker@2
+        displayName: 'Logout ${{ parameters.containerRegistry }}'
+        inputs:
+          containerRegistry: ${{ parameters.containerRegistry }}
+          command: 'logout'

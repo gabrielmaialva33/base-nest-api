@@ -1,0 +1,24 @@
+parameters:
+  buildName: jBuildDSV
+  displayTitle: 'Build API'
+
+jobs:
+  - job: ${{ parameters.buildName }}
+    displayName: ${{ parameters.displayTitle }}
+    pool:
+      vmImage: 'ubuntu-latest'
+    continueOnError: false
+
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '16.x'
+        displayName: 'Install Node.js'
+
+      - script: |
+          npm install
+        displayName: 'Install'
+
+      - script: |
+          npm run build
+        displayName: 'Build'

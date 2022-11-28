@@ -1,0 +1,36 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: 'sBuild'
+    displayName: 'Build'
+    jobs:
+      - template: pipelines/build.yml
+        parameters:
+          buildName: jBuild
+          displayTitle: 'Build'
+  - stage: 'sDeployDEV'
+    displayName: 'Deploy DEV'
+    jobs:
+      - template: pipelines/docker.yml
+        parameters:
+          deploymentName: jDeployDockerDEV
+          displayTitle: 'Push Docker Image on DEV'
+          containerRegistry: 'pdasolucoes'
+          dockerImageName: 'base-os-api-dev'
+      - template: pipelines/deploy.yml
+        parameters:
+          depends: jDeployDockerDEV
+          deploymentName: jDeploy
+          environmentName: 'DEVELOPMENT'
+          displayTitle: 'Deploy API in Development'
+          poolName: 'Azure Pipelines'
+          azureSubscriptionName: 'jDeploy'
+          containerRegistry: 'pdasolucoes'
+          dockerImageName: 'base-os-api-dev'
+          dockerImageTag: latest
+          webAppName: 'base-os-api'
+          webAppSlot: 'PRODUCTION'

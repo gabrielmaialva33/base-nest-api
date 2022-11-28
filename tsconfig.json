@@ -16,6 +16,32 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@src/*": [
+        "src/*"
+      ],
+      "@app/*": [
+        "src/modules/app/*"
+      ],
+      "@auth/*": [
+        "src/modules/auth/*"
+      ],
+      "@common/*": [
+        "src/common/*"
+      ],
+      "@health/*": [
+        "src/modules/health/*"
+      ],
+      "@logger/*": [
+        "src/modules/logger/*"
+      ],
+      "@role/*": [
+        "src/modules/role/*"
+      ],
+      "@user/*": [
+        "src/modules/user/*"
+      ]
+    }
   }
 }

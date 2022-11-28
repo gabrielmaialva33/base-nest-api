@@ -1,0 +1,7 @@
+{
+  "Not Found": "Não encontrado(a)",
+  "Bad Request": "Requisição inválida",
+  "Internal Server Error": "Erro interno do servidor",
+  "Forbidden": "Proibido",
+  "Unauthorized": "Não autorizado"
+}

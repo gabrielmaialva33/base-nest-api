@@ -1,0 +1,379 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: PDA API
+  description: 'This is a simple ACL API built with NestJS'
+  contact:
+    name: Maia
+    email: gabrielmaialva33@gmail.com
+    url: github.com/gabrielmaialva33
+servers:
+  - url: http://127.0.0.1:3333
+    description: Local server
+  - url: http://127.0.0.1:3000
+    description: Docker server
+  - url: https://base-nest-api.mrootx.xyz/
+    description: Azure server
+  - url: https://base-os-api.azurewebsites.net/
+    description: Azure Web App
+paths:
+  /sign_in:
+    post:
+      tags:
+        - Auth
+      summary: Sign in
+      description: Use to sign in
+      requestBody:
+        description: UserEntity object that needs to be signed in
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignIn'
+      responses:
+        '200':
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEntity'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+  /sign_up:
+    post:
+      tags:
+        - Auth
+      summary: Sign up
+      description: Use to sign up
+      requestBody:
+        description: UserEntity object that needs to be signed up
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUp'
+      responses:
+        '200':
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEntity'
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+
+  /users:
+    get:
+      tags:
+        - UserEntity
+      summary: List users
+      description: Use to request all users
+      operationId: GetAllUsers
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+            default: 10
+          description: Number of users per page
+        - in: query
+          name: search
+          schema:
+            type: string
+            example: 'John'
+          description: Search by public fields
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: id
+          description: Sort by field
+        - in: query
+          name: direction
+          schema:
+            type: string
+            default: asc
+      security:
+        - bearerToken: [ ]
+      responses:
+        '200':
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserEntity'
+    post:
+      tags:
+        - UserEntity
+      summary: Store user
+      description: Use to create a user
+      operationId: StoreUser
+      security:
+        - bearerToken: [ ]
+      requestBody:
+        description: UserEntity object that needs to be added to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreUser'
+      responses:
+        '201':
+          description: UserEntity created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEntity'
+        '400':
+          description: Invalid input
+  /users/{userId}:
+    get:
+      tags:
+        - UserEntity
+      summary: Get user
+      description: Use to request a user
+      operationId: GetUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerToken: [ ]
+      responses:
+        '200':
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEntity'
+        '404':
+          description: UserEntity not found
+    put:
+      tags:
+        - UserEntity
+      summary: Edit user
+      description: Use to edit a user
+      operationId: EditUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerToken: [ ]
+      requestBody:
+        description: UserEntity object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditUser'
+      responses:
+        '200':
+          description: UserEntity updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEntity'
+        '400':
+          description: Invalid input
+        '404':
+          description: UserEntity not found
+    delete:
+      tags:
+        - UserEntity
+      summary: Delete user
+      description: Use to delete a user
+      operationId: DeleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerToken: [ ]
+      responses:
+        '204':
+          description: UserEntity deleted
+        '404':
+          description: UserEntity not found
+
+tags:
+  - name: Auth
+    description: Operations about auth
+  - name: UserEntity
+    description: Operations about users
+components:
+  securitySchemes:
+    bearerToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    '200':
+      description: OK
+    '401':
+      description: Unauthorized
+    '422':
+      description: Unprocessable Entity
+    '404':
+      description: Not Found
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 961d77f4-458c-4add-b419-ba70f1b18297
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john@base.com
+        user_name:
+          type: string
+          example: john
+        password:
+          type: string
+          example: '123456'
+        is_online:
+          type: boolean
+          example: false
+      required:
+        - first_name
+        - last_name
+        - email
+        - user_name
+        - password
+      example:
+        id: 961d77f4-458c-4add-b419-ba70f1b18297
+        first_name: John
+        last_name: Doe
+        email: john@base.com
+        user_name: john
+        password: '123456'
+
+    StoreUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john@base.com
+        user_name:
+          type: string
+          example: john
+        password:
+          type: string
+          example: '123456'
+      required:
+        - first_name
+        - last_name
+        - email
+        - user_name
+        - password
+      example:
+        first_name: John
+        last_name: Doe
+        email: john@base.com
+        user_name: john
+        password: '123456'
+    EditUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john@base.com
+        user_name:
+          type: string
+          example: john
+        password:
+          type: string
+          example: '123456'
+      example:
+        first_name: John
+        last_name: Doe
+        email: john@base.com
+        user_name: john
+        password: '123456'
+
+    SignIn:
+      type: object
+      properties:
+        uid:
+          type: string
+          example: 'admin'
+        password:
+          type: string
+          example: '123456'
+      required:
+        - uid
+        - password
+      example:
+        uid: 'admin'
+        password: '123456'
+    SignUp:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: John
+        last_name:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john@base.com
+        user_name:
+          type: string
+          example: john
+        password:
+          type: string
+          example: '123456'
+      required:
+        - first_name
+        - last_name
+        - email
+        - user_name
+        - password
+      example:
+        first_name: John
+        last_name: Doe
+        email: john@base.com
+        user_name: john
+        password: '123456'

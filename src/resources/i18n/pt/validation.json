@@ -1,0 +1,15 @@
+{
+  "length": "{property} deve ter no mínimo {constraints.0} caracteres e no máximo {constraints.1} caracteres",
+  "maxLength": "{property} não pode ser maior que {constraints.0} caracteres",
+  "minLength": "{property} não pode ser menor que {constraints.0} caracteres",
+  "max": "{property} pode ser maior ou igual a {constraints.0}",
+  "min": "{property} pode ser menor ou igual a {ln}",
+  "isPassword": "A senha deve conter pelo menos 8 caracteres, uma letra maiúscula, uma letra minúscula e um número",
+  "isIn": "{property} deve ser estar entre {items}",
+  "isEnum": "{property} deve ser um dos seguintes valores: {items}",
+  "isDataType": "{property} deve ser um {type} de dado válido",
+  "isDate": "{property} deve ser uma data válida",
+  "isNotEmpty": "{property} não pode ser vazio",
+  "isEmail": "{property} deve ser um email válido",
+  "isUnique": "{property} já está em uso"
+}
