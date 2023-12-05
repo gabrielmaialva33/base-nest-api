@@ -6,7 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -18,30 +18,8 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@src/*": [
-        "src/*"
-      ],
-      "@app/*": [
-        "src/modules/app/*"
-      ],
-      "@auth/*": [
-        "src/modules/auth/*"
-      ],
-      "@common/*": [
-        "src/common/*"
-      ],
-      "@health/*": [
-        "src/modules/health/*"
-      ],
-      "@logger/*": [
-        "src/modules/logger/*"
-      ],
-      "@role/*": [
-        "src/modules/role/*"
-      ],
-      "@user/*": [
-        "src/modules/user/*"
-      ]
+      "@src/*": ["src/*"]
     }
-  }
+  },
+  "include": ["src/**/*"],
 }
