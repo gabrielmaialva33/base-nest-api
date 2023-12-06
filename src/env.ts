@@ -16,7 +16,7 @@ export const Env = cleanEnv(process.env, {
   }),
   DB_HOST: str({ default: 'localhost', desc: 'The database host' }),
   DB_PORT: num({ default: 5432, desc: 'The database port' }),
-  DB_USER: str({ default: 'postgres', desc: 'The database user' }),
+  DB_USER: str({ default: 'postgres', desc: 'The database users' }),
   DB_PASSWORD: str({ default: 'postgres', desc: 'The database password' }),
   DB_NAME: str({ default: 'postgres', desc: 'The database name' }),
   DB_DEBUG: bool({ default: false, desc: 'The database debug mode' }),

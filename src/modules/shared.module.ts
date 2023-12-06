@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { UsersModule } from '@src/modules/users/users.module';
 
-@Module({ providers: [], exports: [] })
+@Module({ imports: [UsersModule] })
 export class SharedModule {}
