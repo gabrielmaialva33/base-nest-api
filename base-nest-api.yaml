@@ -1,0 +1,91 @@
+openapi: 3.0.3
+info:
+  title: Base Nest API
+  version: 1.0.0
+  description: Api documentation for base nest api
+  contact:
+    name: Gabriel M.
+    email: gabrielmaialva33@gmail.com
+    url: https://github.com/gabrielmaialva33
+servers:
+  - url: http://localhost:3000
+    description: Local server
+paths:
+  /api/users:
+    get:
+      summary: Get all users
+      description: Get all users
+      operationId: getAllUsers
+      tags:
+        - Users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+tags:
+  - name: User
+    description: Operations about users
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: User id
+        name:
+          type: string
+          description: User name
+        email:
+          type: string
+          description: User email
+        password:
+          type: string
+          description: User password
+        createdAt:
+          type: string
+          format: date-time
+          description: User creation date
+        updatedAt:
+          type: string
+          format: date-time
+          description: User update date
+      required:
+        - id
+        - name
+        - email
+        - password
+        - createdAt
+        - updatedAt
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        internalCode:
+          type: string
+          description: Error internal code
+      required:
+        - message
+        - internalCode
+
+

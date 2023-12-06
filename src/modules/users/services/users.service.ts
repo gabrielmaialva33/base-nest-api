@@ -1,16 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
+import {
+  IUserRepository,
+  USER_REPOSITORY,
+} from '@src/modules/users/interfaces/user.interface';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: IUserRepository,
+  ) {}
+
   create(data: CreateUserDto) {
     return data;
   }
 
   list() {
-    return `This action returns all users`;
+    return this.userRepository.all();
   }
 
   get(id: number) {
