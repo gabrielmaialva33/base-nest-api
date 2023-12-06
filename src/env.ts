@@ -9,8 +9,11 @@ export const Env = cleanEnv(process.env, {
   HOST: str({ default: '0.0.0.0', desc: 'The host to run on' }),
   PORT: num({ default: 3000, desc: 'The port to run on' }),
   API_PREFIX: str({ default: 'api', desc: 'The api prefix' }),
-
   // Database
+  DB_CLIENT: str({
+    default: 'sqlite',
+    desc: 'The database client (sqlite, pg)',
+  }),
   DB_HOST: str({ default: 'localhost', desc: 'The database host' }),
   DB_PORT: num({ default: 5432, desc: 'The database port' }),
   DB_USER: str({ default: 'postgres', desc: 'The database user' }),

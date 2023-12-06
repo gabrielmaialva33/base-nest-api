@@ -17,7 +17,13 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:migrate": "ts-node -r tsconfig-paths/register ./node_modules/knex/bin/cli.js --knexfile ./knexfile.ts migrate:latest",
+    "db:rollback": "ts-node -r tsconfig-paths/register ./node_modules/knex/bin/cli.js --knexfile ./knexfile.ts migrate:rollback",
+    "db:make": "ts-node -r tsconfig-paths/register ./node_modules/knex/bin/cli.js --knexfile ./knexfile.ts migrate:make $1 -x ts",
+    "db:reset": "ts-node -r tsconfig-paths/register ./node_modules/knex/bin/cli.js --knexfile ./knexfile.ts migrate:rollback && ts-node -r tsconfig-paths/register ./node_modules/knex/bin/cli.js --knexfile ./knexfile.ts migrate:latest",
+    "db:seed": "ts-node -r tsconfig-paths/register ./node_modules/knex/bin/cli.js --knexfile ./knexfile.ts seed:run",
+    "db:prune:sqlite": "rimraf ./src/database/database.sqlite"
   },
   "dependencies": {
     "@fastify/compress": "^6.5.0",
@@ -28,7 +34,12 @@
     "@nestjs/core": "^10.2.10",
     "@nestjs/platform-express": "^10.2.10",
     "@nestjs/platform-fastify": "^10.2.10",
+    "better-sqlite3": "^9.2.2",
     "envalid": "^8.0.0",
+    "fast-glob": "^3.3.2",
+    "knex": "^3.0.1",
+    "objection": "^3.1.3",
+    "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },
@@ -37,7 +48,7 @@
     "@nestjs/schematics": "^10.0.3",
     "@nestjs/testing": "^10.2.10",
     "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.10",
+    "@types/jest": "^29.5.11",
     "@types/node": "^20.10.3",
     "@types/supertest": "^2.0.16",
     "@typescript-eslint/eslint-plugin": "^6.13.2",

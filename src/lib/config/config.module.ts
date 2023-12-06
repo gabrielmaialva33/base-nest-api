@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { Env, validateEnv } from '@src/lib/config/env';
+
+import { Env, validateEnv } from '@src/env';
+import { app, database, postgres, sqlite } from '@src/lib/config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      load: [app, database, postgres, sqlite],
       isGlobal: true,
       cache: true,
       expandVariables: true,
