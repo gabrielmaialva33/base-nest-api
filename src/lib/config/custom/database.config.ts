@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
 import { registerAs } from '@nestjs/config';
+
 import { POSTGRES_CONFIG, SQLITE_CONFIG } from '@src/lib/config';
 import { Env } from '@src/env';
 

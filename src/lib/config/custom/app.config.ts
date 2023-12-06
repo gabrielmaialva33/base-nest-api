@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 import { registerAs } from '@nestjs/config';
-import { Env } from '../../../env';
+import { Env } from '@src/env';
 
 export const app = registerAs('app', () => ({
   env: Env.NODE_ENV,

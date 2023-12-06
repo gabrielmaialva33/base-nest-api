@@ -3,8 +3,8 @@ import { registerAs } from '@nestjs/config';
 
 import * as process from 'process';
 
-import { Env } from '../../../env';
 import { KnexLogger } from '@src/common/helpers/knex.utils';
+import { Env } from '@src/env';
 
 export const SQLITE_CONFIG: Knex.Config<Knex.Sqlite3ConnectionConfig> = {
   client: 'better-sqlite3',

@@ -1,7 +1,8 @@
 import { Knex } from 'knex';
-import { Env } from '../../../env';
-import { KnexLogger } from '@src/common/helpers/knex.utils';
 import { registerAs } from '@nestjs/config';
+
+import { KnexLogger } from '@src/common/helpers/knex.utils';
+import { Env } from '@src/env';
 
 export const POSTGRES_CONFIG: Knex.Config = {
   client: 'pg',
