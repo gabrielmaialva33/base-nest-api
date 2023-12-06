@@ -1,45 +1,65 @@
 import { Knex } from 'knex';
-
 import { Logger } from '@nestjs/common';
 
-export const KnexUtils = {
-  formatSql: (sql: string, bindings: any[]) => {
-    if (sql === undefined) return '';
-    if (bindings === undefined) return sql;
+type LogMessage = {
+  sql?: string;
+  bindings?: unknown[];
+  level: LogLevels;
+};
 
-    let i = 0;
-    return sql.replace(/\?/g, () => {
-      const item = bindings[i++];
-      if (typeof item === 'string') return `'${item}'`;
-      return item;
-    });
+export enum LogLevels {
+  DEBUG = 'debug',
+  WARN = 'warn',
+  ERROR = 'error',
+}
+
+export const KnexUtils = {
+  formatSql: (
+    sql: string | undefined,
+    bindings: unknown[] | undefined,
+  ): string => {
+    if (!sql) return '';
+    if (!bindings) return sql;
+
+    let index = 0;
+    try {
+      return sql.replace(/\?/g, () => {
+        const binding = bindings[index++];
+        if (typeof binding === 'string') {
+          return `'${binding}'`;
+        }
+        return String(binding);
+      });
+    } catch (error) {
+      return `Error in formatting SQL: ${error}`;
+    }
   },
 };
 
-export const KnexLogger = {
-  debug: (message) => {
-    if (message.sql)
-      Logger.debug(
-        KnexUtils.formatSql(message.sql, message.bindings),
-        'Knex-SQL',
-      );
-    else Logger.debug(message, 'Knex-SQL');
+const logger = new Logger('Knex-SQL');
+
+const logMessage = (message: LogMessage) => {
+  const formattedMessage = message.sql
+    ? KnexUtils.formatSql(message.sql, message.bindings)
+    : message;
+  logger[message.level](formattedMessage);
+};
+
+export const KnexLogger: Knex.Logger = {
+  debug: (message: LogMessage | LogMessage[]) => {
+    if (Array.isArray(message))
+      message.forEach((m) => logMessage({ ...m, level: LogLevels.DEBUG }));
+    else logMessage({ ...message, level: LogLevels.DEBUG });
   },
-  error: (message) => {
-    if (message.sql)
-      Logger.error(
-        KnexUtils.formatSql(message.sql, message.bindings),
-        'Knex-SQL',
-      );
-    else Logger.error(message, 'Knex-SQL');
+  error: (message: LogMessage | LogMessage[]) => {
+    if (Array.isArray(message))
+      message.forEach((m) => logMessage({ ...m, level: LogLevels.ERROR }));
+    else logMessage({ ...message, level: LogLevels.ERROR });
   },
-  warn: (message) => {
-    if (message.sql)
-      Logger.warn(
-        KnexUtils.formatSql(message.sql, message.bindings),
-        'Knex-SQL',
-      );
-    else Logger.warn(message, 'Knex-SQL');
+  warn: (message: LogMessage | LogMessage[]) => {
+    if (Array.isArray(message))
+      message.forEach((m) => logMessage({ ...m, level: LogLevels.WARN }));
+    else logMessage({ ...message, level: LogLevels.WARN });
   },
   enableColors: true,
-} as Knex.Logger;
+};
