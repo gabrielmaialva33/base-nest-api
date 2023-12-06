@@ -1,6 +1,7 @@
+import { from, Observable } from 'rxjs';
+
 import { IKnexRepository } from '@src/common/module/knex-repository.interface';
 import { BaseEntity } from '@src/common/module/base.entity';
-import { from, Observable } from 'rxjs';
 
 export class KnexRepository<T extends BaseEntity>
   implements IKnexRepository<T>

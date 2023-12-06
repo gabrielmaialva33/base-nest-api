@@ -1,5 +1,5 @@
-import { BaseEntity } from '@src/common/module/base.entity';
 import { Observable } from 'rxjs';
+import { BaseEntity } from '@src/common/module/base.entity';
 
 export interface IKnexRepository<T extends BaseEntity> {
   /**
