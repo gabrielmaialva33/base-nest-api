@@ -37,6 +37,7 @@
     "@nestjs/platform-express": "^10.2.10",
     "@nestjs/platform-fastify": "^10.2.10",
     "better-sqlite3": "^9.2.2",
+    "dotenv": "^16.3.1",
     "envalid": "^8.0.0",
     "fast-glob": "^3.3.2",
     "knex": "^3.0.1",

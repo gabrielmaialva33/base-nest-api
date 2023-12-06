@@ -35,6 +35,9 @@ dependencies:
   better-sqlite3:
     specifier: ^9.2.2
     version: 9.2.2
+  dotenv:
+    specifier: ^16.3.1
+    version: 16.3.1
   envalid:
     specifier: ^8.0.0
     version: 8.0.0
