@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { map, switchMap } from 'rxjs';
 
 import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
@@ -14,20 +15,32 @@ export class UsersService {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  create(data: CreateUserDto) {
-    return data;
-  }
-
   list() {
-    return this.userRepository.all();
+    return this.userRepository.all((query) => {
+      query.orderBy('id', 'desc');
+    });
   }
 
   get(id: number) {
-    return `This action returns a #${id} user`;
+    return this.userRepository.get({ id }).pipe(
+      map((user) => {
+        if (!user) throw new NotFoundException({ message: 'User not found' });
+        return user;
+      }),
+    );
+  }
+
+  create(data: CreateUserDto) {
+    return this.userRepository.create(data);
   }
 
   edit(id: number, data: UpdateUserDto) {
-    return `This action updates a #${id} user with ${JSON.stringify(data)}`;
+    return this.get(id).pipe(
+      switchMap((user) => {
+        user.$set(data);
+        return this.userRepository.update(user);
+      }),
+    );
   }
 
   delete(id: number) {

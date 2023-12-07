@@ -33,14 +33,16 @@
     "@nestjs/common": "^10.2.10",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.2.10",
-    "@nestjs/mapped-types": "*",
+    "@nestjs/mapped-types": "^2.0.4",
     "@nestjs/platform-express": "^10.2.10",
     "@nestjs/platform-fastify": "^10.2.10",
     "better-sqlite3": "^9.2.2",
     "dotenv": "^16.3.1",
     "envalid": "^8.0.0",
     "fast-glob": "^3.3.2",
+    "helper-fns": "^2.6.43",
     "knex": "^3.0.1",
+    "luxon": "^3.4.4",
     "objection": "^3.1.3",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
@@ -54,6 +56,7 @@
     "@nestjs/testing": "^10.2.10",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.11",
+    "@types/luxon": "^3.3.7",
     "@types/node": "^20.10.3",
     "@types/supertest": "^2.0.16",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
@@ -69,7 +72,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.3"
   },
   "jest": {
     "moduleFileExtensions": [

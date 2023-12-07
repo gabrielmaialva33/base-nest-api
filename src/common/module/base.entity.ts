@@ -1,4 +1,5 @@
-import { Model } from 'objection';
+import Objection, { Model } from 'objection';
+import { DateTime } from 'luxon';
 
 export class BaseEntity extends Model {
   /**
@@ -14,9 +15,18 @@ export class BaseEntity extends Model {
 
   /**
    * ------------------------------------------------------
+   * Columns
+   * ------------------------------------------------------
+   */
+
+  /**
+   * ------------------------------------------------------
    * Hooks
    * ------------------------------------------------------
    */
+  $afterInsert() {}
+
+  $beforeUpdate() {}
 
   /**
    * ------------------------------------------------------

@@ -1,3 +1,6 @@
+import { Pojo } from 'objection';
+import { omit } from 'helper-fns';
+
 import { BaseEntity } from '@src/common/module/base.entity';
 
 export class User extends BaseEntity {
@@ -19,8 +22,8 @@ export class User extends BaseEntity {
   is_email_verified: boolean;
   is_deleted: boolean;
   deleted_at: Date;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 
   /**
    * ------------------------------------------------------
@@ -33,6 +36,8 @@ export class User extends BaseEntity {
    * Hooks
    * ------------------------------------------------------
    */
+  $afterInsert() {}
+  $beforeUpdate() {}
 
   /**
    * ------------------------------------------------------
@@ -45,4 +50,8 @@ export class User extends BaseEntity {
    * Misc
    * ------------------------------------------------------
    */
+  $formatJson(json: Pojo) {
+    json = super.$formatJson(json);
+    return omit(json, ['password', 'is_deleted', 'deleted_at']);
+  }
 }
