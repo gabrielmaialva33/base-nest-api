@@ -99,5 +99,24 @@ export interface IKnexRepository<T extends BaseEntity> {
    */
   bulkCreate(payload: Partial<T>[], builder?: Builder<T>): Observable<T[]>;
 
-  update(model: T): Observable<T>;
+  /**
+   * Update a record.
+   *
+   * @param {T} model - The model to update
+   * @param {Builder<T>} builder - The query to filter the records
+   * @returns {Observable<T>}
+   *
+   * @example
+   * const user = await this.repository.get({ id: 1 });
+   * const model = this.repository.update(user);
+   * model.subscribe(result => console.log(result));
+   *
+   * @example
+   * const user = await this.repository.get({ id: 1 });
+   * const model = this.repository.update(user, query => query.where('id', '!=', 1));
+   * model.subscribe(result => console.log(result));
+   *
+   * @memberof IKnexRepository
+   */
+  update(model: T, builder?: Builder<T>): Observable<T>;
 }

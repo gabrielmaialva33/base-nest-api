@@ -64,9 +64,7 @@ export class KnexRepository<T extends BaseEntity>
     ).pipe(map((result) => result as T[]));
   }
 
-  update(model: T): Observable<T> {
-    return from(model.$query().update().returning('*')).pipe(
-      map((result) => result as T),
-    );
+  update(model: T, builder?: Builder<T>): Observable<T> {
+    return from(model.$query().update()).pipe(map((result) => result as T));
   }
 }
