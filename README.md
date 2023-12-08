@@ -111,7 +111,7 @@ This project is under the **MIT** license. [MIT](./LICENSE) ❤️
 
 <br>
 
-### :rocket: **Contributors**
+## :rocket: **Contributors**
 
 | [![Maia](https://avatars.githubusercontent.com/u/26732067?size=100)](https://github.com/gabrielmaialva33) |
 |-----------------------------------------------------------------------------------------------------------|
@@ -121,4 +121,5 @@ Made with ❤️ by Maia 👋🏽 [Get in touch!](https://t.me/mrootx)
 
 Liked? Leave a little star to help the project ⭐
 
+<br>
 

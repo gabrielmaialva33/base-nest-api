@@ -121,4 +121,5 @@ Feito com ❤️ por Maia 👋🏽 [Entre em contato!]_(https://t.me/mrootx)_
 
 Gostou? Deixe uma estrelinha para ajudar o projeto ⭐
 
+<br>
 
