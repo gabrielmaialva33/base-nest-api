@@ -19,7 +19,7 @@ export const isUnique = async <T extends BaseEntity>(
   field: ModelProps<T>,
   value: string | number,
 ): Promise<boolean | Error> => {
-  if (!value || typeof value !== 'string' || value.trim() === '') return true;
+  if (!value || typeof value !== 'string' || value.trim() === '') return false;
   if (field === 'id') new Error('Cannot check uniqueness for "id" field');
 
   try {
@@ -41,20 +41,22 @@ export const isUnique = async <T extends BaseEntity>(
  * @param entity The entity class to perform the query.
  * @param clause The criteria used to find the record. Should be a partial object of the entity type.
  * @throws Throws an error if the database query fails.
- * @returns True if at least one record exists that matches the criteria, false otherwise.
+ * @returns False if at least one record exists that matches the criteria, true otherwise.
  */
 export const isExists = async <T extends BaseEntity>(
   entity: ModelClass<T>,
   clause: Partial<ModelObject<T>>,
 ): Promise<boolean | Error> => {
-  if (!clause || Object.keys(clause).length === 0) {
+  if (!clause || Object.keys(clause).length === 0)
     throw new Error('Invalid search criteria provided');
-  }
+
+  // If any of the values are undefined, return true
+  if (Object.values(clause).some((value) => value === undefined)) return true;
 
   try {
     const count = await entity.query().where(clause).resultSize();
 
-    return count > 0;
+    return count === 0;
   } catch (error) {
     // Log and handle the error appropriately
     throw new Error('Failed to validate existence due to a database error');

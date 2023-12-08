@@ -3,6 +3,7 @@ import { from, map, Observable } from 'rxjs';
 import {
   IKnexRepository,
   Builder,
+  SingleBuilder,
 } from '@src/common/module/knex-repository.interface';
 import { BaseEntity } from '@src/common/module/base.entity';
 
@@ -62,7 +63,15 @@ export class KnexRepository<T extends BaseEntity>
     ).pipe(map((result) => result as T[]));
   }
 
-  update(model: T, builder?: Builder<T>): Observable<T> {
-    return from(model.$query().update()).pipe(map((result) => result as T));
+  update(model: T, builder?: SingleBuilder<T>): Observable<T> {
+    return from(
+      model
+        .$query()
+        .modify((query) => {
+          if (typeof builder === 'function') query.modify(builder);
+        })
+        .update()
+        .returning('*'),
+    ).pipe(map((result) => result as T));
   }
 }

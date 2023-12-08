@@ -10,6 +10,7 @@ export const CreateUserSchema = z.object({
   email: z
     .string()
     .email()
+    .transform((value) => value.toLowerCase().trim())
     .refine((value) => isUnique<User>(User, 'email', value), {
       message: 'Email is already taken',
     }),
@@ -19,6 +20,8 @@ export const CreateUserSchema = z.object({
     .string()
     .min(4)
     .max(20)
+    .transform((value) => value.toLowerCase())
+    .transform((value) => value.replace(/\s/g, '').trim())
     .optional()
     .refine((value) => isUnique<User>(User, 'username', value), {
       message: 'Username is already taken',

@@ -1,9 +1,18 @@
 import { Observable } from 'rxjs';
-import { ModifierFunction, QueryBuilder } from 'objection';
+import {
+  Modifier,
+  ModifierFunction,
+  QueryBuilder,
+  QueryBuilderType,
+  SingleQueryBuilder,
+} from 'objection';
 
 import { BaseEntity } from '@src/common/module/base.entity';
 
 export type Builder<T extends BaseEntity> = ModifierFunction<QueryBuilder<T>>;
+export type SingleBuilder<T extends BaseEntity> = Modifier<
+  SingleQueryBuilder<QueryBuilderType<T>>
+>;
 
 export interface IKnexRepository<T extends BaseEntity> {
   /**
@@ -103,7 +112,7 @@ export interface IKnexRepository<T extends BaseEntity> {
    * Update a record.
    *
    * @param {T} model - The model to update
-   * @param {Builder<T>} builder - The query to filter the records
+   * @param {SingleBuilder<T>} builder - The query to filter the records
    * @returns {Observable<T>}
    *
    * @example
@@ -118,5 +127,5 @@ export interface IKnexRepository<T extends BaseEntity> {
    *
    * @memberof IKnexRepository
    */
-  update(model: T, builder?: Builder<T>): Observable<T>;
+  update(model: T, builder?: SingleBuilder<T>): Observable<T>;
 }

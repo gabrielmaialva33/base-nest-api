@@ -8,14 +8,32 @@ export const UpdateUserSchema = z.object({
   last_name: z.string().min(2).max(255).optional(),
   email: z
     .string()
-    .email()
     .optional()
+    .refine(
+      (value) => value === '' || z.string().email().safeParse(value).success,
+      {
+        message: 'Invalid email',
+      },
+    )
+    .transform((value) => (value === '' ? undefined : value))
     .refine((value) => isExists<User>(User, { email: value }), {
       message: 'Email is already taken',
     }),
   password: z.string().min(6).max(50).optional(),
   avatar_url: z.string().url().optional().nullable(),
-  username: z.string().min(4).max(20).optional(),
+  username: z
+    .string()
+    .optional()
+    .refine(
+      (value) => value === '' || (value.length >= 4 && value.length <= 20),
+      {
+        message: 'Username must be between 4 and 20 characters',
+      },
+    )
+    .transform((value) => (value === '' ? undefined : value))
+    .refine((value) => isExists<User>(User, { username: value }), {
+      message: 'Username is already taken',
+    }),
 });
 
 export class UpdateUserDto extends CreateZodDto(UpdateUserSchema) {}
