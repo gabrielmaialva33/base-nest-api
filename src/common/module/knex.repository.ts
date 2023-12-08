@@ -5,8 +5,6 @@ import {
   Builder,
 } from '@src/common/module/knex-repository.interface';
 import { BaseEntity } from '@src/common/module/base.entity';
-import { query } from 'express';
-import { undefined } from 'zod';
 
 export class KnexRepository<T extends BaseEntity>
   implements IKnexRepository<T>

@@ -1,7 +1,7 @@
 <h1 align="center">
-  <img src=".github/assets/coding.png" height="200" alt="acl">
+  <img src=".github/assets/workforce.png" height="200" alt="acl">
   <br>
-  Base API in <a href="https://nestjs.com/" target="_blank">NestJS</a>
+  Base API em <a href="https://nestjs.com/" target="_blank">NestJS</a>
   <br>
 </h1>
 
@@ -22,26 +22,26 @@
 <p align="center">
     <a href="README.md">English</a>
     ·
-    <a href="README-pt.md">Portuguese</a>
+    <a href="README-pt.md">Português</a>
 </p>
 
 <p align="center">
-  <a href="#bookmark-about">About</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#computer-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#wrench-tools">Tools</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#package-installation">Installation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#memo-license">License</a>
+  <a href="#bookmark-about">Sobre</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#computer-technologies">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#wrench-tools">Ferramentas</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#package-installation">Instalação</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#memo-license">Licença</a>
 </p>
 
 <br>
 
-## :bookmark: About
+## :bookmark: Sobre
 
-**Base Nest API** is an access control list base api that hopes to serve many projects written in Typescript.
+**Base Nest API** é uma api base de controle de acesso que espera servir a muitos projetos escritos em Typescript.
 
 <br>
 
-## :computer: Technologies
+## :computer: Tecnologias
 
 - **[Typescript](https://www.typescriptlang.org/)**
 - **[NestJS](https://nestjs.com/)**
@@ -53,7 +53,7 @@
 
 <br>
 
-## :wrench: Tools
+## :wrench: Ferramentas
 
 - **[WebStorm](https://www.jetbrains.com/webstorm/)**
 - **[DataGrip](https://www.jetbrains.com/datagrip/)**
@@ -63,9 +63,9 @@
 
 <br>
 
-## :package: Installation
+## :package: Instalação
 
-### :heavy_check_mark: **Prerequisites**
+### :heavy_check_mark: **Pré-requisitos**
 
 The following software must be installed:
 
@@ -77,7 +77,7 @@ The following software must be installed:
 
 <br>
 
-### :arrow_down: **Cloning the repository**
+### :arrow_down: **Clonando o repositório**
 
 ```sh
   $ git clone https://github.com/gabrielmaialva33/base-nest-api.git
@@ -87,7 +87,7 @@ The following software must be installed:
 
 <br>
 
-### :arrow_forward: **Running the application**
+### :arrow_forward: **Executando o aplicativo**
 
 - :package: API
 
