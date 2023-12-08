@@ -121,5 +121,9 @@ Made with ❤️ by Maia 👋🏽 [Get in touch!](https://t.me/mrootx)
 
 Liked? Leave a little star to help the project ⭐
 
-<br>
+<br/>
+<br/>
+
+<p align="center"><img src="https://raw.githubusercontent.com/gabrielmaialva33/gabrielmaialva33/master/assets/gray0_ctp_on_line.svg?sanitize=true" /></p>
+<p align="center">&copy; 2017-present <a href="https://github.com/gabrielmaialva33/" target="_blank">Maia</a>
 
