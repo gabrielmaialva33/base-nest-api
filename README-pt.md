@@ -117,7 +117,7 @@ Este projeto está sob a licença **MIT**. [MIT](./LICENSE) ❤️
 |-----------------------------------------------------------------------------------------------------------|
 | [Maia](https://github.com/gabrielmaialva33)                                                               |
 
-Feito com ❤️ por Maia 👋🏽 [Entre em contato!]_(https://t.me/mrootx)_
+Feito com ❤️ por Maia 👋🏽 [Entre em contato!](https://t.me/mrootx)
 
 Gostou? Deixe uma estrelinha para ajudar o projeto ⭐
 
