@@ -111,6 +111,7 @@ Este projeto está sob a licença **MIT**. [MIT](./LICENSE) ❤️
 
 <br>
 
+## :rocket: Contribuição
 
 | [![Maia](https://avatars.githubusercontent.com/u/26732067?size=100)](https://github.com/gabrielmaialva33) |
 |-----------------------------------------------------------------------------------------------------------|
