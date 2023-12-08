@@ -7,6 +7,7 @@ import {
   IUserRepository,
   USER_REPOSITORY,
 } from '@src/modules/users/interfaces/user.interface';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class UsersService {
@@ -38,14 +39,22 @@ export class UsersService {
     return this.get(id).pipe(
       switchMap((user) => {
         user.$set(data);
-        return this.userRepository.update(user, (query) => {
-          query.where('is_deleted', false);
-        });
+        return this.userRepository.update(user);
       }),
     );
   }
 
   delete(id: number) {
-    return `This action removes a #${id} user`;
+    return this.get(id).pipe(
+      switchMap((user) => {
+        user.$set({
+          is_deleted: true,
+          deleted_at: DateTime.local().toISO(),
+        });
+        return this.userRepository
+          .update(user)
+          .pipe(map(() => ({ message: 'User deleted' })));
+      }),
+    );
   }
 }

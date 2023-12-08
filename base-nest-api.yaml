@@ -13,11 +13,19 @@ servers:
 paths:
   /api/users:
     get:
-      summary: Get all users
+      summary: List users
       description: Get all users
       operationId: user.get.all
       tags:
         - User
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: application/json
       responses:
         '200':
           description: OK
@@ -39,6 +47,14 @@ paths:
       operationId: user.create
       tags:
         - User
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: application/json
       requestBody:
         description: User object
         required: true
@@ -67,19 +83,26 @@ paths:
                 $ref: '#/components/schemas/Error'
   /api/users/{id}:
     get:
-      summary: Get user by id
+      summary: Get user
       description: Get user by id
       operationId: user.get.by.id
       tags:
         - User
       parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: application/json
         - name: id
           in: path
           description: User id
           required: true
           schema:
             type: string
-            format: uuid
+            format: int64
       responses:
         '200':
           description: OK
@@ -100,19 +123,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     put:
-      summary: Update user by id
+      summary: Edit user
       description: Update user by id
       operationId: user.update.by.id
       tags:
         - User
       parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: application/json
         - name: id
           in: path
           description: User id
           required: true
           schema:
             type: string
-            format: uuid
+            format: int64
       requestBody:
         description: User object
         required: true
@@ -127,6 +157,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete user
+      description: Delete user by id
+      operationId: user.delete.by.id
+      tags:
+        - User
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: application/json
+        - name: id
+          in: path
+          description: User id
+          required: true
+          schema:
+            type: string
+            format: int64
+      responses:
+        '204':
+          description: No Content
         '404':
           description: Not Found
           content:
