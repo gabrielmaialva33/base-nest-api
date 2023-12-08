@@ -17,18 +17,20 @@ export class UsersService {
   ) {}
 
   list() {
-    return this.userRepository.all((query) => {
-      query.orderBy('id', 'desc');
+    return this.userRepository.all((qb) => {
+      qb.whereNot('is_deleted', true);
     });
   }
 
   get(id: number) {
-    return this.userRepository.get({ id }).pipe(
-      map((user) => {
-        if (!user) throw new NotFoundException({ message: 'User not found' });
-        return user;
-      }),
-    );
+    return this.userRepository
+      .get({ id }, (qb) => qb.whereNot('is_deleted', true))
+      .pipe(
+        map((user) => {
+          if (!user) throw new NotFoundException({ message: 'User not found' });
+          return user;
+        }),
+      );
   }
 
   create(data: CreateUserDto) {
