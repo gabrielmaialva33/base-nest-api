@@ -1,7 +1,9 @@
-import { Pojo, QueryBuilder } from 'objection';
+import Objection, { Pojo, QueryBuilder } from 'objection';
 import { omit } from 'helper-fns';
 
 import { BaseEntity } from '@src/common/module/base.entity';
+import { DateTime } from 'luxon';
+import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 
 export class User extends BaseEntity {
   static tableName = 'users';
@@ -36,8 +38,14 @@ export class User extends BaseEntity {
    * Hooks
    * ------------------------------------------------------
    */
-  $afterInsert() {}
-  $beforeUpdate() {}
+  async $beforeInsert() {
+    // Hash the password before inserting the user
+    if (this.password)
+      this.password = await Argon2Utils.hashPassword(this.password);
+  }
+  $beforeUpdate() {
+    this.updated_at = DateTime.local().toISO();
+  }
 
   /**
    * ------------------------------------------------------
@@ -61,12 +69,12 @@ export class User extends BaseEntity {
       required: ['first_name', 'last_name', 'email', 'password'],
       properties: {
         id: { type: 'integer' },
-        first_name: { type: 'string', minLength: 1, maxLength: 255 },
-        last_name: { type: 'string', minLength: 1, maxLength: 255 },
+        first_name: { type: 'string', minLength: 1, maxLength: 80 },
+        last_name: { type: 'string', minLength: 1, maxLength: 80 },
         email: { type: 'string', minLength: 1, maxLength: 255 },
-        password: { type: 'string', minLength: 1, maxLength: 255 },
+        password: { type: 'string', minLength: 1, maxLength: 118 },
         avatar_url: { type: ['string', 'null'], minLength: 1, maxLength: 255 },
-        username: { type: ['string', 'null'], minLength: 1, maxLength: 255 },
+        username: { type: ['string', 'null'], minLength: 1, maxLength: 40 },
         last_login_at: { type: 'string', minLength: 1, maxLength: 255 },
         is_email_verified: { type: 'boolean' },
         is_deleted: { type: 'boolean' },

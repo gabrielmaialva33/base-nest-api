@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import Objection, { Model } from 'objection';
 
 export class BaseEntity extends Model {
   /**
@@ -23,9 +23,27 @@ export class BaseEntity extends Model {
    * Hooks
    * ------------------------------------------------------
    */
-  $afterInsert() {}
+  $beforeInsert(queryContext: Objection.QueryContext): Promise<any> | void {
+    return super.$beforeInsert(queryContext);
+  }
 
-  $beforeUpdate() {}
+  $beforeUpdate(
+    opt: Objection.ModelOptions,
+    queryContext: Objection.QueryContext,
+  ): Promise<any> | void {
+    return super.$beforeUpdate(opt, queryContext);
+  }
+
+  $afterInsert(queryContext: Objection.QueryContext): Promise<any> | void {
+    return super.$afterInsert(queryContext);
+  }
+
+  $afterUpdate(
+    opt: Objection.ModelOptions,
+    queryContext: Objection.QueryContext,
+  ): Promise<any> | void {
+    return super.$afterUpdate(opt, queryContext);
+  }
 
   /**
    * ------------------------------------------------------

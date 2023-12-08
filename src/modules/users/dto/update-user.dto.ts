@@ -4,8 +4,8 @@ import { isExists } from '@src/common/validation/refine.zod';
 import { User } from '@src/modules/users/entities/user.entity';
 
 export const UpdateUserSchema = z.object({
-  first_name: z.string().min(2).max(255).optional(),
-  last_name: z.string().min(2).max(255).optional(),
+  first_name: z.string().min(2).max(80).optional(),
+  last_name: z.string().min(2).max(80).optional(),
   email: z
     .string()
     .optional()
@@ -25,7 +25,7 @@ export const UpdateUserSchema = z.object({
     .string()
     .optional()
     .refine(
-      (value) => value === '' || (value.length >= 4 && value.length <= 20),
+      (value) => value === '' || (value.length >= 4 && value.length <= 40),
       {
         message: 'Username must be between 4 and 20 characters',
       },

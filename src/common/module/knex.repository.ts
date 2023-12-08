@@ -45,11 +45,12 @@ export class KnexRepository<T extends BaseEntity>
 
   create(payload: Partial<T>, builder?: Builder<T>): Observable<T> {
     return from(
-      this.model.transaction(async (trx) => {
-        const query = this.model.query(trx);
-        if (typeof builder === 'function') query.modify(builder);
-        return query.insert(payload);
-      }),
+      this.model
+        .query()
+        .modify((query) => {
+          if (typeof builder === 'function') query.modify(builder);
+        })
+        .insert(payload),
     ).pipe(map((result) => result as T));
   }
 

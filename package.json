@@ -36,6 +36,7 @@
     "@nestjs/mapped-types": "^2.0.4",
     "@nestjs/platform-express": "^10.2.10",
     "@nestjs/platform-fastify": "^10.2.10",
+    "argon2": "^0.31.2",
     "better-sqlite3": "^9.2.2",
     "dotenv": "^16.3.1",
     "envalid": "^8.0.0",
