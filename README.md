@@ -111,12 +111,11 @@ This project is under the **MIT** license. [MIT](./LICENSE) ❤️
 
 <br>
 
-Made with ❤️ by Maia 👋🏽 [Get in touch!](https://github.com/gabrielmaialva33)
-
 | [![Maia](https://avatars.githubusercontent.com/u/26732067?size=100)](https://github.com/gabrielmaialva33) |
 |-----------------------------------------------------------------------------------------------------------|
 | [Maia](https://github.com/gabrielmaialva33)                                                               |
 
+Made with ❤️ by Maia 👋🏽 [Get in touch!](https://github.com/gabrielmaialva33)
 
 Liked? Leave a little star to help the project ⭐
 
