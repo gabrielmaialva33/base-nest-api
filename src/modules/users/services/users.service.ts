@@ -1,5 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { map, switchMap } from 'rxjs';
+import { DateTime } from 'luxon';
 
 import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
@@ -7,7 +8,7 @@ import {
   IUserRepository,
   USER_REPOSITORY,
 } from '@src/modules/users/interfaces/user.interface';
-import { DateTime } from 'luxon';
+import { User } from '@src/modules/users/entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -18,13 +19,13 @@ export class UsersService {
 
   list() {
     return this.userRepository.all((qb) => {
-      qb.whereNot('is_deleted', true);
+      qb.modify(User.scopes.notDeleted);
     });
   }
 
   get(id: number) {
     return this.userRepository
-      .get({ id }, (qb) => qb.whereNot('is_deleted', true))
+      .get({ id }, (qb) => qb.modify(User.scopes.notDeleted))
       .pipe(
         map((user) => {
           if (!user) throw new NotFoundException({ message: 'User not found' });

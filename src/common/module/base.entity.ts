@@ -1,5 +1,4 @@
-import Objection, { Model } from 'objection';
-import { DateTime } from 'luxon';
+import { Model } from 'objection';
 
 export class BaseEntity extends Model {
   /**
