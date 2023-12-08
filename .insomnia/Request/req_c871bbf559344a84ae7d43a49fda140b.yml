@@ -1,0 +1,24 @@
+_id: req_c871bbf559344a84ae7d43a49fda140b
+type: Request
+parentId: fld_6c7db3bd29b840f199c050a5409272d6
+modified: 1702006645763
+created: 1702006645763
+url: "{{ _.base_url }}/api/users/{{ _.id }}"
+name: Get user
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: Content-Type
+    disabled: false
+    value: application/json
+authentication: {}
+metaSortKey: -1702006645763
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

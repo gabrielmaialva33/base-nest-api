@@ -1,0 +1,34 @@
+_id: req_9b6789849951442c8ddc2603b1b895f7
+type: Request
+parentId: fld_6c7db3bd29b840f199c050a5409272d6
+modified: 1702006645763
+created: 1702006645763
+url: "{{ _.base_url }}/api/users/{{ _.id }}"
+name: Edit user
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+      "first_name": "Gabriel",
+      "last_name": "Alva",
+      "email": "gabriel.alva@emial.com",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55906861?v=4",
+      "username": "gabriel.alva",
+      "password": "Dev@551238"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    disabled: false
+    value: application/json
+authentication: {}
+metaSortKey: -1702006645763
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
