@@ -10,6 +10,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('avatar_url').nullable();
     table.string('username', 40).nullable().unique();
 
+    table.string('remember_me_token').nullable();
     table.dateTime('last_login_at').nullable();
 
     table.boolean('is_email_verified').notNullable().defaultTo(false);

@@ -1,4 +1,4 @@
-import Objection, { Pojo, QueryBuilder } from 'objection';
+import { Pojo, QueryBuilder } from 'objection';
 import { omit } from 'helper-fns';
 
 import { BaseEntity } from '@src/common/module/base.entity';
@@ -12,6 +12,7 @@ export class User extends BaseEntity {
    * ------------------------------------------------------
    * Columns
    * ------------------------------------------------------
+   * Columns are used to define the fields of the model.
    */
   id: number;
   first_name: string;
@@ -21,6 +22,7 @@ export class User extends BaseEntity {
   avatar_url: string;
   username: string;
   last_login_at: Date;
+  remember_me_token: string;
   is_email_verified: boolean;
   is_deleted: boolean;
   deleted_at: Date;
@@ -31,12 +33,14 @@ export class User extends BaseEntity {
    * ------------------------------------------------------
    * Relations
    * ------------------------------------------------------
+   * Relations are used to define relationships between models.
    */
 
   /**
    * ------------------------------------------------------
    * Hooks
    * ------------------------------------------------------
+   * Hooks are used to perform actions before or after certain events.
    */
   async $beforeInsert() {
     // Hash the password before inserting the user
@@ -51,6 +55,7 @@ export class User extends BaseEntity {
    * ------------------------------------------------------
    * Scopes
    * ------------------------------------------------------
+   * Scopes are used to define commonly used queries that can be re-used in multiple places.
    */
   static scopes = {
     notDeleted(builder: QueryBuilder<User>) {
@@ -62,6 +67,8 @@ export class User extends BaseEntity {
    * ------------------------------------------------------
    * Misc
    * ------------------------------------------------------
+   * - jsonSchema is used by objection to validate the data before inserting it into the database
+   * - $formatJson is used by objection to format the data before sending it to the client
    */
   static get jsonSchema() {
     return {
@@ -75,6 +82,11 @@ export class User extends BaseEntity {
         password: { type: 'string', minLength: 1, maxLength: 118 },
         avatar_url: { type: ['string', 'null'], minLength: 1, maxLength: 255 },
         username: { type: ['string', 'null'], minLength: 1, maxLength: 40 },
+        remember_me_token: {
+          type: ['string', 'null'],
+          minLength: 1,
+          maxLength: 255,
+        },
         last_login_at: { type: 'string', minLength: 1, maxLength: 255 },
         is_email_verified: { type: 'boolean' },
         is_deleted: { type: 'boolean' },
