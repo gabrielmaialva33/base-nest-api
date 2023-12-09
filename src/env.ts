@@ -9,6 +9,7 @@ export const Env = cleanEnv(process.env, {
   HOST: str({ default: '0.0.0.0', desc: 'The host to run on' }),
   PORT: num({ default: 3000, desc: 'The port to run on' }),
   API_PREFIX: str({ default: 'api', desc: 'The api prefix' }),
+  JWT_SECRET: str({ default: 'secret', desc: 'The jwt secret' }),
   // Database
   DB_CLIENT: str({
     default: 'sqlite',
