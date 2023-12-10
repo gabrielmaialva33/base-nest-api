@@ -1,7 +1,7 @@
 _id: spc_314ae5f298184b9ba5d35399f886b682
 type: ApiSpec
 parentId: wrk_1629d20a4b0444d88a87592d593cee39
-modified: 1702006637361
+modified: 1702242079253
 created: 1701886126179
 fileName: Base Nest API
 contents: >+
@@ -34,6 +34,8 @@ contents: >+
             schema:
               type: string
               example: application/json
+        security:
+          - bearerToken: [ ]
         responses:
           '200':
             description: OK
@@ -63,6 +65,8 @@ contents: >+
             schema:
               type: string
               example: application/json
+        security:
+          - bearerToken: [ ]
         requestBody:
           description: User object
           required: true
@@ -111,6 +115,8 @@ contents: >+
             schema:
               type: string
               format: int64
+        security:
+          - bearerToken: [ ]
         responses:
           '200':
             description: OK
@@ -151,6 +157,8 @@ contents: >+
             schema:
               type: string
               format: int64
+        security:
+          - bearerToken: [ ]
         requestBody:
           description: User object
           required: true
@@ -198,6 +206,8 @@ contents: >+
             schema:
               type: string
               format: int64
+        security:
+          - bearerToken: [ ]
         responses:
           '204':
             description: No Content
@@ -213,12 +223,69 @@ contents: >+
               application/json:
                 schema:
                   $ref: '#/components/schemas/Error'
+
+    /api/sign_in:
+      post:
+        summary: Sign in
+        description: Sign in user
+        operationId: sign.in
+        tags:
+          - Session
+        parameters:
+          - name: Content-Type
+            in: header
+            description: Content-Type
+            required: true
+            schema:
+              type: string
+              example: application/json
+        requestBody:
+          description: Sign in object with user email OR username and password
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uid:
+                    type: string
+                    description: User email
+                    example: "gabriel.alva"
+                  password:
+                    type: string
+                    description: User password
+                    example: "Dev@551238"
+                example: {
+                  "uid": "gabriel.alva",
+                  "password": "Dev@551238"
+                }
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
   tags:
+    - name: Session
+      description: Operations about sessions
     - name: User
       description: Operations about users
   components:
     securitySchemes:
-      bearerAuth:
+      bearerToken:
         type: http
         scheme: bearer
         bearerFormat: JWT
@@ -306,7 +373,7 @@ contents: >+
           "first_name": "Gabriel",
           "last_name": "Alva",
           "email": "gabriel.alva@emial.com",
-          "avatar_url": "https://avatars.githubusercontent.com/u/55906861?v=4",
+          "avatar_url": "https://telegra.ph/file/05cba54e6cb16c3ea0d9e.png",
           "username": "gabriel.alva",
           "password": "Dev@551238"
         }

@@ -1,10 +1,10 @@
-_id: req_c871bbf559344a84ae7d43a49fda140b
+_id: req_7080d89c286044698762beda3b524aff
 type: Request
-parentId: fld_6c7db3bd29b840f199c050a5409272d6
-modified: 1702006645763
-created: 1702006645763
-url: "{{ _.base_url }}/api/users/{{ _.id }}"
-name: Get user
+parentId: fld_d5832086d2f247d991d7d5f5a792e00a
+modified: 1702242109563
+created: 1702242109563
+url: "{{ _.base_url }}/api/users"
+name: List users
 description: ""
 method: GET
 body: {}
@@ -13,8 +13,11 @@ headers:
   - name: Content-Type
     disabled: false
     value: application/json
-authentication: {}
-metaSortKey: -1702006645763
+authentication:
+  type: bearer
+  token: "{{ _.bearerToken }}"
+  prefix: ""
+metaSortKey: -1702242109563
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
