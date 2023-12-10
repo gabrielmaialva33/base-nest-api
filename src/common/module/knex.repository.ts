@@ -1,8 +1,8 @@
 import { from, map, Observable } from 'rxjs';
 
 import {
-  IKnexRepository,
   Builder,
+  IKnexRepository,
   SingleBuilder,
 } from '@src/common/module/knex-repository.interface';
 import { BaseEntity } from '@src/common/module/base.entity';

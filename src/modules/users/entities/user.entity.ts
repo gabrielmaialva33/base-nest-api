@@ -47,6 +47,7 @@ export class User extends BaseEntity {
     if (this.password)
       this.password = await Argon2Utils.hashPassword(this.password);
   }
+
   $beforeUpdate() {
     this.updated_at = DateTime.local().toISO();
   }

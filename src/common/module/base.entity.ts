@@ -8,6 +8,7 @@ export class BaseEntity extends Model {
    */
   static useLimitInFirst = true;
   static idColumn = 'id';
+
   static get modelPaths() {
     return [__dirname];
   }
