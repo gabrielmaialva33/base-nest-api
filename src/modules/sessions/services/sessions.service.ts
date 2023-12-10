@@ -35,4 +35,11 @@ export class SessionsService {
       }),
     );
   }
+
+  signOut() {
+    //todo: implement sign out
+    return {
+      message: 'Sign out successful',
+    };
+  }
 }

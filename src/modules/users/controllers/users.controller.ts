@@ -11,7 +11,9 @@ import {
 import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
 import { UsersService } from '@src/modules/users/services/users.service';
+import { Auth } from '@src/common/decorators/auth.decorator';
 
+@Auth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

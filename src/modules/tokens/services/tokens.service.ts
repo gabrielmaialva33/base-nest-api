@@ -34,7 +34,7 @@ import {
  * @method saveToken - Save a token to the database
  * @method createJwt - Create a JWT token
  * @method getExpiresAtDate - Get the date the token expires
- * -------------------------------------------------------x
+ * -------------------------------------------------------
  */
 @Injectable()
 export class TokensService {

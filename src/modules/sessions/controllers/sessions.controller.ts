@@ -12,4 +12,9 @@ export class SessionsController {
   signIn(@Body() body: SignInUserDto) {
     return this.sessionsService.signIn(body);
   }
+
+  @Post('/sign_out')
+  signOut() {
+    return this.sessionsService.signOut();
+  }
 }

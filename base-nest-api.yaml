@@ -26,6 +26,8 @@ paths:
           schema:
             type: string
             example: application/json
+      security:
+        - bearerToken: [ ]
       responses:
         '200':
           description: OK
@@ -55,6 +57,8 @@ paths:
           schema:
             type: string
             example: application/json
+      security:
+        - bearerToken: [ ]
       requestBody:
         description: User object
         required: true
@@ -103,6 +107,8 @@ paths:
           schema:
             type: string
             format: int64
+      security:
+        - bearerToken: [ ]
       responses:
         '200':
           description: OK
@@ -143,6 +149,8 @@ paths:
           schema:
             type: string
             format: int64
+      security:
+        - bearerToken: [ ]
       requestBody:
         description: User object
         required: true
@@ -190,6 +198,8 @@ paths:
           schema:
             type: string
             format: int64
+      security:
+        - bearerToken: [ ]
       responses:
         '204':
           description: No Content
@@ -212,7 +222,7 @@ paths:
       description: Sign in user
       operationId: sign.in
       tags:
-        - User
+        - Session
       parameters:
         - name: Content-Type
           in: header
@@ -261,11 +271,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 tags:
+  - name: Session
+    description: Operations about sessions
   - name: User
     description: Operations about users
 components:
   securitySchemes:
-    bearerAuth:
+    bearerToken:
       type: http
       scheme: bearer
       bearerFormat: JWT
@@ -353,7 +365,7 @@ components:
         "first_name": "Gabriel",
         "last_name": "Alva",
         "email": "gabriel.alva@emial.com",
-        "avatar_url": "https://avatars.githubusercontent.com/u/55906861?v=4",
+        "avatar_url": "https://telegra.ph/file/05cba54e6cb16c3ea0d9e.png",
         "username": "gabriel.alva",
         "password": "Dev@551238"
       }
