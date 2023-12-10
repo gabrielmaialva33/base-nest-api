@@ -1,7 +1,7 @@
 _id: spc_314ae5f298184b9ba5d35399f886b682
 type: ApiSpec
 parentId: wrk_1629d20a4b0444d88a87592d593cee39
-modified: 1702242079253
+modified: 1702252225695
 created: 1701886126179
 fileName: Base Nest API
 contents: >+
@@ -10,11 +10,34 @@ contents: >+
   info:
     title: Base Nest API
     version: 1.0.0
-    description: Api documentation for base nest api
+    description: |
+      This is a base Nest API with JWT authentication and CRUD operations for users.
+
+      # Introduction
+      This API was developed using [NestJS](https://nestjs.com/) framework, [TypeORM](https://typeorm.io/#/) ORM and [PostgreSQL](https://www.postgresql.org/) database.
+
+      # Authentication
+      This API uses [JWT](https://jwt.io/) authentication. To get a token, you need to make a POST request to `/api/sign_in` with a JSON body containing the user email OR username and password. The response will be a JSON with the user data and the token. To use the token, you need to put it in the `Authorization` header of the request with the `Bearer` prefix. Example: `Authorization: Bearer <token>`.
+
+      <!-- ReDoc-Inject: <security-definitions> -->
+    x-logo:
+      url: https://telegra.ph/file/601ee09e6fe658d0de5b9.png
+      altText: HideDev Logo
     contact:
       name: Gabriel M.
       email: gabrielmaialva33@gmail.com
       url: https://github.com/gabrielmaialva33
+    license:
+      name: MIT
+      url: https://opensource.org/licenses/MIT
+    x-tagGroups:
+      - name: Session
+        tags:
+          - name: Sign in
+            description: Sign in user
+      - name: User Management
+        tags:
+          - User
   servers:
     - url: http://localhost:3000
       description: Local server
