@@ -90,9 +90,25 @@ export class TokensService {
       expires_at: tokenInfo.expiresAt.toISO(),
       user_id: tokenInfo.userId,
     };
-    return this.tokenRepository
-      .create(tokenData)
-      .pipe(map(() => tokenInfo.rawToken));
+
+    // delete existing tokens for user
+    return this.destroyToken(tokenInfo.userId).pipe(
+      switchMap(() =>
+        // create new token
+        this.tokenRepository
+          .create(tokenData)
+          .pipe(map(() => tokenInfo.rawToken)),
+      ),
+    );
+  }
+
+  private destroyToken(userId: number) {
+    return this.tokenRepository.get({ user_id: userId }).pipe(
+      map((token) => {
+        if (!token) return;
+        return this.tokenRepository.destroy(token);
+      }),
+    );
   }
 
   private createJwt(rawToken: string, payload: JwtPayload): string {

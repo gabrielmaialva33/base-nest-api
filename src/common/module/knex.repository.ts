@@ -82,4 +82,14 @@ export class KnexRepository<T extends BaseEntity>
         .returning('*'),
     ).pipe(map((result) => result as T));
   }
+
+  destroy(model: T, builder?: SingleBuilder<T>): Observable<number> {
+    return from(
+      this.model.transaction(async (trx) => {
+        const query = model.$query(trx);
+        if (builder && typeof builder === 'function') query.modify(builder);
+        return query.delete();
+      }),
+    ).pipe(map((result) => result as unknown as number));
+  }
 }

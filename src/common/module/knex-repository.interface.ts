@@ -132,4 +132,21 @@ export interface IKnexRepository<T extends BaseEntity> {
    * @memberof IKnexRepository
    */
   update(model: T, builder?: SingleBuilder<T>): Observable<T>;
+
+  /**
+   * Destroy a record.
+   * @param {T} model - The model to delete
+   * @param {SingleBuilder<T>} builder - The query to filter the records
+   * @returns {Observable<number>}
+   * @memberof IKnexRepository
+   * @example
+   * const user = await this.repository.get({ id: 1 });
+   * const model = this.repository.destroy(user);
+   * model.subscribe(result => console.log(result));
+   * @example
+   * const user = await this.repository.get({ id: 1 });
+   * const model = this.repository.destroy(user, query => query.where('id', '!=', 1));
+   * model.subscribe(result => console.log(result));
+   */
+  destroy(model: T, builder?: SingleBuilder<T>): Observable<number>;
 }
