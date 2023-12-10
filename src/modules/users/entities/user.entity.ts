@@ -1,8 +1,8 @@
 import { Pojo, QueryBuilder } from 'objection';
 import { omit } from 'helper-fns';
+import { DateTime } from 'luxon';
 
 import { BaseEntity } from '@src/common/module/base.entity';
-import { DateTime } from 'luxon';
 import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 
 export class User extends BaseEntity {
@@ -58,17 +58,16 @@ export class User extends BaseEntity {
    * Scopes are used to define commonly used queries that can be re-used in multiple places.
    */
   static scopes = {
-    notDeleted(builder: QueryBuilder<User>) {
-      builder.whereNot('is_deleted', true);
-    },
+    notDeleted: (builder: QueryBuilder<User>) =>
+      builder.whereNot('is_deleted', true),
   };
 
   /**
    * ------------------------------------------------------
    * Misc
    * ------------------------------------------------------
-   * - jsonSchema is used by objection to validate the data before inserting it into the database
-   * - $formatJson is used by objection to format the data before sending it to the client
+   * - jsonSchema is used by objection to validate the data before inserting it into the database (optional)
+   * - $formatJson is used by objection to format the data before sending it to the client (optional)
    */
   static get jsonSchema() {
     return {

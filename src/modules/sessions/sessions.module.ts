@@ -6,9 +6,11 @@ import { SessionsController } from '@src/modules/sessions/controllers/sessions.c
 import { LocalStrategy } from '@src/modules/sessions/strategies/local.strategy';
 import { JwtStrategy } from '@src/modules/sessions/strategies/jwt.strategy';
 import { SessionsService } from '@src/modules/sessions/services/sessions.service';
+import { TokensModule } from '@src/modules/tokens/tokens.module';
+import { UsersModule } from '@src/modules/users/users.module';
 
 @Module({
-  imports: [PassportModule, NestJwtModule],
+  imports: [PassportModule, NestJwtModule, TokensModule, UsersModule],
   controllers: [SessionsController],
   providers: [SessionsService, LocalStrategy, JwtStrategy],
 })

@@ -11,15 +11,14 @@ export async function up(knex: Knex): Promise<void> {
     table.string('username', 40).nullable().unique();
 
     table.string('remember_me_token').nullable();
-    table.dateTime('last_login_at').nullable();
+    table.timestamp('last_login_at').nullable();
 
     table.boolean('is_email_verified').notNullable().defaultTo(false);
     table.boolean('is_deleted').notNullable().defaultTo(false);
 
-    table.dateTime('deleted_at').nullable();
+    table.timestamp('deleted_at').nullable();
 
-    table.dateTime('created_at').notNullable().defaultTo(knex.fn.now());
-    table.dateTime('updated_at').notNullable().defaultTo(knex.fn.now());
+    table.timestamps(true, true);
   });
 }
 

@@ -34,6 +34,17 @@ export class UsersService {
       );
   }
 
+  getBy(field: string, value: any) {
+    return this.userRepository
+      .get({ [field]: value }, (qb) => qb.modify(User.scopes.notDeleted))
+      .pipe(
+        map((user) => {
+          if (!user) throw new NotFoundException({ message: 'User not found' });
+          return user;
+        }),
+      );
+  }
+
   create(data: CreateUserDto) {
     return this.userRepository.create(data);
   }

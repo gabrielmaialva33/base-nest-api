@@ -6,6 +6,7 @@ import {
   SingleBuilder,
 } from '@src/common/module/knex-repository.interface';
 import { BaseEntity } from '@src/common/module/base.entity';
+import { ModelObject } from 'objection';
 
 export class KnexRepository<T extends BaseEntity>
   implements IKnexRepository<T>
@@ -43,7 +44,10 @@ export class KnexRepository<T extends BaseEntity>
     ).pipe(map((result) => result as T));
   }
 
-  create(payload: Partial<T>, builder?: Builder<T>): Observable<T> {
+  create(
+    payload: Partial<ModelObject<T>>,
+    builder?: Builder<T>,
+  ): Observable<T> {
     return from(
       this.model
         .query()
@@ -54,7 +58,10 @@ export class KnexRepository<T extends BaseEntity>
     ).pipe(map((result) => result as T));
   }
 
-  bulkCreate(payload: Partial<T>[], builder?: Builder<T>): Observable<T[]> {
+  bulkCreate(
+    payload: Partial<ModelObject<T>>[],
+    builder?: Builder<T>,
+  ): Observable<T[]> {
     return from(
       this.model.transaction(async (trx) => {
         const query = this.model.query(trx);

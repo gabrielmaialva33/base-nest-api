@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import {
+  ModelObject,
   Modifier,
   ModifierFunction,
   QueryBuilder,
@@ -75,7 +76,7 @@ export interface IKnexRepository<T extends BaseEntity> {
   /**
    * Create a new record.
    *
-   * @param {Partial<T>} payload - The data to create the record
+   * @param {Partial<ModelObject<T>>} payload - The data to create the record
    * @param {Builder<T>} builder - The query to filter the records
    * @returns {Observable<T>}
    *
@@ -88,12 +89,12 @@ export interface IKnexRepository<T extends BaseEntity> {
    *
    * @memberof IKnexRepository
    */
-  create(payload: Partial<T>, builder?: Builder<T>): Observable<T>;
+  create(payload: Partial<ModelObject<T>>, builder?: Builder<T>): Observable<T>;
 
   /**
    * Create multiple records.
    *
-   * @param {Partial<T>[]} payload - The data to create the records
+   * @param {Partial<ModelObject<T>>[]} payload - The data to create the records
    * @param {Builder<T>} builder - The query to filter the records
    * @returns {Observable<T[]>}
    *
@@ -106,7 +107,10 @@ export interface IKnexRepository<T extends BaseEntity> {
    *
    * @memberof IKnexRepository
    */
-  bulkCreate(payload: Partial<T>[], builder?: Builder<T>): Observable<T[]>;
+  bulkCreate(
+    payload: Partial<ModelObject<T>>[],
+    builder?: Builder<T>,
+  ): Observable<T[]>;
 
   /**
    * Update a record.

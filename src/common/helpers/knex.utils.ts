@@ -13,6 +13,12 @@ export enum LogLevels {
   ERROR = 'error',
 }
 
+/**
+ * -------------------------------------------------------
+ * KnexUtils
+ * -------------------------------------------------------
+ * KnexUtils is a collection of utilities for Knex.
+ */
 export const KnexUtils = {
   formatSql: (
     sql: string | undefined,

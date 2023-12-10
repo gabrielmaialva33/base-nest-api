@@ -1,4 +1,5 @@
 import * as argon2 from 'argon2';
+import { from, map, Observable } from 'rxjs';
 
 /**
  * -------------------------------------------------------
@@ -52,4 +53,48 @@ export const Argon2Utils = {
       throw err;
     }
   },
+
+  /**
+   * Hash a string
+   * @param str
+   */
+  hash: async (str: string): Promise<string> => {
+    try {
+      const hash = await argon2.hash(str);
+      return hash;
+    } catch (err) {
+      console.error('Error hashing string:', err);
+      throw err;
+    }
+  },
+
+  /**
+   * Verify a string
+   * @param hash
+   * @param str
+   */
+  verify: async (hash: string, str: string): Promise<boolean> => {
+    try {
+      const match = await argon2.verify(hash, str);
+      return match;
+    } catch (err) {
+      console.error('Error verifying string:', err);
+      throw err;
+    }
+  },
+
+  /**
+   * Hash a string (Observable)
+   * @param str
+   */
+  hash$: (str: string): Observable<string> => {
+    return from(Argon2Utils.hash(str)).pipe(map((hash) => hash));
+  },
+  /**
+   * Verify a string (Observable)
+   * @param hash
+   * @param str
+   */
+  verify$: (hash: string, str: string): Observable<boolean> =>
+    from(Argon2Utils.verify(hash, str)).pipe(map((match) => match)),
 };

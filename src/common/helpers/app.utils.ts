@@ -1,5 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 
+/**
+ * -------------------------------------------------------
+ * AppUtils
+ * -------------------------------------------------------
+ * AppUtils is a collection of utilities for the app.
+ */
 export const AppUtils = {
   /**
    * Kill the app with grace on SIGINT and SIGTERM
