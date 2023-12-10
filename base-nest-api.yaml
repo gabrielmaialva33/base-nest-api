@@ -6,7 +6,7 @@ info:
     This is a base Nest API with JWT authentication and CRUD operations for users.
 
     # Introduction
-    This API was developed using [NestJS](https://nestjs.com/) framework, [TypeORM](https://typeorm.io/#/) ORM and [PostgreSQL](https://www.postgresql.org/) database.
+    This API was developed using [NestJS](https://nestjs.com/) framework, [Objection.js](https://vincit.github.io/objection.js/) ORM and [PostgreSQL](https://www.postgresql.org/) database. It has a user authentication system using [JWT](https://jwt.io/) and CRUD operations for users.
 
     # Authentication
     This API uses [JWT](https://jwt.io/) authentication. To get a token, you need to make a POST request to `/api/sign_in` with a JSON body containing the user email OR username and password. The response will be a JSON with the user data and the token. To use the token, you need to put it in the `Authorization` header of the request with the `Bearer` prefix. Example: `Authorization: Bearer <token>`.
