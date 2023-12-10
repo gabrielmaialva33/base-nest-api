@@ -69,11 +69,10 @@
 
 The following software must be installed:
 
-- **[Node.js](https://nodejs.org/en/)** (required)
-- **[Pnpm](https://pnpm.js.org/)** or **[Yarn](https://yarnpkg.com/)** (required)
+- **[Node.js](https://nodejs.org/en/)**
+- **[Pnpm](https://pnpm.js.org/)** or **[Yarn](https://yarnpkg.com/)**
 - **[Git](https://git-scm.com/)**
-- **[PostgreSQL](https://www.postgresql.org/)** or **[Sqlite](https://www.sqlite.org/index.html)** (required)
-- **[Docker](https://www.docker.com/)** (optional)
+- **[PostgreSQL](https://www.postgresql.org/)** or **[Sqlite](https://www.sqlite.org/index.html)**
 
 <br>
 
@@ -98,7 +97,7 @@ The following software must be installed:
   # Config environment system
   $ cp .env.example .env
   # Run migrations
-  $ pnpm db:migrate
+  $ pnpm db:migrate # by default, the database is sqlite
   # API start
   $ pnpm start:dev
 ```
