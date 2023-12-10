@@ -5,28 +5,16 @@ import { isUnique } from '@src/common/validation/refine.zod';
 import { User } from '@src/modules/users/entities/user.entity';
 
 export const CreateUserSchema = z.object({
-  first_name: z
-    .string()
-    .min(2)
-    .max(80)
-    .transform((value) => value.trim()),
-  last_name: z
-    .string()
-    .min(2)
-    .max(80)
-    .transform((value) => value.trim()),
+  first_name: z.string().min(2).max(80).trim(),
+  last_name: z.string().min(2).max(80).trim(),
   email: z
     .string()
     .email()
-    .transform((value) => value.toLowerCase().trim())
+    .trim()
     .refine((value) => isUnique<User>(User, 'email', value), {
       message: 'Email is already taken',
     }),
-  password: z
-    .string()
-    .min(6)
-    .max(50)
-    .transform((value) => value.trim()),
+  password: z.string().min(6).max(50).trim(),
   avatar_url: z.string().url().optional().nullable(),
   username: z
     .string()

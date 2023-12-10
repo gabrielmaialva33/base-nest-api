@@ -8,5 +8,4 @@ export const app = registerAs('app', () => ({
   host: Env.HOST,
   port: Env.PORT,
   apiPrefix: Env.API_PREFIX,
-  jwtSecret: Env.JWT_SECRET,
 }));

@@ -205,6 +205,61 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
+  /api/sign_in:
+    post:
+      summary: Sign in
+      description: Sign in user
+      operationId: sign.in
+      tags:
+        - User
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: application/json
+      requestBody:
+        description: Sign in object with user email OR username and password
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uid:
+                  type: string
+                  description: User email
+                  example: "gabriel.alva"
+                password:
+                  type: string
+                  description: User password
+                  example: "Dev@551238"
+              example: {
+                "uid": "gabriel.alva",
+                "password": "Dev@551238"
+              }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 tags:
   - name: User
     description: Operations about users

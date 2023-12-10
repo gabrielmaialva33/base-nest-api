@@ -4,8 +4,8 @@ import { isExists } from '@src/common/validation/refine.zod';
 import { User } from '@src/modules/users/entities/user.entity';
 
 export const UpdateUserSchema = z.object({
-  first_name: z.string().min(2).max(80).optional(),
-  last_name: z.string().min(2).max(80).optional(),
+  first_name: z.string().min(2).max(80).trim().optional(),
+  last_name: z.string().min(2).max(80).trim().optional(),
   email: z
     .string()
     .optional()
@@ -15,12 +15,12 @@ export const UpdateUserSchema = z.object({
         message: 'Invalid email',
       },
     )
-    .transform((value) => (value === '' ? undefined : value))
+    .transform((value) => (value === '' ? undefined : value.trim()))
     .refine((value) => isExists<User>(User, { email: value }), {
       message: 'Email is already taken',
     }),
-  password: z.string().min(6).max(50).optional(),
-  avatar_url: z.string().url().optional().nullable(),
+  password: z.string().min(6).max(50).trim().optional(),
+  avatar_url: z.string().url().trim().optional().nullable(),
   username: z
     .string()
     .optional()
@@ -30,7 +30,7 @@ export const UpdateUserSchema = z.object({
         message: 'Username must be between 4 and 20 characters',
       },
     )
-    .transform((value) => (value === '' ? undefined : value))
+    .transform((value) => (value === '' ? undefined : value.trim()))
     .refine((value) => isExists<User>(User, { username: value }), {
       message: 'Username is already taken',
     }),
