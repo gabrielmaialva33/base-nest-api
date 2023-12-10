@@ -69,6 +69,7 @@ export class User extends BaseEntity {
    * ------------------------------------------------------
    * - jsonSchema is used by objection to validate the data before inserting it into the database (optional)
    * - $formatJson is used by objection to format the data before sending it to the client (optional)
+   * - uid is used to identify the user by unique identifier (email or username)
    */
   static get jsonSchema() {
     return {
@@ -101,4 +102,6 @@ export class User extends BaseEntity {
     json = super.$formatJson(json);
     return omit(json, ['password', 'is_deleted', 'deleted_at']);
   }
+
+  static uid = ['email', 'username'];
 }

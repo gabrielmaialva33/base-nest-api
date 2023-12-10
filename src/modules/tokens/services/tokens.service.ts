@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { catchError, map, switchMap } from 'rxjs';
 import { DateTime } from 'luxon';
 import * as ms from 'ms';
@@ -54,8 +59,10 @@ export class TokensService {
       switchMap((tokenInfo) => this.saveToken(tokenInfo)),
       map((rawToken) => this.createJwt(rawToken, payload)),
       catchError((error) => {
-        console.error('Error generating JWT token:', error);
-        throw error;
+        Logger.error(error.message, 'TokenService');
+        throw new InternalServerErrorException({
+          message: 'Not able to login',
+        });
       }),
     );
   }
