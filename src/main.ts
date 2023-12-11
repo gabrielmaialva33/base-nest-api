@@ -58,6 +58,12 @@ async function bootstrap() {
   await app.register(fastifyStatic, {
     root: path.join(__dirname, '..', 'public'),
     prefix: '/public/',
+    decorateReply: false,
+  });
+  await app.register(fastifyStatic, {
+    root: path.join(__dirname, '..', 'docs'),
+    prefix: '/docs/',
+    decorateReply: false,
   });
 
   /**
