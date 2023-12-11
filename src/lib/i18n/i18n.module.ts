@@ -1,20 +1,28 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import {
   AcceptLanguageResolver,
+  CookieResolver,
   HeaderResolver,
   I18nModule,
   QueryResolver,
 } from 'nestjs-i18n';
 import * as process from 'process';
 
+@Global()
 @Module({
   imports: [
     I18nModule.forRoot({
       fallbackLanguage: 'en',
       fallbacks: {
-        'en-US': 'en',
-        'pt-BR': 'pt',
-        'es-ES': 'es',
+        en: 'en',
+        pt: 'pt',
+        es: 'es',
+        'en_*': 'en',
+        'pt_*': 'pt',
+        'es_*': 'es',
+        'en-*': 'en',
+        'pt-*': 'pt',
+        'es-*': 'es',
       },
       logging: true,
       loaderOptions: {
@@ -22,9 +30,10 @@ import * as process from 'process';
         watch: true,
         includeSubfolders: true,
       },
-      typesOutputPath: process.cwd() + '/src/generated/i18n/i18n.types.ts',
+      typesOutputPath:
+        process.cwd() + '/src/resources/generated/i18n/i18n.types.ts',
       resolvers: [
-        { use: QueryResolver, options: ['lang'] },
+        { use: QueryResolver, options: ['lang', 'locale', 'l'] },
         AcceptLanguageResolver,
         new HeaderResolver(['x-lang']),
       ],

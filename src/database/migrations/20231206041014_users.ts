@@ -13,6 +13,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('remember_me_token').nullable();
     table.timestamp('last_login_at').nullable();
 
+    table.boolean('is_active').notNullable().defaultTo(true);
     table.boolean('is_email_verified').notNullable().defaultTo(false);
     table.boolean('is_deleted').notNullable().defaultTo(false);
 

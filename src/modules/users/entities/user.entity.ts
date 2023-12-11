@@ -23,6 +23,7 @@ export class User extends BaseEntity {
   username: string;
   last_login_at: Date;
   remember_me_token: string;
+  is_active: boolean;
   is_email_verified: boolean;
   is_deleted: boolean;
   deleted_at: Date;
@@ -89,6 +90,7 @@ export class User extends BaseEntity {
           maxLength: 255,
         },
         last_login_at: { type: 'string', minLength: 1, maxLength: 255 },
+        is_active: { type: 'boolean' },
         is_email_verified: { type: 'boolean' },
         is_deleted: { type: 'boolean' },
         deleted_at: { type: ['string', 'null'], minLength: 1, maxLength: 255 },

@@ -2,6 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { map, switchMap } from 'rxjs';
 import { DateTime } from 'luxon';
 
+import { translate } from '@src/lib/i18n';
 import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
 import {
@@ -28,7 +29,13 @@ export class UsersService {
       .get({ id }, (qb) => qb.modify(User.scopes.notDeleted))
       .pipe(
         map((user) => {
-          if (!user) throw new NotFoundException({ message: 'User not found' });
+          if (!user)
+            throw new NotFoundException({
+              message: translate('exception.model_not_found', {
+                args: { model: translate('model.user.label') },
+              }),
+            });
+
           return user;
         }),
       );

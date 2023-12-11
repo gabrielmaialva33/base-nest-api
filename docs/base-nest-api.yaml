@@ -356,6 +356,14 @@ paths:
           schema:
             type: string
             example: application/json
+        - name: Accept-Language
+          in: header
+          description: Accept-Language
+          required: true
+          schema:
+            type: string
+            description: Language code (ISO 639-1)
+            example: en-US
       x-codeSamples:
         - lang: shell
           source: |
