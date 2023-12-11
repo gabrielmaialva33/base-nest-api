@@ -1,7 +1,7 @@
 import Knex, { Knex as KnexType } from 'knex';
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'objection';
-//import { BaseEntity } from '@src/lib/orm/objection/base.entity';
+
 import { ObjectionConstants } from '@src/lib/orm/objection/objection.constants';
 import { DatabaseOptions } from '@src/lib/orm/objection/objection.interface';
 
