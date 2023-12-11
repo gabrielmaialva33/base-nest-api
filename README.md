@@ -117,6 +117,8 @@ This project is under the **MIT** license. [MIT](./LICENSE) ❤️
 
 Made with ❤️ by Maia 👋🏽 [Get in touch!](https://t.me/mrootx)
 
+## :star:
+
 Liked? Leave a little star to help the project ⭐
 
 <br/>

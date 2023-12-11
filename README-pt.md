@@ -117,6 +117,8 @@ Este projeto está sob a licença **MIT**. [MIT](./LICENSE) ❤️
 
 Feito com ❤️ por Maia 👋🏽 [Entre em contato!](https://t.me/mrootx)
 
+## :star:
+
 Gostou? Deixe uma estrelinha para ajudar o projeto ⭐
 
 <br/>
