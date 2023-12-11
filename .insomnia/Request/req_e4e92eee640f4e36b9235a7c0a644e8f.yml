@@ -7,8 +7,8 @@ url: "{{ _.base_url }}/api/users/{{ _.id }}"
 name: Get user
 description: ""
 method: GET
-body: {}
-parameters: []
+body: { }
+parameters: [ ]
 headers:
   - name: Content-Type
     disabled: false

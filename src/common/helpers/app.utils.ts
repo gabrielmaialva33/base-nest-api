@@ -25,7 +25,7 @@ export const AppUtils = {
   async gracefulShutdown(app: INestApplication, code: string) {
     setTimeout(() => process.exit(1), 5000);
     logger.verbose(`Signal received with code ${code} ⚡.`);
-    logger.log('❗Closing http server with grace.');
+    logger.log('❗ Closing http server with grace.');
 
     try {
       await app.close();

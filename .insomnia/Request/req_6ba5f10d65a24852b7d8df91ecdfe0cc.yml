@@ -14,7 +14,7 @@ body:
       "uid": "gabriel.alva",
       "password": "Dev@551238"
     }
-parameters: []
+parameters: [ ]
 headers:
   - name: Content-Type
     disabled: false

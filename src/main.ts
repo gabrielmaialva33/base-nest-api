@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
+import * as path from 'path';
 
 import {
   FastifyAdapter,
@@ -9,6 +10,7 @@ import {
 import helmet from '@fastify/helmet';
 import compression from '@fastify/compress';
 import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
 
 import { AppUtils } from '@src/common/helpers/app.utils';
 import { ZodValidationPipe } from '@src/lib/validation/zod';
@@ -27,11 +29,35 @@ async function bootstrap() {
    * Security
    * ------------------------------------------------------
    */
-  await app.register(helmet);
+  await app.register(helmet, {
+    contentSecurityPolicy: {
+      directives: {
+        'default-src': ["'self'"],
+        'img-src': [
+          "'self'",
+          'data:',
+          'https://telegra.ph',
+          'https://cdn.redoc.ly',
+        ],
+        'script-src': [
+          "'self'",
+          'https:',
+          "'unsafe-inline'",
+          'https://cdn.redoc.ly',
+          'blob:',
+        ],
+        'worker-src': ["'self'", 'blob:'],
+      },
+    },
+  });
   await app.register(compression, { encodings: ['gzip', 'deflate'] });
   await app.register(multipart, {
     limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
     throwFileSizeLimit: true,
+  });
+  await app.register(fastifyStatic, {
+    root: path.join(__dirname, '..', 'public'),
+    prefix: '/public/',
   });
 
   /**
@@ -41,7 +67,7 @@ async function bootstrap() {
    */
   app.enableCors();
   app.enableShutdownHooks();
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', { exclude: ['/'] });
   app.useGlobalPipes(new ZodValidationPipe());
 
   await app

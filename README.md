@@ -60,7 +60,6 @@
 - **[Insomnia](https://insomnia.rest/)**
 - **[OpenAPI](https://swagger.io/specification/)**
 
-
 <br>
 
 ## :package: Installation
