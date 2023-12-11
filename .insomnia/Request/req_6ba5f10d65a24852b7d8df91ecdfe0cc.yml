@@ -1,8 +1,8 @@
-_id: req_1c0ae91c5da0448ba8e7ee85d3a09921
+_id: req_6ba5f10d65a24852b7d8df91ecdfe0cc
 type: Request
-parentId: fld_959aaf8a34ff4d6d9c62b9672e60b330
-modified: 1702242109565
-created: 1702242109565
+parentId: fld_add3f7c7d9cd4c768c041b6a27d3763c
+modified: 1702253960726
+created: 1702253960726
 url: "{{ _.base_url }}/api/sign_in"
 name: Sign in
 description: ""
@@ -19,8 +19,11 @@ headers:
   - name: Content-Type
     disabled: false
     value: application/json
-authentication: {}
-metaSortKey: -1702242109565
+authentication:
+  type: bearer
+  token: "{{ _.bearerToken }}"
+  prefix: ""
+metaSortKey: -1702253960726
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

@@ -1,12 +1,12 @@
-_id: req_86e708531a6545b886d67d0809ea3140
+_id: req_3ad93898a1be40dca6d661cd02b3fdc6
 type: Request
-parentId: fld_d5832086d2f247d991d7d5f5a792e00a
-modified: 1702242109564
-created: 1702242109564
-url: "{{ _.base_url }}/api/users/{{ _.id }}"
-name: Edit user
+parentId: fld_d2aecd22d800407f9d7c6bd1f03eaed9
+modified: 1702253960725
+created: 1702253960725
+url: "{{ _.base_url }}/api/users"
+name: Create user
 description: ""
-method: PUT
+method: POST
 body:
   mimeType: application/json
   text: |-
@@ -27,7 +27,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1702242109564
+metaSortKey: -1702253960725
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
