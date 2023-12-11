@@ -14,15 +14,15 @@ export class SessionsService {
     private readonly userService: UsersService,
   ) {}
 
-  signIn(body: SignInUserDto) {
-    return this.userService.getByUid(body.uid).pipe(
+  signIn({ uid, password }: SignInUserDto) {
+    return this.userService.getByUid(uid).pipe(
       switchMap((user) => {
         if (!user) throw new NotFoundException('User not found');
 
         return this.tokensService
           .generateJwtToken({
             id: user.id,
-            uid: body.uid,
+            uid: uid,
           })
           .pipe(
             map((token) => {
