@@ -2,7 +2,30 @@
   "name": "base-nest-api",
   "version": "0.0.1",
   "description": "This is a base project for NestJS API",
-  "author": "gabrielmaialva33@gmail.com <Gabriel Maia>",
+  "author": {
+    "email": "gabrielmaialva33@gmail.com",
+    "name": "Gabriel Maia",
+    "url": "https://github.com/gabrielmaialva33"
+  },
+  "homepage": "https://github.com/gabrielmaialva33/base-nest-api#readme",
+  "repository": "https://github.com/gabrielmaialva33/base-nest-api.git",
+  "keywords": [
+    "api",
+    "postgres",
+    "sqlite",
+    "postgresql",
+    "openapi",
+    "objection-orm",
+    "api-rest",
+    "objectionjs",
+    "nestjs",
+    "better-sqlite3",
+    "nestjs-backend",
+    "zod"
+  ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "private": true,
   "license": "LICENSE",
   "scripts": {

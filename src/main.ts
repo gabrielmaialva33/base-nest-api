@@ -73,7 +73,7 @@ async function bootstrap() {
    */
   app.enableCors();
   app.enableShutdownHooks();
-  app.setGlobalPrefix('api', { exclude: ['/'] });
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ZodValidationPipe());
 
   await app
