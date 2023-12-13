@@ -1,15 +1,14 @@
 _id: env_d0b6a918ccba45208319c5def4f2e579
 type: Environment
 parentId: env_fdb17db9bb373c10ed29aa850d06f6cfabd6ab8c
-modified: 1702242133052
+modified: 1702440764318
 created: 1702006645761
 name: Local Server
 data:
   scheme: http
   base_path: ""
   host: localhost:3000
-  bearerToken: "{% response 'body', 'req_1c0ae91c5da0448ba8e7ee85d3a09921',
-    'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+  bearerToken: ""
 dataPropertyOrder:
   "&":
     - scheme

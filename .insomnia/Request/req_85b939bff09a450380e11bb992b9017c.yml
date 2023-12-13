@@ -1,20 +1,24 @@
-_id: req_6ba5f10d65a24852b7d8df91ecdfe0cc
+_id: req_85b939bff09a450380e11bb992b9017c
 type: Request
-parentId: fld_add3f7c7d9cd4c768c041b6a27d3763c
-modified: 1702253960726
-created: 1702253960726
-url: "{{ _.base_url }}/api/sign_in"
-name: Sign in
+parentId: fld_b9407e056901456193cea2b2585a5786
+modified: 1702440750049
+created: 1702440750049
+url: "{{ _.base_url }}/api/users"
+name: Create user
 description: ""
 method: POST
 body:
   mimeType: application/json
   text: |-
     {
-      "uid": "gabriel.alva",
+      "first_name": "Gabriel",
+      "last_name": "Alva",
+      "email": "gabriel.alva@emial.com",
+      "avatar_url": "https://telegra.ph/file/05cba54e6cb16c3ea0d9e.png",
+      "username": "gabriel.alva",
       "password": "Dev@551238"
     }
-parameters: [ ]
+parameters: []
 headers:
   - name: Content-Type
     disabled: false
@@ -23,7 +27,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1702253960726
+metaSortKey: -1702440750049
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

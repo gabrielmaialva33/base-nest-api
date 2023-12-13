@@ -1,7 +1,7 @@
 _id: spc_314ae5f298184b9ba5d35399f886b682
 type: ApiSpec
 parentId: wrk_1629d20a4b0444d88a87592d593cee39
-modified: 1702253933970
+modified: 1702440733958
 created: 1701886126179
 fileName: Base Nest API
 contents: >+
@@ -45,9 +45,154 @@ contents: >+
     - name: User Management
       tags:
         - User
-  security:
-    - bearerToken: [ ]
   paths:
+    /api/sign_in:
+      post:
+        summary: Sign in
+        description: Sign in user
+        operationId: sign.in
+        tags:
+          - Session
+        parameters:
+          - name: Content-Type
+            in: header
+            description: Content-Type
+            required: true
+            schema:
+              type: string
+              example: application/json
+          - name: Accept-Language
+            in: header
+            description: Accept-Language
+            required: true
+            schema:
+              type: string
+              description: Language code (ISO 639-1)
+              example: en-US
+        x-codeSamples:
+          - lang: shell
+            source: |
+              curl -X POST "http://localhost:3000/api/sign_in" -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"uid\": \"gabriel.alva\", \"password\": \"Dev@551238\"}"
+          - lang: javascript
+            source: |
+              fetch("http://localhost:3000/api/sign_in", {
+                method: "POST",
+                headers: {
+                  "accept": "application/json",
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  "uid": "gabriel.alva",
+                  "password": "Dev@551238"
+                })
+              })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error));
+        x-tagGroups:
+          - name: Authentication
+        requestBody:
+          description: Sign in object with user email OR username and password
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignIn'
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SignSuccess'
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+    /api/sign_up:
+      post:
+        summary: Sign up
+        description: Sign up user
+        operationId: sign.up
+        tags:
+          - Session
+        parameters:
+          - name: Content-Type
+            in: header
+            description: Content-Type
+            required: true
+            schema:
+              type: string
+              example: application/json
+          - name: Accept-Language
+            in: header
+            description: Accept-Language
+            required: true
+            schema:
+              type: string
+              description: Language code (ISO 639-1)
+              example: en-US
+        x-codeSamples:
+          - lang: shell
+            source: |
+              curl -X POST "http://localhost:3000/api/sign_up" -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"first_name\": \"Gabriel\", \"last_name\": \"Alva\", \"email\": \"gabriel.maia@email.com\", \"avatar_url\": \"https://telegra.ph/file/05cba"," \
+              "54e6cb16c3ea0d9e.png\", \"username\": \"gabriel.alva\", \"password\": \"Dev@551238\"}"
+          - lang: javascript
+            source: |
+              fetch("http://localhost:3000/api/sign_up", {
+              method: "POST",
+              headers: {
+                  "accept": "application/json",
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                  "first_name": "Gabriel",
+                  "last_name": "Alva",
+                  "email": "gabriel.maia@email.com"
+                  "avatar_url": "https://telegra.ph/file/05cba54e6cb16c3ea0d9e.png",
+                  "username": "gabriel.alva",
+                  "password": "Dev@551238"
+              })
+              }).then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.log(error));
+        x-tagGroups:
+          - name: Authentication
+        requestBody:
+          description: Sign up object with user first name, last name, email, avatar url, username and password
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingUp'
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SignSuccess'
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+
     /api/users:
       get:
         summary: List users
@@ -342,82 +487,6 @@ contents: >+
               application/json:
                 schema:
                   $ref: '#/components/schemas/Error'
-
-    /api/sign_in:
-      post:
-        summary: Sign in
-        description: Sign in user
-        operationId: sign.in
-        tags:
-          - Session
-        parameters:
-          - name: Content-Type
-            in: header
-            description: Content-Type
-            required: true
-            schema:
-              type: string
-              example: application/json
-        x-codeSamples:
-          - lang: shell
-            source: |
-              curl -X POST "http://localhost:3000/api/sign_in" -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"uid\": \"gabriel.alva\", \"password\": \"Dev@551238\"}"
-          - lang: javascript
-            source: |
-              fetch("http://localhost:3000/api/sign_in", {
-                method: "POST",
-                headers: {
-                  "accept": "application/json",
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                  "uid": "gabriel.alva",
-                  "password": "Dev@551238"
-                })
-              })
-                .then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => console.log(error));
-        requestBody:
-          description: Sign in object with user email OR username and password
-          required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  uid:
-                    type: string
-                    description: User email
-                    example: "gabriel.alva"
-                  password:
-                    type: string
-                    description: User password
-                    example: "Dev@551238"
-                example: {
-                  "uid": "gabriel.alva",
-                  "password": "Dev@551238"
-                }
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/User'
-          '400':
-            description: Bad Request
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Error'
-          '500':
-            description: Internal Server Error
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Error'
-
   components:
     securitySchemes:
       bearerToken:
@@ -430,6 +499,12 @@ contents: >+
         format: int64
         readOnly: true
         example: 1
+      Token:
+        type: string
+        description: JWT token
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjI5MjU0NjQ2LCJleHAiOjE2Mjk4N
+        'x-tags':
+          - Token
       User:
         type: object
         properties:
@@ -517,6 +592,49 @@ contents: >+
           "avatar_url": "https://telegra.ph/file/05cba54e6cb16c3ea0d9e.png",
           "username": "gabriel.alva",
           "password": "Dev@551238"
+        }
+
+      SignIn:
+        type: object
+        properties:
+          uid:
+            type: string
+            description: User email OR username
+          password:
+            type: string
+            description: User password
+        required:
+          - uid
+          - password
+        example: {
+          "uid": "gabriel.alva",
+          "password": "Dev@551238"
+        }
+      SingUp:
+        $ref: '#/components/schemas/User.Create'
+      SignSuccess:
+        type: object
+        properties:
+          user:
+            allOf:
+              - $ref: '#/components/schemas/User'
+          token:
+            allOf:
+              - $ref: '#/components/schemas/Token'
+        example: {
+          "user": {
+            "id": 1,
+            "first_name": "Gabriel",
+            "last_name": "Alva",
+            "email": "gabriel.maia@email.com",
+            "avatar_url": "https://avatars.githubusercontent.com/u/26732067?9860f53f5e541765777ca3f00f94ab9d360645ce&v=4",
+            "username": "gabriel.alva",
+            "last_login_at": "2023-12-06 18:10:21",
+            "is_email_verified": false,
+            "created_at": "2023-12-06 18:10:21",
+            "updated_at": "2023-12-06 18:10:21"
+          },
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjI5MjU0NjQ2LCJleHAiOjE2Mjk4N"
         }
 
       Error:

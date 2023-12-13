@@ -1,0 +1,33 @@
+_id: req_189115c91013474f97a9cf2c78403d0d
+type: Request
+parentId: fld_18d501786caf4b7e814995ea48ea75d3
+modified: 1702440750048
+created: 1702440750048
+url: "{{ _.base_url }}/api/sign_in"
+name: Sign in
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+      "uid": "gabriel.alva",
+      "password": "Dev@551238"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    disabled: false
+    value: application/json
+  - name: Accept-Language
+    disabled: false
+    value: en-US
+authentication: {}
+metaSortKey: -1702440750048
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
