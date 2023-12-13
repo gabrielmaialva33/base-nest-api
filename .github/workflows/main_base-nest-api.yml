@@ -67,3 +67,7 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EF3FBE4A1B4644208B25E20E3C528544 }}
           package: .
+
+      - name: 'Run nestjs migrations'
+        run: |
+          npm run db:migrate
