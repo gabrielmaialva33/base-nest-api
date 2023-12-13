@@ -32,14 +32,13 @@ export class SessionsService {
             }),
           });
 
-        if (user.is_active)
+        if (!user.is_active)
           throw new ForbiddenException({
             message: translate('exception.model_not_active', {
               args: { model: translate('model.user.label') },
             }),
           });
 
-        console.log(user.password, password);
         return Argon2Utils.verify$(user.password, password).pipe(
           switchMap((match) => {
             if (!match)

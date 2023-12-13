@@ -3,7 +3,6 @@ import { z } from '@src/lib/validation/zod/z';
 import { CreateZodDto } from '@src/lib/validation/zod';
 import { isUnique } from '@src/common/validation/refine.zod';
 import { User } from '@src/modules/users/entities/user.entity';
-import { translate } from '@src/lib/i18n';
 
 export const SignUpUserSchema = z.object({
   first_name: z.string().min(2).max(80).trim(),
@@ -13,9 +12,7 @@ export const SignUpUserSchema = z.object({
     .email()
     .trim()
     .refine((value) => isUnique<User>(User, 'email', value), {
-      message: translate('exception.field_already_exists', {
-        args: { field: translate('model.user.field.email') },
-      }),
+      message: 'Email is already taken',
     }),
   password: z.string().min(6).max(50).trim(),
   avatar_url: z.string().url().optional().nullable(),
@@ -27,9 +24,7 @@ export const SignUpUserSchema = z.object({
     .transform((value) => value.replace(/\s/g, '').trim())
     .optional()
     .refine((value) => isUnique<User>(User, 'username', value), {
-      message: translate('exception.field_already_exists', {
-        args: { field: translate('model.user.field.username') },
-      }),
+      message: 'Username is already taken',
     }),
 });
 
