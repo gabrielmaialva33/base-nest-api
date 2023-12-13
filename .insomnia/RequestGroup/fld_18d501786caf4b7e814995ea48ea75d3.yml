@@ -5,6 +5,6 @@ modified: 1702440750046
 created: 1702440750046
 name: Session
 description: Operations about sessions
-environment: {}
+environment: { }
 environmentPropertyOrder: null
 metaSortKey: -1702440750047
