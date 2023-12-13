@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: '20.x'
 
+      - name: Install nestjs cli
+        run: npm i -g @nestjs/cli
+
       - name: npm install, build, and test
         run: |
           npm install
