@@ -1,5 +1,9 @@
 {
   "user": {
-    "label": "Usuario"
+    "label": "Usuario",
+    "field": {
+      "email": "Correo electrónico",
+      "username": "Nombre de usuario"
+    }
   }
 }

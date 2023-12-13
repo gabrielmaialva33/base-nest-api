@@ -1,10 +1,11 @@
 import type { Path, TranslateOptions } from 'nestjs-i18n';
 import { I18nContext } from 'nestjs-i18n';
-import { I18nTranslations } from '@src/generated/i18n/i18n.types';
+import { I18nTranslations } from '@src/resources/generated/i18n/i18n.types';
+
 export function translate(
   key: Path<I18nTranslations>,
   options: TranslateOptions = {},
-) {
+): string {
   const i18nContext = I18nContext.current<I18nTranslations>();
 
   if (i18nContext) return i18nContext.t(key, options);

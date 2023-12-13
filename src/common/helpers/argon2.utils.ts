@@ -1,5 +1,8 @@
 import * as argon2 from 'argon2';
 import { from, map, Observable } from 'rxjs';
+import { Logger } from '@nestjs/common';
+
+const logger = new Logger();
 
 /**
  * -------------------------------------------------------
@@ -24,9 +27,13 @@ export const Argon2Utils = {
     try {
       const hash = await argon2.hash(password, { saltLength: 32 });
       return hash;
-    } catch (err) {
-      console.error('Error hashing password:', err);
-      throw err;
+    } catch (error) {
+      logger.error(
+        `Error hashing password: ${error.message}`,
+        error.stack,
+        'Argon2:Utils',
+      );
+      throw error;
     }
   },
 
@@ -48,9 +55,13 @@ export const Argon2Utils = {
     try {
       const match = await argon2.verify(hash, password);
       return match;
-    } catch (err) {
-      console.error('Error verifying password:', err);
-      throw err;
+    } catch (error) {
+      logger.error(
+        `Error verifying password: ${error.message}`,
+        error.stack,
+        'Argon2:Utils',
+      );
+      throw error;
     }
   },
 
@@ -62,9 +73,13 @@ export const Argon2Utils = {
     try {
       const hash = await argon2.hash(str);
       return hash;
-    } catch (err) {
-      console.error('Error hashing string:', err);
-      throw err;
+    } catch (error) {
+      logger.error(
+        `Error hashing password: ${error.message}`,
+        error.stack,
+        'Argon2:Utils',
+      );
+      throw error;
     }
   },
 
@@ -77,9 +92,13 @@ export const Argon2Utils = {
     try {
       const match = await argon2.verify(hash, str);
       return match;
-    } catch (err) {
-      console.error('Error verifying string:', err);
-      throw err;
+    } catch (error) {
+      logger.error(
+        `Error verifying password: ${error.message}`,
+        error.stack,
+        'Argon2:Utils',
+      );
+      throw error;
     }
   },
 

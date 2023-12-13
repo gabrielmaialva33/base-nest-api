@@ -1,14 +1,12 @@
-import { Global, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import {
   AcceptLanguageResolver,
-  CookieResolver,
   HeaderResolver,
   I18nModule,
   QueryResolver,
 } from 'nestjs-i18n';
 import * as process from 'process';
 
-@Global()
 @Module({
   imports: [
     I18nModule.forRoot({

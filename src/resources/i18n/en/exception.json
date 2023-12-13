@@ -1,3 +1,6 @@
 {
-  "model_not_found": "{model} not found."
+  "model_not_found": "{model} not found.",
+  "model_not_active": "{model} not active.",
+  "invalid_credentials": "Invalid credentials.",
+  "field_already_exists": "Field {field} already exists."
 }

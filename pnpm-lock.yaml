@@ -128,10 +128,10 @@ devDependencies:
     specifier: ^2.0.16
     version: 2.0.16
   '@typescript-eslint/eslint-plugin':
-    specifier: ^6.13.2
+    specifier: ^6.14.0
     version: 6.14.0(@typescript-eslint/parser@6.14.0)(eslint@8.55.0)(typescript@5.3.3)
   '@typescript-eslint/parser':
-    specifier: ^6.13.2
+    specifier: ^6.14.0
     version: 6.14.0(eslint@8.55.0)(typescript@5.3.3)
   eslint:
     specifier: ^8.55.0
@@ -1448,12 +1448,12 @@ packages:
   /@types/eslint-scope@3.7.7:
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
     dependencies:
-      '@types/eslint': 8.44.8
+      '@types/eslint': 8.44.9
       '@types/estree': 1.0.5
     dev: true
 
-  /@types/eslint@8.44.8:
-    resolution: {integrity: sha512-4K8GavROwhrYl2QXDXm0Rv9epkA8GBFu0EI+XrrnnuCl7u8CWBRusX7fXJfanhZTDWSAL24gDI/UqXyUM0Injw==}
+  /@types/eslint@8.44.9:
+    resolution: {integrity: sha512-6yBxcvwnnYoYT1Uk2d+jvIfsuP4mb2EdIxFnrPABj5a/838qe5bGkNLFOiipX4ULQ7XVQvTxOh7jO+BTAiqsEw==}
     dependencies:
       '@types/estree': 1.0.5
       '@types/json-schema': 7.0.15
@@ -2277,7 +2277,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001568
-      electron-to-chromium: 1.4.610
+      electron-to-chromium: 1.4.611
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.2)
     dev: true
@@ -2836,8 +2836,8 @@ packages:
   /ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  /electron-to-chromium@1.4.610:
-    resolution: {integrity: sha512-mqi2oL1mfeHYtOdCxbPQYV/PL7YrQlxbvFEZ0Ee8GbDdShimqt2/S6z2RWqysuvlwdOrQdqvE0KZrBTipAeJzg==}
+  /electron-to-chromium@1.4.611:
+    resolution: {integrity: sha512-ZtRpDxrjHapOwxtv+nuth5ByB8clyn8crVynmRNGO3wG3LOp8RTcyZDqwaI6Ng6y8FCK2hVZmJoqwCskKbNMaw==}
     dev: true
 
   /emittery@0.13.1:
