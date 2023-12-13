@@ -77,7 +77,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ZodValidationPipe());
 
   await app
-    .listen(3000, '0.0.0.0')
+    .listen(process.env.PORT || 3000, '0.0.0.0')
     .then(async () =>
       Logger.log(
         `Application is running on: ${await app.getUrl()}`,
