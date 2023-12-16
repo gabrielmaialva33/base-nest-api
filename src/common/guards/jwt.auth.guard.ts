@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
+import { RequestContext } from '@src/lib/context';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -25,6 +26,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (err || !user || info) {
       throw new UnauthorizedException(this.getErrorMessage(info));
     }
+
+    const async = RequestContext.get();
+    async.currentUser = user;
+
     return user;
   }
 

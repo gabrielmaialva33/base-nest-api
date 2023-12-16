@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { catchError, map, switchMap } from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap } from 'rxjs';
 import { DateTime } from 'luxon';
 import * as ms from 'ms';
 
@@ -20,6 +20,7 @@ import {
   GenerateToken,
   TokenGeneratorService,
 } from '@src/modules/tokens/services/token-generator.service';
+import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 
 /**
  * -------------------------------------------------------
@@ -63,6 +64,19 @@ export class TokensService {
         throw new InternalServerErrorException({
           message: 'Not able to login',
         });
+      }),
+    );
+  }
+
+  validateJwtToken(token: string) {
+    return this.jwtService.verifyAsync(token);
+  }
+
+  validateOpaqueToken(userId: number, rawToken: string) {
+    return this.tokenRepository.get({ user_id: userId }).pipe(
+      mergeMap((token) => {
+        if (!token) return of(false);
+        return Argon2Utils.verify$(token.token, rawToken);
       }),
     );
   }

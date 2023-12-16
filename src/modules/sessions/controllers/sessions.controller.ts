@@ -21,6 +21,6 @@ export class SessionsController {
 
   @Post('/sign_out')
   signOut() {
-    return this.sessionsService.signOut();
+    return {};
   }
 }
