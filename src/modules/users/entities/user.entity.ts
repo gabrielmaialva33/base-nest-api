@@ -22,12 +22,12 @@ export class User extends BaseEntity {
   password: string;
   avatar_url: string;
   username: string;
-  last_login_at: Date;
+  last_login_at: string;
   remember_me_token: string;
   is_active: boolean;
   is_email_verified: boolean;
   is_deleted: boolean;
-  deleted_at: Date;
+  deleted_at: string;
   created_at: string;
   updated_at: string;
 
