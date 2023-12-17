@@ -102,7 +102,12 @@ export class User extends BaseEntity {
 
   $formatJson(json: Pojo) {
     json = super.$formatJson(json);
-    return omit(json, ['password', 'is_deleted', 'deleted_at']);
+    return omit(json, [
+      'password',
+      'remember_me_token',
+      'is_deleted',
+      'deleted_at',
+    ]);
   }
 
   static uid = ['email', 'username'];

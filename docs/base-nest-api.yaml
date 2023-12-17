@@ -186,6 +186,134 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/sign_out:
+    delete:
+      summary: Sign out
+      description: Sign out user
+      operationId: sign.out
+      tags:
+        - Session
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Language
+          in: header
+          description: Accept-Language
+          required: true
+          schema:
+            type: string
+            description: Language code (ISO 639-1)
+            example: en-US
+        - name: Authorization
+          in: header
+          description: Authorization
+          required: true
+          schema:
+            type: string
+            description: JWT token
+            example: Bearer <token>
+      x-codeSamples:
+        - lang: shell
+          source: |
+            curl -X DELETE "http://localhost:3000/api/sign_out" -H "accept: application/json" -H "Authorization: Bearer <token>"
+        - lang: javascript
+          source: |
+            fetch("http://localhost:3000/api/sign_out", {
+              method: "DELETE",
+              headers: {
+                "accept": "application/json",
+                "Authorization": "Bearer <token>"
+              }
+            })
+              .then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.log(error));
+      x-tagGroups:
+        - name: Authentication
+      security:
+        - bearerToken: [ ]
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/refresh_token:
+    patch:
+      summary: Refresh token
+      description: Refresh user token
+      operationId: refresh.token
+      tags:
+        - Session
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Language
+          in: header
+          description: Accept-Language
+          required: true
+          schema:
+            type: string
+            description: Language code (ISO 639-1)
+            example: en-US
+      x-codeSamples:
+        - lang: shell
+          source: |
+            curl -X POST "http://localhost:3000/api/refresh_token" -H "accept: application/json" -H "Authorization: Bearer <token>"
+        - lang: javascript
+          source: |
+            fetch("http://localhost:3000/api/refresh_token", {
+            method: "POST",
+            headers: {
+                "accept": "application/json",
+                "Authorization": "Bearer <token>"
+            }
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.log(error));
+      x-tagGroups:
+        - name: Authentication
+      security:
+        - bearerToken: [ ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignSuccess'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /api/users:
     get:

@@ -44,20 +44,23 @@ export class TokensService {
     private readonly configService: ConfigService,
     @Inject(JwtService)
     private readonly jwtService: JwtService,
+    @Inject(TokenGeneratorService)
+    private readonly tokenGenerator: TokenGeneratorService,
     @Inject(TOKEN_REPOSITORY)
     private readonly tokenRepository: ITokenRepository,
-    private readonly tokenGenerator: TokenGeneratorService,
   ) {}
 
   private tokenLength = 60;
-  private tokenType = 'opaque_token';
+  private tokenType: TokenType = TokenType.ACCESS;
   private expiresIn =
     this.configService.get<string>('jwt.access_expiry') || '15m';
+  private refreshExpiresIn =
+    this.configService.get<string>('jwt.refresh_expiry') || '7d';
 
   generateJwtToken(payload: JwtPayload) {
-    return this.tokenGenerator.generateToken(this.tokenLength).pipe(
+    return this.tokenGenerator.generateHashToken(this.tokenLength).pipe(
       map((token) => this.buildTokenObject(token, payload)),
-      switchMap((tokenInfo) => this.saveToken(tokenInfo)),
+      switchMap((tokenData) => this.saveToken(tokenData)),
       map((rawToken) => this.createJwt(rawToken, payload)),
       catchError((error) => {
         Logger.error(error.message, 'TokenService');
@@ -68,8 +71,35 @@ export class TokensService {
     );
   }
 
-  validateJwtToken(token: string) {
-    return this.jwtService.verifyAsync(token);
+  generateRefreshToken(rawToken: string, payload: JwtPayload) {
+    return this.tokenGenerator
+      .hashToken(rawToken)
+      .pipe()
+      .pipe(
+        map((token) =>
+          this.buildTokenObject(
+            { rawToken, hashToken: token },
+            payload,
+            TokenType.REFRESH,
+          ),
+        ),
+        switchMap((tokenData) => this.saveToken(tokenData)),
+        map((rawToken) => this.createJwt(rawToken, payload, TokenType.REFRESH)),
+        catchError((error) => {
+          Logger.error(error.message, 'TokenService');
+          throw new InternalServerErrorException({
+            message: 'Not able to login',
+          });
+        }),
+      );
+  }
+
+  generateRememberMeToken() {
+    return this.tokenGenerator.generateToken(this.tokenLength);
+  }
+
+  destroyJwtToken(userId: number) {
+    return this.destroyToken(userId);
   }
 
   validateOpaqueToken(userId: number, rawToken: string) {
@@ -84,11 +114,15 @@ export class TokensService {
   private buildTokenObject(
     token: GenerateToken,
     payload: JwtPayload,
-  ): TokenInfo {
-    const expiresAt = this.getExpiresAtDate(this.expiresIn);
+    type: TokenType = TokenType.ACCESS,
+  ): TokenData {
+    const expiresAt =
+      type === TokenType.ACCESS
+        ? this.getExpiresAtDate(this.expiresIn)
+        : this.getExpiresAtDate(this.refreshExpiresIn);
     return {
-      name: 'Access Token | Authentication',
-      type: this.tokenType,
+      name: 'Opaque Access Token | Authentication',
+      type,
       token: token.hashToken,
       rawToken: token.rawToken,
       userId: payload.id,
@@ -96,22 +130,22 @@ export class TokensService {
     };
   }
 
-  private saveToken(tokenInfo: TokenInfo) {
-    const tokenData = {
-      name: tokenInfo.name || 'Opaque Access Token | Authentication',
-      type: this.tokenType,
-      token: tokenInfo.token,
-      expires_at: tokenInfo.expiresAt.toISO(),
-      user_id: tokenInfo.userId,
+  private saveToken(tokenData: TokenData) {
+    const payload = {
+      name: tokenData.name || 'Opaque Access Token | Authentication',
+      type: tokenData.type || this.tokenType,
+      token: tokenData.token,
+      expires_at: tokenData.expiresAt.toISO(),
+      user_id: tokenData.userId,
     };
 
     // delete existing tokens for user
-    return this.destroyToken(tokenInfo.userId).pipe(
+    return this.destroyToken(tokenData.userId).pipe(
       switchMap(() =>
         // create new token
         this.tokenRepository
-          .create(tokenData)
-          .pipe(map(() => tokenInfo.rawToken)),
+          .create(payload)
+          .pipe(map(() => tokenData.rawToken)),
       ),
     );
   }
@@ -125,11 +159,14 @@ export class TokensService {
     );
   }
 
-  private createJwt(rawToken: string, payload: JwtPayload): string {
-    return this.jwtService.sign(
-      { token: rawToken, ...payload },
-      { expiresIn: this.expiresIn },
-    );
+  private createJwt(
+    rawToken: string,
+    payload: JwtPayload,
+    type: TokenType = TokenType.ACCESS,
+  ) {
+    const expiresIn =
+      type === TokenType.ACCESS ? this.expiresIn : this.refreshExpiresIn;
+    return this.jwtService.sign({ token: rawToken, ...payload }, { expiresIn });
   }
 
   private getExpiresAtDate(expiresIn?: string | number): DateTime | undefined {
@@ -140,16 +177,22 @@ export class TokensService {
   }
 }
 
-interface JwtPayload {
+export interface JwtPayload {
   id: number;
   uid?: string;
+  rawToken?: string;
 }
 
-interface TokenInfo {
+export interface TokenData {
   name?: string;
   type?: string;
   token: string;
   rawToken: string;
   userId: number;
   expiresAt: DateTime;
+}
+
+export enum TokenType {
+  ACCESS = 'access_token',
+  REFRESH = 'refresh_token',
 }

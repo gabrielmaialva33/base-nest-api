@@ -10,7 +10,7 @@ import { Argon2Utils } from '@src/common/helpers/argon2.utils';
  * -------------------------------------------------------
  * @class TokenGeneratorService
  * @property {number} tokenLength - Length of the raw token. The hash length will vary
- * @method generateToken - Generate a token and hash
+ * @method generateHashToken - Generate a token and hash
  * @method generateHash - Converts value to an argon2 hash
  * -------------------------------------------------------
  */
@@ -21,11 +21,19 @@ export class TokenGeneratorService {
    * @param tokenLength Length of the token to be generated.
    * @returns An Observable containing the token and its hash.
    */
-  generateToken(tokenLength: number): Observable<GenerateToken> {
+  generateHashToken(tokenLength: number): Observable<GenerateToken> {
     const rawToken = CryptoUtils.random(tokenLength);
     return this.generateHash(rawToken).pipe(
       map((hash) => ({ rawToken, hashToken: hash })),
     );
+  }
+
+  hashToken(rawToken: string): Observable<string> {
+    return this.generateHash(rawToken);
+  }
+
+  generateToken(tokenLength: number) {
+    return CryptoUtils.random(tokenLength);
   }
 
   /**

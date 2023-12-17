@@ -1,8 +1,16 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { SessionsService } from '@src/modules/sessions/services/sessions.service';
 import { LocalAuthGuard } from '@src/common/guards/local.auth.guard';
 import { SignInUserDto } from '@src/modules/sessions/dto/sign-in-user.dto';
 import { SignUpUserDto } from '@src/modules/sessions/dto/sign-up-user.dto';
+import { Auth } from '@src/common/decorators/auth.decorator';
 
 @Controller()
 export class SessionsController {
@@ -19,8 +27,15 @@ export class SessionsController {
     return this.sessionsService.signUp(body);
   }
 
-  @Post('/sign_out')
+  @Auth()
+  @Delete('/sign_out')
   signOut() {
-    return {};
+    return this.sessionsService.signOut();
+  }
+
+  @Auth()
+  @Patch('/refresh_token')
+  refreshToken() {
+    return this.sessionsService.refreshToken();
   }
 }
