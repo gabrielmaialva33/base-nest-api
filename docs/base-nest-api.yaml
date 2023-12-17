@@ -308,9 +308,9 @@ paths:
 
   /api/users:
     get:
-      summary: List users
-      description: Get all users
-      operationId: user.get.all
+      summary: Paginate users
+      description: Get paginated users
+      operationId: user.paginate
       tags:
         - User
       parameters:
@@ -321,6 +321,65 @@ paths:
           schema:
             type: string
             example: application/json
+        - name: Accept-Language
+          in: header
+          description: Accept-Language
+          required: true
+          schema:
+            type: string
+            description: Language code (ISO 639-1)
+            example: en-US
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: per_page
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            format: int64
+            example: 10
+        - name: sort
+          in: query
+          description: Sort users by field
+          required: false
+          schema:
+            type: string
+            enum:
+              - id
+              - first_name
+              - last_name
+              - email
+              - username
+              - last_login_at
+              - created_at
+              - updated_at
+            example: id
+        - name: order
+          in: query
+          description: Sort users by order
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+              - ASC
+              - DESC
+            example: asc
+        - name: search
+          in: query
+          description: Search users by field (first_name, last_name, email, username)
+          required: false
+          schema:
+            type: string
+            example: 'Gabriel'
       security:
         - bearerToken: [ ]
       x-codeSamples:
@@ -344,9 +403,15 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  pagination:
+                    allOf:
+                      - $ref: '#/components/schemas/Pagination'
         '500':
           description: Internal Server Error
           content:
@@ -412,6 +477,96 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/users/all:
+    get:
+      summary: List users
+      description: Get all users (no pagination)
+      operationId: user.get.all
+      tags:
+        - User
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: application/json
+        - name: Accept-Language
+          in: header
+          description: Accept-Language
+          required: true
+          schema:
+            type: string
+            description: Language code (ISO 639-1)
+            example: en-US
+        - name: sort
+          in: query
+          description: Sort users by field
+          required: false
+          schema:
+            type: string
+            enum:
+              - id
+              - first_name
+              - last_name
+              - email
+              - username
+              - last_login_at
+              - created_at
+              - updated_at
+            example: id
+        - name: order
+          in: query
+          description: Sort users by order
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+              - ASC
+              - DESC
+            example: asc
+        - name: search
+          in: query
+          description: Search users by field (first_name, last_name, email, username)
+          required: false
+          schema:
+            type: string
+            example: 'Gabriel'
+      security:
+        - bearerToken: [ ]
+      x-codeSamples:
+        - lang: shell
+          source: |
+            curl -X GET "http://localhost:3000/api/users/all" -H "accept: application/json"
+        - lang: javascript
+          source: |
+            fetch("http://localhost:3000/api/users/all", {
+            method: "GET",
+            headers: {
+                "accept": "application/json"
+            }
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.log(error));
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
         '500':
           description: Internal Server Error
           content:
@@ -618,6 +773,72 @@ components:
       example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjI5MjU0NjQ2LCJleHAiOjE2Mjk4N
       'x-tags':
         - Token
+    Pagination:
+      type: object
+      properties:
+        pagination:
+          type: object
+          properties:
+            total:
+              type: integer
+              format: int64
+              description: Total number of items
+              example: 3
+            current_page:
+              type: integer
+              format: int64
+              description: Current page number
+              example: 2
+            per_page:
+              type: integer
+              format: int64
+              description: Number of items per page
+              example: 1
+            total_pages:
+              type: integer
+              format: int64
+              description: Total number of pages
+              example: 3
+            first:
+              type: integer
+              format: int64
+              description: First page number
+              example: 1
+            previous:
+              type: integer
+              format: int64
+              description: Previous page number
+              example: 1
+            next:
+              type: integer
+              format: int64
+              description: Next page number
+              example: 3
+            last:
+              type: integer
+              format: int64
+              description: Last page number
+              example: 3
+            has_more:
+              type: boolean
+              description: Has more pages
+              example: true
+            has_previous:
+              type: boolean
+              description: Has previous pages
+              example: true
+          example: {
+            "total": 3,
+            "current_page": 2,
+            "per_page": 1,
+            "total_pages": 3,
+            "first": 1,
+            "previous": 1,
+            "next": 3,
+            "last": 3,
+            "has_more": true,
+            "has_previous": true
+          }
     User:
       type: object
       properties:

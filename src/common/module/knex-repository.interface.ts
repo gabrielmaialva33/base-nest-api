@@ -3,17 +3,29 @@ import {
   ModelObject,
   Modifier,
   ModifierFunction,
+  OrderByDirection,
   QueryBuilder,
   QueryBuilderType,
   SingleQueryBuilder,
 } from 'objection';
 
 import { BaseEntity } from '@src/common/module/base.entity';
+import { PaginationOptions } from '@src/common/module/pagination';
 
 export type Builder<T extends BaseEntity> = ModifierFunction<QueryBuilder<T>>;
 export type SingleBuilder<T extends BaseEntity> = Modifier<
   SingleQueryBuilder<QueryBuilderType<T>>
 >;
+
+export interface PaginateResult<T> {
+  results: T[];
+  total: number;
+}
+
+export interface ListOptions<T> {
+  sort?: keyof T | string;
+  order?: OrderByDirection;
+}
 
 export interface IKnexRepository<T extends BaseEntity> {
   /**
@@ -43,6 +55,31 @@ export interface IKnexRepository<T extends BaseEntity> {
     clauseOrBuilder?: Partial<T> | Builder<T>,
     builder?: Builder<T>,
   ): Observable<T[]>;
+
+  /**
+   * Get all the records that match the clause or query and list the results.
+   * @param {ListOptions<T>} options - The list options
+   * @param {Builder<T>} builder - The query to filter the records
+   */
+  list(options?: ListOptions<T>, builder?: Builder<T>): Observable<T[]>;
+
+  /**
+   * Get all the records that match the clause or query and paginate the results.
+   * @param {PaginationOptions} args - The pagination options
+   * @param {Builder<T>} builder - The query to filter the records
+   * @returns {Observable<PaginateResult<T>>}
+   * @memberof IKnexRepository
+   * @example
+   * const models = this.repository.paginate({ page: 1, per_page: 10 });
+   * models.subscribe(results => console.log(results));
+   * @example
+   * const models = this.repository.paginate({ page: 1, per_page: 10 }, query => query.orderBy('id', 'desc'));
+   * models.subscribe(results => console.log(results));
+   */
+  paginate(
+    args?: PaginationOptions<T>,
+    builder?: Builder<T>,
+  ): Observable<PaginateResult<T>>;
 
   /**
    * Get the first record that matches the clause or query.

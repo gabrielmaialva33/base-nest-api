@@ -6,11 +6,14 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 
+import { OrderByDirection } from 'objection';
 import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
 import { UsersService } from '@src/modules/users/services/users.service';
+
 import { Auth } from '@src/common/decorators/auth.decorator';
 
 @Auth()
@@ -18,9 +21,24 @@ import { Auth } from '@src/common/decorators/auth.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get('/all')
+  list(
+    @Query('sort') sort: string = 'id',
+    @Query('order') order: OrderByDirection = 'asc',
+    @Query('search') search: string = undefined,
+  ) {
+    return this.usersService.list({ sort, order, search });
+  }
+
   @Get()
-  list() {
-    return this.usersService.list();
+  paginate(
+    @Query('page') page: number = 1,
+    @Query('per_page') per_page: number = 10,
+    @Query('sort') sort: string = 'id',
+    @Query('order') order: OrderByDirection = 'asc',
+    @Query('search') search: string = undefined,
+  ) {
+    return this.usersService.paginate({ page, per_page, sort, order, search });
   }
 
   @Get(':id')

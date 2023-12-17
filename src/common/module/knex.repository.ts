@@ -1,16 +1,25 @@
 import { from, map, Observable } from 'rxjs';
+import { ModelObject, OrderByDirection } from 'objection';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 import {
   Builder,
   IKnexRepository,
+  ListOptions,
+  PaginateResult,
   SingleBuilder,
 } from '@src/common/module/knex-repository.interface';
 import { BaseEntity } from '@src/common/module/base.entity';
-import { ModelObject } from 'objection';
+import { PaginationOptions } from '@src/common/module/pagination';
 
 export class KnexRepository<T extends BaseEntity>
   implements IKnexRepository<T>
 {
+  protected readonly DEFAULT_SORT = 'id';
+  protected readonly DEFAULT_ORDER: OrderByDirection = 'asc';
+  protected readonly DEFAULT_PAGE = 1;
+  protected readonly DEFAULT_PER_PAGE = 10;
+
   constructor(protected readonly model: typeof BaseEntity) {}
 
   all(
@@ -25,6 +34,62 @@ export class KnexRepository<T extends BaseEntity>
         if (typeof builder === 'function') query.modify(builder);
       }),
     ).pipe(map((result) => result as T[]));
+  }
+
+  list(options?: ListOptions<T>, builder?: Builder<T>): Observable<T[]> {
+    const { sort = this.DEFAULT_SORT, order = this.DEFAULT_ORDER } =
+      options || {};
+
+    return from(
+      this.model.query().modify((query) => {
+        if (sort !== this.DEFAULT_SORT) this.validateSortProperty(String(sort));
+        if (order !== this.DEFAULT_ORDER) this.validateOrderProperty(order);
+
+        if (typeof builder === 'function') query.modify(builder);
+
+        return query.orderBy(
+          `${this.model.tableName}.${String(sort).toLowerCase()}`,
+          order,
+        );
+      }),
+    ).pipe(map((result) => result as T[]));
+  }
+
+  paginate(
+    args?: PaginationOptions<T>,
+    builder?: Builder<T>,
+  ): Observable<PaginateResult<T>> {
+    const {
+      page = this.DEFAULT_PAGE,
+      per_page = this.DEFAULT_PER_PAGE,
+      sort = this.DEFAULT_SORT,
+      order = this.DEFAULT_ORDER,
+    } = args || {};
+
+    return from(
+      this.model.transaction(async (trx) => {
+        if (sort !== this.DEFAULT_SORT) this.validateSortProperty(String(sort));
+        if (order !== this.DEFAULT_ORDER) this.validateOrderProperty(order);
+
+        const query = this.model.query(trx);
+        if (typeof builder === 'function') query.modify(builder);
+
+        query.page(Number(page) - 1, Number(per_page));
+
+        return query.orderBy(
+          `${this.model.tableName}.${String(sort).toLowerCase()}`,
+          order,
+        );
+      }),
+    ).pipe(
+      map(
+        (result) =>
+          ({
+            results: result['results'] as T[],
+            total: result['total'] as number,
+          }) as { results: T[]; total: number },
+      ),
+    );
   }
 
   get(
@@ -91,5 +156,30 @@ export class KnexRepository<T extends BaseEntity>
         return query.delete();
       }),
     ).pipe(map((result) => result as unknown as number));
+  }
+
+  /**
+   * Helper method to paginate a query
+   */
+  private validateSortProperty(sort: string) {
+    if (
+      !Object.keys(this.model.jsonSchema.properties).includes(
+        sort.toLowerCase(),
+      )
+    )
+      throw new HttpException(
+        `sort property must be one of: ${Object.keys(
+          this.model.jsonSchema.properties,
+        ).join(', ')}`,
+        HttpStatus.BAD_REQUEST,
+      );
+  }
+
+  private validateOrderProperty(order: string) {
+    if (order.toLowerCase() !== 'asc' && order !== 'desc')
+      throw new HttpException(
+        `order property must be asc or desc`,
+        HttpStatus.BAD_REQUEST,
+      );
   }
 }

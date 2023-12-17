@@ -8,8 +8,11 @@ import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
 import {
   IUserRepository,
   USER_REPOSITORY,
+  UserList,
+  UserPaginate,
 } from '@src/modules/users/interfaces/user.interface';
 import { User } from '@src/modules/users/entities/user.entity';
+import { createPagination } from '@src/common/module/pagination';
 
 @Injectable()
 export class UsersService {
@@ -18,10 +21,31 @@ export class UsersService {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  list() {
-    return this.userRepository.all((qb) => {
+  list(params?: UserList) {
+    const { search, ...options } = params;
+    return this.userRepository.list(options, (qb) => {
       qb.modify(User.scopes.notDeleted);
+      if (search) qb.modify(User.scopes.search, search);
     });
+  }
+
+  paginate(params?: UserPaginate) {
+    const { search, ...options } = params;
+    return this.userRepository
+      .paginate(options, (qb) => {
+        qb.modify(User.scopes.notDeleted);
+        if (search) qb.modify(User.scopes.search, search);
+      })
+      .pipe(
+        map((data) =>
+          createPagination<User>({
+            data: data.results,
+            total: data.total,
+            page: +params.page,
+            per_page: +params.per_page,
+          }),
+        ),
+      );
   }
 
   get(id: number) {

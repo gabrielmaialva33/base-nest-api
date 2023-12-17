@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 
 import { BaseEntity } from '@src/common/module/base.entity';
 import { Argon2Utils } from '@src/common/helpers/argon2.utils';
+import { Env } from '@src/env';
 
 export class User extends BaseEntity {
   static tableName = 'users';
@@ -62,6 +63,12 @@ export class User extends BaseEntity {
   static scopes = {
     notDeleted: (builder: QueryBuilder<User>) =>
       builder.whereNot('is_deleted', true),
+    search: (builder: QueryBuilder<User>, search: string) =>
+      builder.where((builder) => {
+        const like = Env.DB_CLIENT === 'pg' ? 'ilike' : 'like';
+        for (const field of this.searchBy)
+          builder.orWhere(field, `${like}`, `%${search}%`);
+      }),
   };
 
   /**
@@ -111,4 +118,5 @@ export class User extends BaseEntity {
   }
 
   static uid = ['email', 'username'];
+  static searchBy = ['first_name', 'last_name', 'email', 'username'];
 }
