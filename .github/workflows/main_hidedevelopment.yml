@@ -21,9 +21,10 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Install pnpm
-        run: |
-          curl -fsSL https://get.pnpm.io/install.sh | sh -
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8.12.1
 
       - name: pnmp, build, and test
         run: |
