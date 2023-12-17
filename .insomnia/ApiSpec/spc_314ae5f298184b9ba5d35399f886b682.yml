@@ -1,7 +1,7 @@
 _id: spc_314ae5f298184b9ba5d35399f886b682
 type: ApiSpec
 parentId: wrk_1629d20a4b0444d88a87592d593cee39
-modified: 1702440733958
+modified: 1702827838105
 created: 1701886126179
 fileName: Base Nest API
 contents: >+
@@ -192,12 +192,133 @@ contents: >+
               application/json:
                 schema:
                   $ref: '#/components/schemas/Error'
+    /api/sign_out:
+      delete:
+        summary: Sign out
+        description: Sign out user
+        operationId: sign.out
+        tags:
+          - Session
+        parameters:
+          - name: Content-Type
+            in: header
+            description: Content-Type
+            required: true
+            schema:
+              type: string
+              example: application/json
+          - name: Accept-Language
+            in: header
+            description: Accept-Language
+            required: true
+            schema:
+              type: string
+              description: Language code (ISO 639-1)
+              example: en-US
+          - name: Authorization
+            in: header
+            description: Authorization
+            required: true
+            schema:
+              type: string
+              description: JWT token
+              example: Bearer <token>
+        x-codeSamples:
+          - lang: shell
+            source: |
+              curl -X DELETE "http://localhost:3000/api/sign_out" -H "accept: application/json" -H "Authorization: Bearer <token>"
+          - lang: javascript
+            source: |
+              fetch("http://localhost:3000/api/sign_out", {
+                method: "DELETE",
+                headers: {
+                  "accept": "application/json",
+                  "Authorization": "Bearer <token>"
+                }
+              })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.log(error));
+        x-tagGroups:
+          - name: Authentication
+        security:
+          - bearerToken: [ ]
+        responses:
+          '204':
+            description: No Content
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+    /api/refresh_token:
+      patch:
+        summary: Refresh token
+        description: Refresh user token
+        operationId: refresh.token
+        tags:
+          - Session
+        parameters:
+          - name: Accept-Language
+            in: header
+            description: Accept-Language
+            required: true
+            schema:
+              type: string
+              description: Language code (ISO 639-1)
+              example: en-US
+        x-codeSamples:
+          - lang: shell
+            source: |
+              curl -X POST "http://localhost:3000/api/refresh_token" -H "accept: application/json" -H "Authorization: Bearer <token>"
+          - lang: javascript
+            source: |
+              fetch("http://localhost:3000/api/refresh_token", {
+              method: "POST",
+              headers: {
+                  "accept": "application/json",
+                  "Authorization": "Bearer <token>"
+              }
+              })
+              .then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.log(error));
+        x-tagGroups:
+          - name: Authentication
+        security:
+          - bearerToken: [ ]
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SignSuccess'
+          '400':
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
 
     /api/users:
       get:
-        summary: List users
-        description: Get all users
-        operationId: user.get.all
+        summary: Paginate users
+        description: Get paginated users
+        operationId: user.paginate
         tags:
           - User
         parameters:
@@ -208,6 +329,65 @@ contents: >+
             schema:
               type: string
               example: application/json
+          - name: Accept-Language
+            in: header
+            description: Accept-Language
+            required: true
+            schema:
+              type: string
+              description: Language code (ISO 639-1)
+              example: en-US
+          - name: page
+            in: query
+            description: Page number
+            required: false
+            schema:
+              type: integer
+              format: int64
+              example: 1
+          - name: per_page
+            in: query
+            description: Number of items per page
+            required: false
+            schema:
+              type: integer
+              format: int64
+              example: 10
+          - name: sort
+            in: query
+            description: Sort users by field
+            required: false
+            schema:
+              type: string
+              enum:
+                - id
+                - first_name
+                - last_name
+                - email
+                - username
+                - last_login_at
+                - created_at
+                - updated_at
+              example: id
+          - name: order
+            in: query
+            description: Sort users by order
+            required: false
+            schema:
+              type: string
+              enum:
+                - asc
+                - desc
+                - ASC
+                - DESC
+              example: asc
+          - name: search
+            in: query
+            description: Search users by field (first_name, last_name, email, username)
+            required: false
+            schema:
+              type: string
+              example: 'Gabriel'
         security:
           - bearerToken: [ ]
         x-codeSamples:
@@ -231,9 +411,15 @@ contents: >+
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/User'
+                  type: object
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/User'
+                    pagination:
+                      allOf:
+                        - $ref: '#/components/schemas/Pagination'
           '500':
             description: Internal Server Error
             content:
@@ -299,6 +485,96 @@ contents: >+
               application/json:
                 schema:
                   $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+    /api/users/all:
+      get:
+        summary: List users
+        description: Get all users (no pagination)
+        operationId: user.get.all
+        tags:
+          - User
+        parameters:
+          - name: Content-Type
+            in: header
+            description: Content-Type
+            required: true
+            schema:
+              type: string
+              example: application/json
+          - name: Accept-Language
+            in: header
+            description: Accept-Language
+            required: true
+            schema:
+              type: string
+              description: Language code (ISO 639-1)
+              example: en-US
+          - name: sort
+            in: query
+            description: Sort users by field
+            required: false
+            schema:
+              type: string
+              enum:
+                - id
+                - first_name
+                - last_name
+                - email
+                - username
+                - last_login_at
+                - created_at
+                - updated_at
+              example: id
+          - name: order
+            in: query
+            description: Sort users by order
+            required: false
+            schema:
+              type: string
+              enum:
+                - asc
+                - desc
+                - ASC
+                - DESC
+              example: asc
+          - name: search
+            in: query
+            description: Search users by field (first_name, last_name, email, username)
+            required: false
+            schema:
+              type: string
+              example: 'Gabriel'
+        security:
+          - bearerToken: [ ]
+        x-codeSamples:
+          - lang: shell
+            source: |
+              curl -X GET "http://localhost:3000/api/users/all" -H "accept: application/json"
+          - lang: javascript
+            source: |
+              fetch("http://localhost:3000/api/users/all", {
+              method: "GET",
+              headers: {
+                  "accept": "application/json"
+              }
+              })
+              .then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.log(error));
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/User'
           '500':
             description: Internal Server Error
             content:
@@ -505,6 +781,72 @@ contents: >+
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjI5MjU0NjQ2LCJleHAiOjE2Mjk4N
         'x-tags':
           - Token
+      Pagination:
+        type: object
+        properties:
+          pagination:
+            type: object
+            properties:
+              total:
+                type: integer
+                format: int64
+                description: Total number of items
+                example: 3
+              current_page:
+                type: integer
+                format: int64
+                description: Current page number
+                example: 2
+              per_page:
+                type: integer
+                format: int64
+                description: Number of items per page
+                example: 1
+              total_pages:
+                type: integer
+                format: int64
+                description: Total number of pages
+                example: 3
+              first:
+                type: integer
+                format: int64
+                description: First page number
+                example: 1
+              previous:
+                type: integer
+                format: int64
+                description: Previous page number
+                example: 1
+              next:
+                type: integer
+                format: int64
+                description: Next page number
+                example: 3
+              last:
+                type: integer
+                format: int64
+                description: Last page number
+                example: 3
+              has_more:
+                type: boolean
+                description: Has more pages
+                example: true
+              has_previous:
+                type: boolean
+                description: Has previous pages
+                example: true
+            example: {
+              "total": 3,
+              "current_page": 2,
+              "per_page": 1,
+              "total_pages": 3,
+              "first": 1,
+              "previous": 1,
+              "next": 3,
+              "last": 3,
+              "has_more": true,
+              "has_previous": true
+            }
       User:
         type: object
         properties:

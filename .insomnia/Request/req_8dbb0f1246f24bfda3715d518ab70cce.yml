@@ -1,14 +1,14 @@
-_id: req_b95bdb6bd8264f3f963aaefc7297e87e
+_id: req_8dbb0f1246f24bfda3715d518ab70cce
 type: Request
-parentId: fld_b9407e056901456193cea2b2585a5786
-modified: 1702440750050
-created: 1702440750050
+parentId: fld_97e8f78d454d40d495e72e17100a2259
+modified: 1702827842567
+created: 1702827842567
 url: "{{ _.base_url }}/api/users/{{ _.id }}"
-name: Delete user
+name: Get user
 description: ""
-method: DELETE
-body: { }
-parameters: [ ]
+method: GET
+body: {}
+parameters: []
 headers:
   - name: Content-Type
     disabled: false
@@ -17,7 +17,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1702440750050
+metaSortKey: -1702827842567
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
