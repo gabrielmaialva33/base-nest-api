@@ -29,7 +29,7 @@ async function bootstrap() {
    * Security
    * ------------------------------------------------------
    */
-  await app.register(helmet, {
+  await app.register(helmet as any, {
     contentSecurityPolicy: {
       directives: {
         'default-src': ["'self'"],
