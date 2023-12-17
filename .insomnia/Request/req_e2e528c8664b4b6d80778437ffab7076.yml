@@ -18,7 +18,7 @@ body:
       "username": "gabriel.alva",
       "password": "Dev@551238"
     }
-parameters: []
+parameters: [ ]
 headers:
   - name: Content-Type
     disabled: false
@@ -26,7 +26,7 @@ headers:
   - name: Accept-Language
     disabled: false
     value: en-US
-authentication: {}
+authentication: { }
 metaSortKey: -1702827842560
 isPrivate: false
 settingStoreCookies: true

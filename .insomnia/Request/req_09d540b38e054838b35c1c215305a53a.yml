@@ -7,8 +7,8 @@ url: "{{ _.base_url }}/api/refresh_token"
 name: Refresh token
 description: ""
 method: PATCH
-body: {}
-parameters: []
+body: { }
+parameters: [ ]
 headers:
   - name: Accept-Language
     disabled: false

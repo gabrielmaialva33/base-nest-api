@@ -60,6 +60,7 @@ export interface PaginationMeta {
    * whether there are previous pages
    */
   has_previous: boolean;
+
   /**
    * any other meta information
    */

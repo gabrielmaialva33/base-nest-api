@@ -6,6 +6,7 @@ interface PaginationOptions<T> {
   total: number;
   page: number;
   per_page: number;
+
   [key: string]: any; // For any other option.
 }
 
