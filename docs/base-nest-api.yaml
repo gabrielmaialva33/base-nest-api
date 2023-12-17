@@ -258,13 +258,6 @@ paths:
       tags:
         - Session
       parameters:
-        - name: Content-Type
-          in: header
-          description: Content-Type
-          required: true
-          schema:
-            type: string
-            example: application/json
         - name: Accept-Language
           in: header
           description: Accept-Language

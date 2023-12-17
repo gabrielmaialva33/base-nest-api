@@ -10,7 +10,6 @@ import {
   USER_REPOSITORY,
 } from '@src/modules/users/interfaces/user.interface';
 import { User } from '@src/modules/users/entities/user.entity';
-import { ModelObject } from 'objection';
 
 @Injectable()
 export class UsersService {
