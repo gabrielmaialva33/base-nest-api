@@ -51,7 +51,10 @@
   },
   "dependencies": {
     "@fastify/compress": "^6.5.0",
+    "@fastify/cors": "8.4.2",
+    "@fastify/formbody": "7.4.0",
     "@fastify/helmet": "^11.1.1",
+    "@fastify/middie": "8.3.0",
     "@fastify/multipart": "^8.0.0",
     "@fastify/static": "^6.12.0",
     "@nestjs/common": "^10.2.10",
@@ -67,7 +70,7 @@
     "dotenv": "^16.3.1",
     "envalid": "^8.0.0",
     "fast-glob": "^3.3.2",
-    "fastify": "^4.25.1",
+    "fastify": "4.25.1",
     "helper-fns": "^2.6.43",
     "knex": "^3.1.0",
     "luxon": "^3.4.4",
@@ -77,7 +80,7 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.11.3",
-    "reflect-metadata": "^0.1.12",
+    "reflect-metadata": "^0.2.1",
     "rimraf": "^5.0.5",
     "rxjs": "^7.8.1",
     "zod": "^3.22.4"

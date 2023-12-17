@@ -50,17 +50,17 @@ async function bootstrap() {
       },
     },
   });
-  await app.register(compression, { encodings: ['gzip', 'deflate'] });
-  await app.register(multipart, {
+  await app.register(compression as any, { encodings: ['gzip', 'deflate'] });
+  await app.register(multipart as any, {
     limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
     throwFileSizeLimit: true,
   });
-  await app.register(fastifyStatic, {
+  await app.register(fastifyStatic as any, {
     root: path.join(__dirname, '..', 'public'),
     prefix: '/public/',
     decorateReply: false,
   });
-  await app.register(fastifyStatic, {
+  await app.register(fastifyStatic as any, {
     root: path.join(__dirname, '..', 'docs'),
     prefix: '/docs/',
     decorateReply: false,
