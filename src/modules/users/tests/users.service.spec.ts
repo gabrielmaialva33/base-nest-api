@@ -1,15 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from '@src/modules/users/services/users.service';
+
 import { NotFoundException } from '@nestjs/common';
+
 import { createMock } from '@golevelup/ts-jest';
 import { of } from 'rxjs';
 import { pick } from 'helper-fns';
 
-import { userFactory } from '@src/database/factories';
+import { UsersService } from '@src/modules/users/services/users.service';
+
 import {
   IUserRepository,
   USER_REPOSITORY,
 } from '@src/modules/users/interfaces/user.interface';
+import { userFactory } from '@src/database/factories';
 
 describe('UsersService', () => {
   let service: UsersService;

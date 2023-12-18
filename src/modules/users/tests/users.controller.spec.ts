@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { createMock } from '@golevelup/ts-jest';
+import { NotFoundException } from '@nestjs/common';
 
 import { of } from 'rxjs';
+import { pick } from 'helper-fns';
+import { createMock } from '@golevelup/ts-jest';
 
 import { UsersController } from '@src/modules/users/controllers/users.controller';
 import { UsersService } from '@src/modules/users/services/users.service';
@@ -12,16 +14,13 @@ import {
 } from '@src/modules/users/interfaces/user.interface';
 
 import { userFactory } from '@src/database/factories';
-import { NotFoundException } from '@nestjs/common';
-import { pick } from 'helper-fns';
 
 describe('UsersController', () => {
   let controller: UsersController;
+  let mockUserRepository: jest.Mocked<IUserRepository>;
+  const mockUsers = userFactory.makeManyStub(10);
 
-  // repositories mock declaration
-  const mockUserRepository = createMock<IUserRepository>();
-
-  beforeEach(async () => {
+  beforeAll(async () => {
     jest.clearAllMocks();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -30,12 +29,13 @@ describe('UsersController', () => {
         UsersService,
         {
           provide: USER_REPOSITORY,
-          useValue: mockUserRepository,
+          useValue: createMock<IUserRepository>(),
         },
       ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
+    mockUserRepository = module.get(USER_REPOSITORY);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -45,32 +45,29 @@ describe('UsersController', () => {
   });
 
   describe('list', () => {
-    const mockUserList = userFactory.makeManyStub(10);
-
     it('should return a list of users', (done) => {
-      jest.spyOn(mockUserRepository, 'list').mockReturnValue(of(mockUserList));
+      mockUserRepository.list.mockReturnValue(of(mockUsers));
 
       controller.list().subscribe((users) => {
-        expect(users).toEqual(mockUserList);
+        expect(mockUserRepository.list).toHaveBeenCalled();
+        expect(mockUserRepository.list).toHaveBeenCalledTimes(1);
+        expect(users).toEqual(mockUsers);
         done();
       });
     });
   });
 
   describe('paginate', () => {
-    const mockUserList = userFactory.makeManyStub(10);
-
     it('should return a paginated list of users', (done) => {
-      jest.spyOn(mockUserRepository, 'paginate').mockReturnValue(
-        of({
-          results: mockUserList,
-          total: mockUserList.length,
-        }),
+      mockUserRepository.paginate.mockReturnValue(
+        of({ results: mockUsers, total: mockUsers.length }),
       );
 
       controller.paginate().subscribe((paginatedUsers) => {
+        expect(mockUserRepository.paginate).toHaveBeenCalled();
+        expect(mockUserRepository.paginate).toHaveBeenCalledTimes(1);
         expect(paginatedUsers).toEqual({
-          data: mockUserList,
+          data: mockUsers,
           pagination: {
             total: 10,
             current_page: 1,
@@ -84,35 +81,35 @@ describe('UsersController', () => {
             has_previous: false,
           },
         });
-
-        expect(paginatedUsers.data).toEqual(mockUserList);
-        expect(paginatedUsers.pagination.total).toEqual(mockUserList.length);
+        expect(paginatedUsers.data).toEqual(mockUsers);
+        expect(paginatedUsers.pagination.total).toEqual(mockUsers.length);
         done();
       });
     });
   });
 
   describe('get', () => {
-    const mockUser = userFactory.makeStub();
+    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should return a user', (done) => {
-      jest.spyOn(mockUserRepository, 'get').mockReturnValue(of(mockUser));
+      mockUserRepository.get.mockReturnValue(of(mockUser));
 
       controller.get(String(mockUser.id)).subscribe((user) => {
+        expect(mockUserRepository.get).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
         expect(user).toEqual(mockUser);
         done();
       });
     });
 
     it('should throw an error if user not found', (done) => {
-      const getSpy = jest
-        .spyOn(mockUserRepository, 'get')
-        .mockReturnValue(of(null));
+      mockUserRepository.get.mockReturnValue(of(null));
 
       controller.get(String(mockUser.id)).subscribe({
         next: () => done.fail('Should not be called'),
         error: (err) => {
-          expect(getSpy).toHaveBeenCalled();
+          expect(mockUserRepository.get).toHaveBeenCalled();
+          expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
           expect(err).toBeDefined();
           expect(err.status).toEqual(404);
           expect(err).toBeInstanceOf(NotFoundException);
@@ -124,12 +121,13 @@ describe('UsersController', () => {
   });
 
   describe('create', () => {
-    const mockUser = userFactory.makeStub();
+    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should create a user', (done) => {
-      jest.spyOn(mockUserRepository, 'create').mockReturnValue(of(mockUser));
+      mockUserRepository.create.mockReturnValue(of(mockUser));
 
       controller.create(mockUser).subscribe((user) => {
+        expect(mockUserRepository.create).toHaveBeenCalled();
         expect(user).toEqual(mockUser);
         done();
       });
@@ -137,7 +135,7 @@ describe('UsersController', () => {
   });
 
   describe('edit', () => {
-    const mockUser = userFactory.makeStub();
+    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
     const data = pick(userFactory.make(), [
       'first_name',
       'last_name',
@@ -147,16 +145,14 @@ describe('UsersController', () => {
     ]);
 
     it('should update a user', (done) => {
-      const getSpy = jest
-        .spyOn(mockUserRepository, 'get')
-        .mockReturnValue(of(mockUser));
-      const editSpy = jest
-        .spyOn(mockUserRepository, 'update')
-        .mockReturnValue(of(mockUser.$set(data)));
+      mockUserRepository.get.mockReturnValue(of(mockUser));
+      mockUserRepository.update.mockReturnValue(of(mockUser.$set(data)));
 
       controller.edit(String(mockUser.id), mockUser).subscribe((user) => {
-        expect(getSpy).toHaveBeenCalled();
-        expect(editSpy).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.update).toHaveBeenCalled();
+        expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         expect(user).toEqual(mockUser);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
@@ -165,19 +161,19 @@ describe('UsersController', () => {
   });
 
   describe('delete', () => {
-    const mockUser = userFactory.makeStub();
+    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should delete a user', (done) => {
-      const getSpy = jest
-        .spyOn(mockUserRepository, 'get')
-        .mockReturnValue(of(mockUser));
-      const deleteSpy = jest
-        .spyOn(mockUserRepository, 'update')
-        .mockReturnValue(of(mockUser.$set({ is_deleted: true })));
+      mockUserRepository.get.mockReturnValue(of(mockUser));
+      mockUserRepository.update.mockReturnValue(
+        of(mockUser.$set({ is_deleted: true })),
+      );
 
       controller.delete(String(mockUser.id)).subscribe((result) => {
-        expect(getSpy).toHaveBeenCalled();
-        expect(deleteSpy).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.update).toHaveBeenCalled();
+        expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         expect(result).toEqual(undefined);
         done();
       });
