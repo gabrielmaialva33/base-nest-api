@@ -1,5 +1,5 @@
 import { from, map, Observable } from 'rxjs';
-import { ModelObject, OrderByDirection } from 'objection';
+import { OrderByDirection, PartialModelObject } from 'objection';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 import {
@@ -109,10 +109,7 @@ export class KnexRepository<T extends BaseEntity>
     ).pipe(map((result) => result as T));
   }
 
-  create(
-    payload: Partial<ModelObject<T>>,
-    builder?: Builder<T>,
-  ): Observable<T> {
+  create(payload: PartialModelObject<T>, builder?: Builder<T>): Observable<T> {
     return from(
       this.model
         .query()
@@ -124,7 +121,7 @@ export class KnexRepository<T extends BaseEntity>
   }
 
   bulkCreate(
-    payload: Partial<ModelObject<T>>[],
+    payload: PartialModelObject<T>[],
     builder?: Builder<T>,
   ): Observable<T[]> {
     return from(

@@ -8,6 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { map } from 'rxjs';
 
 import { OrderByDirection } from 'objection';
 import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
@@ -38,7 +39,13 @@ export class UsersController {
     @Query('order') order: OrderByDirection = 'asc',
     @Query('search') search: string = undefined,
   ) {
-    return this.usersService.paginate({ page, per_page, sort, order, search });
+    return this.usersService.paginate({
+      page: +page,
+      per_page: +per_page,
+      sort,
+      order,
+      search,
+    });
   }
 
   @Get(':id')
@@ -58,6 +65,6 @@ export class UsersController {
 
   @Delete(':id')
   delete(@Param('id') id: string) {
-    return this.usersService.delete(+id);
+    return this.usersService.delete(+id).pipe(map(() => undefined));
   }
 }

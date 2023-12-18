@@ -4,11 +4,11 @@ export interface PaginationOptions<T> {
   /**
    * the page that is requested
    */
-  page: number | string;
+  page?: number;
   /**
    * the amount of items to be requested per page
    */
-  per_page: number | string;
+  per_page?: number;
   /**
    * sort by field
    */

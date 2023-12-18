@@ -1,16 +1,16 @@
-import crypto from 'crypto';
-import { ModelObject } from 'objection';
-import { faker } from '@faker-js/faker';
+import * as crypto from 'crypto';
+import { PartialModelObject } from 'objection';
 import { DateTime } from 'luxon';
+import { faker } from '@faker-js/faker';
 
 import { BaseFactory } from '@src/common/module/base.factory';
 import { User } from '@src/modules/users/entities/user.entity';
 
-export class UserFactory extends BaseFactory<User> {
+class UserFactory extends BaseFactory<User> {
   constructor() {
     super(User);
   }
-  make(data?: Partial<ModelObject<User>>): Partial<ModelObject<User>> {
+  make(data?: PartialModelObject<User>): PartialModelObject<User> {
     return {
       first_name: faker.person.firstName(),
       last_name: faker.person.lastName(),
@@ -29,7 +29,7 @@ export class UserFactory extends BaseFactory<User> {
     };
   }
 
-  makeStub(data?: Partial<ModelObject<User>>): User {
+  makeStub(data?: PartialModelObject<User>): User {
     const user = new User();
     const userData = this.make(data);
 
@@ -41,3 +41,5 @@ export class UserFactory extends BaseFactory<User> {
     return user;
   }
 }
+
+export const userFactory = new UserFactory();

@@ -1,24 +1,29 @@
-import { BaseEntity } from '@src/common/module/base.entity';
 import { forkJoin, from, Observable } from 'rxjs';
+import { PartialModelObject } from 'objection';
+
+import { BaseEntity } from '@src/common/module/base.entity';
 
 export abstract class BaseFactory<T extends BaseEntity> {
   protected constructor(protected model: typeof BaseEntity) {}
 
-  protected abstract make(data?: Partial<T>): Partial<T>;
+  protected abstract make(data?: Partial<T>): PartialModelObject<T>;
 
   protected abstract makeStub(data?: Partial<T>): T;
 
-  makeMany(quantity: number, data?: Partial<T>): Partial<T>[] {
-    const entities: Partial<T>[] = [];
+  makeMany(quantity: number, data?: Partial<T>): PartialModelObject<T>[] {
+    const entities: PartialModelObject<T>[] = [];
     for (let i = 0; i < quantity; i++) {
       entities.push(this.make(data));
     }
+
     return entities;
   }
 
   makeManyStub(amount = 10, data?: Partial<T>): T[] {
     const entities: T[] = [];
-    for (let i = 0; i < amount; i++) entities.push(this.makeStub(data));
+    for (let i = 0; i < amount; i++) {
+      entities.push(this.makeStub(data));
+    }
     return entities;
   }
 

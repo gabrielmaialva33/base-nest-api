@@ -1,4 +1,4 @@
-import { ModelClass, ModelObject, ModelProps } from 'objection';
+import { ModelClass, ModelProps, PartialModelObject } from 'objection';
 import { BaseEntity } from '@src/common/module/base.entity';
 
 /**
@@ -45,7 +45,7 @@ export const isUnique = async <T extends BaseEntity>(
  */
 export const isExists = async <T extends BaseEntity>(
   entity: ModelClass<T>,
-  clause: Partial<ModelObject<T>>,
+  clause: PartialModelObject<T>,
 ): Promise<boolean | Error> => {
   if (!clause || Object.keys(clause).length === 0)
     throw new Error('Invalid search criteria provided');
