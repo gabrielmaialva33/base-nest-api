@@ -13,11 +13,10 @@ import {
 
 describe('UsersService', () => {
   let service: UsersService;
+  let mockUserRepository: jest.Mocked<IUserRepository>;
+  const mockUsers = userFactory.makeManyStub(10);
 
-  // repositories mock declaration
-  const mockUserRepository = createMock<IUserRepository>();
-
-  beforeEach(async () => {
+  beforeAll(async () => {
     jest.clearAllMocks();
 
     const module: TestingModule = await Test.createTestingModule({
@@ -25,12 +24,13 @@ describe('UsersService', () => {
         UsersService,
         {
           provide: USER_REPOSITORY,
-          useValue: mockUserRepository,
+          useValue: createMock<IUserRepository>(),
         },
       ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
+    mockUserRepository = module.get(USER_REPOSITORY);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -40,15 +40,12 @@ describe('UsersService', () => {
   });
 
   describe('list', () => {
-    const mockUsers = userFactory.makeManyStub(10);
-
     it('should return a list of users', (done) => {
-      const listSpy = jest
-        .spyOn(mockUserRepository, 'list')
-        .mockReturnValue(of(mockUsers));
+      mockUserRepository.list.mockReturnValue(of(mockUsers));
 
       service.list().subscribe((users) => {
-        expect(listSpy).toHaveBeenCalled();
+        expect(mockUserRepository.list).toHaveBeenCalled();
+        expect(mockUserRepository.list).toHaveBeenCalledTimes(1);
         expect(users).toEqual(mockUsers);
         expect(users.length).toEqual(10);
         done();
@@ -57,17 +54,16 @@ describe('UsersService', () => {
   });
 
   describe('paginate', () => {
-    const mockUsers = userFactory.makeManyStub(10);
-
     it('should return a paginated list of users', (done) => {
-      const paginateSpy = jest
-        .spyOn(mockUserRepository, 'paginate')
-        .mockReturnValue(of({ results: mockUsers, total: 10 }));
+      mockUserRepository.paginate.mockReturnValue(
+        of({ results: mockUsers, total: mockUsers.length }),
+      );
 
       service.paginate().subscribe((paginatedUsers) => {
         const { data, pagination } = paginatedUsers;
 
-        expect(paginateSpy).toHaveBeenCalled();
+        expect(mockUserRepository.paginate).toHaveBeenCalled();
+        expect(mockUserRepository.paginate).toHaveBeenCalledTimes(1);
         expect(paginatedUsers).toEqual({
           data: mockUsers,
           pagination: {
@@ -102,15 +98,14 @@ describe('UsersService', () => {
   });
 
   describe('get', () => {
-    const mockUser = userFactory.makeStub();
+    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should return a user', (done) => {
-      const getSpy = jest
-        .spyOn(mockUserRepository, 'get')
-        .mockReturnValue(of(mockUser));
+      mockUserRepository.get.mockReturnValue(of(mockUser));
 
       service.get(mockUser.id).subscribe((user) => {
-        expect(getSpy).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
         expect(user).toEqual(mockUser);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
@@ -118,14 +113,13 @@ describe('UsersService', () => {
     });
 
     it('should not return a user', (done) => {
-      const getSpy = jest
-        .spyOn(mockUserRepository, 'get')
-        .mockReturnValue(of(undefined));
+      mockUserRepository.get.mockReturnValue(of(undefined));
 
       service.get(mockUser.id).subscribe({
         next: () => done.fail('Should not return a user'),
         error: (err) => {
-          expect(getSpy).toHaveBeenCalled();
+          expect(mockUserRepository.get).toHaveBeenCalled();
+          expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
           expect(err).toBeDefined();
           expect(err.status).toEqual(404);
           expect(err).toBeInstanceOf(NotFoundException);
@@ -137,15 +131,14 @@ describe('UsersService', () => {
   });
 
   describe('getByUid', () => {
-    const mockUser = userFactory.makeStub();
+    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should return a user', (done) => {
-      const getByUidSpy = jest
-        .spyOn(mockUserRepository, 'getByUid')
-        .mockReturnValue(of(mockUser));
+      mockUserRepository.getByUid.mockReturnValue(of(mockUser));
 
       service.getByUid(mockUser.email).subscribe((user) => {
-        expect(getByUidSpy).toHaveBeenCalled();
+        expect(mockUserRepository.getByUid).toHaveBeenCalled();
+        expect(mockUserRepository.getByUid).toHaveBeenCalledTimes(1);
         expect(user).toEqual(mockUser);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
@@ -175,12 +168,10 @@ describe('UsersService', () => {
     const mockUser = userFactory.makeStub();
 
     it('should create a user', (done) => {
-      const createSpy = jest
-        .spyOn(mockUserRepository, 'create')
-        .mockReturnValue(of(mockUser));
+      mockUserRepository.create.mockReturnValue(of(mockUser));
 
       service.create(mockUser).subscribe((user) => {
-        expect(createSpy).toHaveBeenCalled();
+        expect(mockUserRepository.create).toHaveBeenCalled();
         expect(user).toEqual(mockUser);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
@@ -189,7 +180,7 @@ describe('UsersService', () => {
   });
 
   describe('edit', () => {
-    const mockUser = userFactory.makeStub();
+    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
     const data = pick(userFactory.make(), [
       'first_name',
       'last_name',
@@ -199,16 +190,14 @@ describe('UsersService', () => {
     ]);
 
     it('should edit a user', (done) => {
-      const getSpy = jest
-        .spyOn(mockUserRepository, 'get')
-        .mockReturnValue(of(mockUser));
-      const editSpy = jest
-        .spyOn(mockUserRepository, 'update')
-        .mockReturnValue(of(mockUser.$set(data)));
+      mockUserRepository.get.mockReturnValue(of(mockUser));
+      mockUserRepository.update.mockReturnValue(of(mockUser.$set(data)));
 
       service.edit(mockUser.id, {}).subscribe((user) => {
-        expect(getSpy).toHaveBeenCalled();
-        expect(editSpy).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.update).toHaveBeenCalled();
+        expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
       });
@@ -216,15 +205,14 @@ describe('UsersService', () => {
   });
 
   describe('save', () => {
-    const mockUser = userFactory.makeStub();
+    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should save a user', (done) => {
-      const saveSpy = jest
-        .spyOn(mockUserRepository, 'update')
-        .mockReturnValue(of(mockUser));
+      mockUserRepository.update.mockReturnValue(of(mockUser));
 
       service.save(mockUser).subscribe((user) => {
-        expect(saveSpy).toHaveBeenCalled();
+        expect(mockUserRepository.update).toHaveBeenCalled();
+        expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         expect(user).toEqual(mockUser);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
@@ -233,19 +221,19 @@ describe('UsersService', () => {
   });
 
   describe('delete', () => {
-    const mockUser = userFactory.makeStub();
+    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should delete a user', (done) => {
-      const getSpy = jest
-        .spyOn(mockUserRepository, 'get')
-        .mockReturnValue(of(mockUser));
-      const deleteSpy = jest
-        .spyOn(mockUserRepository, 'update')
-        .mockReturnValue(of(mockUser.$set({ is_deleted: true })));
+      mockUserRepository.get.mockReturnValue(of(mockUser));
+      mockUserRepository.update.mockReturnValue(
+        of(mockUser.$set({ is_deleted: true })),
+      );
 
       service.delete(mockUser.id).subscribe((result) => {
-        expect(getSpy).toHaveBeenCalled();
-        expect(deleteSpy).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalled();
+        expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.update).toHaveBeenCalled();
+        expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         expect(result).toEqual(true);
         done();
       });
