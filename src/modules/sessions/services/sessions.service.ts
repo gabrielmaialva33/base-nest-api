@@ -9,13 +9,14 @@ import { map, switchMap } from 'rxjs';
 
 import { translate } from '@src/lib/i18n';
 
+import { RequestContext } from '@src/lib/context';
 import { TokensService } from '@src/modules/tokens/services/tokens.service';
 import { UsersService } from '@src/modules/users/services/users.service';
 import { SignInUserDto } from '@src/modules/sessions/dto/sign-in-user.dto';
 import { User } from '@src/modules/users/entities/user.entity';
-import { RequestContext } from '@src/lib/context';
 
 import { Argon2Utils } from '@src/common/helpers/argon2.utils';
+import { SignUpUserDto } from '@src/modules/sessions/dto/sign-up-user.dto';
 
 @Injectable()
 export class SessionsService {
@@ -74,7 +75,7 @@ export class SessionsService {
     );
   }
 
-  signUp(data: SignInUserDto) {
+  signUp(data: SignUpUserDto) {
     return this.userService.create(data).pipe(
       switchMap((user) => {
         const token = this.tokensService.generateRememberMeToken();
@@ -85,7 +86,7 @@ export class SessionsService {
         return this.tokensService
           .generateJwtToken({
             id: user.id,
-            uid: data.uid,
+            uid: data.email,
           })
           .pipe(
             map((token) => {
