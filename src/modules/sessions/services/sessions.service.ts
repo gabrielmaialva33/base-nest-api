@@ -9,11 +9,9 @@ import { map, switchMap } from 'rxjs';
 
 import { translate } from '@src/lib/i18n';
 
-import { RequestContext } from '@src/lib/context';
 import { TokensService } from '@src/modules/tokens/services/tokens.service';
 import { UsersService } from '@src/modules/users/services/users.service';
 import { SignInUserDto } from '@src/modules/sessions/dto/sign-in-user.dto';
-import { User } from '@src/modules/users/entities/user.entity';
 
 import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 import { SignUpUserDto } from '@src/modules/sessions/dto/sign-up-user.dto';
@@ -100,14 +98,17 @@ export class SessionsService {
     );
   }
 
-  signOut() {
-    const user: User = RequestContext.get().currentUser;
-    return this.tokensService.destroyJwtToken(user.id);
+  signOut(userId: number) {
+    return this.userService.get(userId).pipe(
+      switchMap((user) => {
+        if (!user) throw new NotFoundException();
+        return this.tokensService.destroyJwtToken(user.id);
+      }),
+    );
   }
 
-  refreshToken() {
-    const user: User = RequestContext.get().currentUser;
-    return this.userService.get(user.id).pipe(
+  refreshToken(userId: number) {
+    return this.userService.get(userId).pipe(
       switchMap((user) => {
         return this.tokensService
           .generateRefreshToken(user.remember_me_token, {

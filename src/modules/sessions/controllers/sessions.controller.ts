@@ -11,6 +11,8 @@ import { LocalAuthGuard } from '@src/common/guards/local.auth.guard';
 import { SignInUserDto } from '@src/modules/sessions/dto/sign-in-user.dto';
 import { SignUpUserDto } from '@src/modules/sessions/dto/sign-up-user.dto';
 import { Auth } from '@src/common/decorators/auth.decorator';
+import { User } from '@src/modules/users/entities/user.entity';
+import { RequestContext } from '@src/lib/context';
 
 @Controller()
 export class SessionsController {
@@ -30,12 +32,18 @@ export class SessionsController {
   @Auth()
   @Delete('/sign_out')
   signOut() {
-    return this.sessionsService.signOut();
+    const user: User = RequestContext.get().currentUser;
+    if (!user) return;
+
+    return this.sessionsService.signOut(user.id);
   }
 
   @Auth()
   @Patch('/refresh_token')
   refreshToken() {
-    return this.sessionsService.refreshToken();
+    const user: User = RequestContext.get().currentUser;
+    if (!user) return;
+
+    return this.sessionsService.refreshToken(user.id);
   }
 }
