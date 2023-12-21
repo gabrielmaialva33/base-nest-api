@@ -2,6 +2,7 @@ import { Pojo } from 'objection';
 
 import { BaseEntity } from '@src/common/module/base.entity';
 import { User } from '@src/modules/users/entities/user.entity';
+import { omit } from 'helper-fns';
 
 export class Role extends BaseEntity {
   static tableName = 'roles';
@@ -14,10 +15,9 @@ export class Role extends BaseEntity {
    */
   id: number;
   name: string;
+  slug: string;
   description: string;
-  is_active: boolean;
   created_at: string;
-  updated_at: string;
 
   /**
    * ------------------------------------------------------
@@ -65,17 +65,18 @@ export class Role extends BaseEntity {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['name'],
+      required: ['name', 'slug'],
       properties: {
-        name: { type: 'string', minLength: 1, maxLength: 255 },
-        description: { type: 'string', minLength: 1, maxLength: 255 },
-        is_active: { type: 'boolean' },
+        name: { type: 'string', minLength: 1, maxLength: 50 },
+        slug: { type: 'string', minLength: 1, maxLength: 50 },
+        description: { type: ['string', 'null'] },
       },
     };
   }
 
   $formatJson(json: Pojo) {
     json = super.$formatJson(json);
+    json = omit(json, ['created_at']);
     return json;
   }
 }
