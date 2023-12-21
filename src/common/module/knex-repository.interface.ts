@@ -105,10 +105,25 @@ export interface IKnexRepository<T extends BaseEntity> {
    *
    * @memberof IKnexRepository
    */
-  get(
+  getBy(
     clauseOrBuilder?: Partial<T> | Builder<T>,
     builder?: Builder<T>,
   ): Observable<T>;
+
+  /**
+   * Get a record by its id.
+   * @param {number} id - The id of the record
+   * @param {Builder<T>} builder - The query to filter the records
+   * @returns {Observable<T>}
+   * @memberof IKnexRepository
+   * @example
+   * const model = this.repository.getById(1);
+   * model.subscribe(result => console.log(result));
+   * @example
+   * const model = this.repository.getById(1, query => query.orderBy('id', 'desc'));
+   * model.subscribe(result => console.log(result));
+   */
+  getById(id: number, builder?: Builder<T>): Observable<T>;
 
   /**
    * Create a new record.

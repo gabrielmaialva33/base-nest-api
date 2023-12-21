@@ -92,7 +92,7 @@ export class KnexRepository<T extends BaseEntity>
     );
   }
 
-  get(
+  getBy(
     clauseOrBuilder?: Partial<T> | Builder<T>,
     builder?: Builder<T>,
   ): Observable<T> {
@@ -105,6 +105,18 @@ export class KnexRepository<T extends BaseEntity>
           else if (clauseOrBuilder) query.where(clauseOrBuilder);
           if (typeof builder === 'function') query.modify(builder);
         })
+        .first(),
+    ).pipe(map((result) => result as T));
+  }
+
+  getById(id: number, builder?: Builder<T>): Observable<T> {
+    return from(
+      this.model
+        .query()
+        .modify((query) => {
+          if (typeof builder === 'function') query.modify(builder);
+        })
+        .findById(id)
         .first(),
     ).pipe(map((result) => result as T));
   }

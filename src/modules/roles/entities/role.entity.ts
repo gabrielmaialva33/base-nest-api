@@ -1,10 +1,10 @@
-import { QueryBuilder } from 'objection';
-import { DateTime } from 'luxon';
+import { Pojo } from 'objection';
 
 import { BaseEntity } from '@src/common/module/base.entity';
+import { User } from '@src/modules/users/entities/user.entity';
 
-export class Token extends BaseEntity {
-  public static tableName = 'api_tokens';
+export class Role extends BaseEntity {
+  static tableName = 'roles';
 
   /**
    * ------------------------------------------------------
@@ -12,12 +12,12 @@ export class Token extends BaseEntity {
    * ------------------------------------------------------
    * Columns are used to define the fields of the model.
    */
+  id: number;
   name: string;
-  type: string;
-  token: string;
-  user_id: number;
-  expires_at: string;
+  description: string;
+  is_active: boolean;
   created_at: string;
+  updated_at: string;
 
   /**
    * ------------------------------------------------------
@@ -26,11 +26,15 @@ export class Token extends BaseEntity {
    * Relations are used to define relationships between models.
    */
   static relationMappings = {
-    user: {
-      relation: BaseEntity.BelongsToOneRelation,
-      modelClass: 'user.entity',
+    users: {
+      relation: BaseEntity.ManyToManyRelation,
+      modelClass: User,
       join: {
-        from: 'api_tokens.user_id',
+        from: 'roles.id',
+        through: {
+          from: 'user_roles.role_id',
+          to: 'user_roles.user_id',
+        },
         to: 'users.id',
       },
     },
@@ -49,10 +53,6 @@ export class Token extends BaseEntity {
    * ------------------------------------------------------
    * Scopes are used to define commonly used queries that can be re-used in multiple places.
    */
-  static scopes = {
-    notExpired: (builder: QueryBuilder<Token>) =>
-      builder.where('expires_at', '>', DateTime.local().toISO()),
-  };
 
   /**
    * ------------------------------------------------------
@@ -61,17 +61,21 @@ export class Token extends BaseEntity {
    * - jsonSchema is used by objection to validate the data before inserting it into the database (optional)
    * - $formatJson is used by objection to format the data before sending it to the client (optional)
    */
-  static jsonSchema = {
-    type: 'object',
-    required: ['name', 'type', 'token', 'user_id'],
-    properties: {
-      id: { type: 'integer' },
-      name: { type: 'string' },
-      type: { type: 'string' },
-      token: { type: 'string' },
-      user_id: { type: 'integer' },
-      expires_at: { type: ['string', 'null'] },
-      created_at: { type: 'string' },
-    },
-  };
+
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['name'],
+      properties: {
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        description: { type: 'string', minLength: 1, maxLength: 255 },
+        is_active: { type: 'boolean' },
+      },
+    };
+  }
+
+  $formatJson(json: Pojo) {
+    json = super.$formatJson(json);
+    return json;
+  }
 }

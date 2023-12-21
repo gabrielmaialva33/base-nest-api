@@ -10,6 +10,7 @@ import { NestI18nModule } from '@src/lib/i18n/i18n.module';
 
 import { RequestContext, RequestContextModule } from '@src/lib/context';
 import { ContextInterceptor } from '@src/common/interceptors/context.interceptor';
+import { RolesModule } from '@src/modules/roles/roles.module';
 
 @Module({
   imports: [

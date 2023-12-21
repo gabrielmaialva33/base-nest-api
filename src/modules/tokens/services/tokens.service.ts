@@ -103,7 +103,7 @@ export class TokensService {
   }
 
   validateOpaqueToken(userId: number, rawToken: string) {
-    return this.tokenRepository.get({ user_id: userId }).pipe(
+    return this.tokenRepository.getBy({ user_id: userId }).pipe(
       mergeMap((token) => {
         if (!token) return of(false);
         return Argon2Utils.verify$(token.token, rawToken);
@@ -151,7 +151,7 @@ export class TokensService {
   }
 
   private destroyToken(userId: number) {
-    return this.tokenRepository.get({ user_id: userId }).pipe(
+    return this.tokenRepository.getBy({ user_id: userId }).pipe(
       mergeMap((token) => {
         if (!token) return of(0);
         return this.tokenRepository.destroy(token);

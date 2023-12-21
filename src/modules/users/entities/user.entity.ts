@@ -2,9 +2,11 @@ import { Pojo, QueryBuilder } from 'objection';
 import { omit } from 'helper-fns';
 import { DateTime } from 'luxon';
 
-import { BaseEntity } from '@src/common/module/base.entity';
-import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 import { Env } from '@src/env';
+import { Argon2Utils } from '@src/common/helpers/argon2.utils';
+
+import { BaseEntity } from '@src/common/module/base.entity';
+import { Token } from '@src/modules/tokens/entities/token.entity';
 
 export class User extends BaseEntity {
   static tableName = 'users';
@@ -37,6 +39,28 @@ export class User extends BaseEntity {
    * ------------------------------------------------------
    * Relations are used to define relationships between models.
    */
+  static relationMappings = {
+    tokens: {
+      relation: BaseEntity.HasManyRelation,
+      modelClass: Token,
+      join: {
+        from: 'users.id',
+        to: 'api_tokens.user_id',
+      },
+    },
+    roles: {
+      relation: BaseEntity.ManyToManyRelation,
+      modelClass: 'role.entity',
+      join: {
+        from: 'users.id',
+        through: {
+          from: 'user_roles.user_id',
+          to: 'user_roles.role_id',
+        },
+        to: 'roles.id',
+      },
+    },
+  };
 
   /**
    * ------------------------------------------------------

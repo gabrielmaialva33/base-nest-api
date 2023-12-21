@@ -51,7 +51,7 @@ export class UsersService {
 
   get(id: number) {
     return this.userRepository
-      .get({ id }, (qb) => qb.modify(User.scopes.notDeleted))
+      .getBy({ id }, (qb) => qb.modify(User.scopes.notDeleted))
       .pipe(
         map((user) => {
           if (!user)
@@ -68,7 +68,7 @@ export class UsersService {
 
   getBy(field: string, value: any) {
     return this.userRepository
-      .get({ [field]: value }, (qb) => qb.modify(User.scopes.notDeleted))
+      .getBy({ [field]: value }, (qb) => qb.modify(User.scopes.notDeleted))
       .pipe(
         map((user) => {
           if (!user) throw new NotFoundException({ message: 'User not found' });

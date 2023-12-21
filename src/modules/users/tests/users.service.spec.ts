@@ -104,11 +104,11 @@ describe('UsersService', () => {
     const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should return a user', (done) => {
-      mockUserRepository.get.mockReturnValue(of(mockUser));
+      mockUserRepository.getBy.mockReturnValue(of(mockUser));
 
       service.get(mockUser.id).subscribe((user) => {
-        expect(mockUserRepository.get).toHaveBeenCalled();
-        expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.getBy).toHaveBeenCalled();
+        expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
         expect(user).toEqual(mockUser);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
@@ -116,13 +116,13 @@ describe('UsersService', () => {
     });
 
     it('should not return a user', (done) => {
-      mockUserRepository.get.mockReturnValue(of(undefined));
+      mockUserRepository.getBy.mockReturnValue(of(undefined));
 
       service.get(mockUser.id).subscribe({
         next: () => done.fail('Should not return a user'),
         error: (err) => {
-          expect(mockUserRepository.get).toHaveBeenCalled();
-          expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
+          expect(mockUserRepository.getBy).toHaveBeenCalled();
+          expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
           expect(err).toBeDefined();
           expect(err.status).toEqual(404);
           expect(err).toBeInstanceOf(NotFoundException);
@@ -193,12 +193,12 @@ describe('UsersService', () => {
     ]);
 
     it('should edit a user', (done) => {
-      mockUserRepository.get.mockReturnValue(of(mockUser));
+      mockUserRepository.getBy.mockReturnValue(of(mockUser));
       mockUserRepository.update.mockReturnValue(of(mockUser.$set(data)));
 
       service.edit(mockUser.id, {}).subscribe((user) => {
-        expect(mockUserRepository.get).toHaveBeenCalled();
-        expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.getBy).toHaveBeenCalled();
+        expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
         expect(mockUserRepository.update).toHaveBeenCalled();
         expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
@@ -227,14 +227,14 @@ describe('UsersService', () => {
     const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should delete a user', (done) => {
-      mockUserRepository.get.mockReturnValue(of(mockUser));
+      mockUserRepository.getBy.mockReturnValue(of(mockUser));
       mockUserRepository.update.mockReturnValue(
         of(mockUser.$set({ is_deleted: true })),
       );
 
       service.delete(mockUser.id).subscribe((result) => {
-        expect(mockUserRepository.get).toHaveBeenCalled();
-        expect(mockUserRepository.get).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.getBy).toHaveBeenCalled();
+        expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
         expect(mockUserRepository.update).toHaveBeenCalled();
         expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         expect(result).toEqual(true);
