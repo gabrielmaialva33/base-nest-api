@@ -43,6 +43,7 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 400 private_key
           ssh -o StrictHostKeyChecking=no -i private_key hd@20.226.119.146 '
+          # Load nvm and dependencies
           source /home/hd/.nvm/nvm.sh
           source /home/hd/.bashrc
           source /home/hd/.profile
@@ -53,6 +54,7 @@ jobs:
           esac
           nvm use node
 
+          # Ensure the directory exists
           DIR=/home/hd/base-nest-api
           if [ ! -d $DIR ]
             then
@@ -66,7 +68,7 @@ jobs:
           git checkout main && git fetch --all && git reset --hard origin/main && git pull origin main
 
           # Install dependencies, build
-          pnpm install && pnpm db:migrate && pnpm build
+          pnpm install && pnpm db:prune:sqlite && pnpm db:migrate && pnpm build
 
           # Check if the app is running and kill it
           if [ $(tmux ls | grep base-nest-api | wc -l) -gt 0 ]
