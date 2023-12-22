@@ -46,7 +46,11 @@ jobs:
           source /home/hd/.nvm/nvm.sh
           source /home/hd/.bashrc
           source /home/hd/.profile
-          source /home/hd/.local/share/pnpm/pnpm
+          export PNPM_HOME="/home/hd/.local/share/pnpm"
+          case ":$PATH:" in
+            *":$PNPM_HOME:"*) ;;
+            *) export PATH="$PNPM_HOME:$PATH" ;;
+          esac
           nvm use node
 
           DIR=/home/hd/base-nest-api
