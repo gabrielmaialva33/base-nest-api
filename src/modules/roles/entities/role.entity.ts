@@ -1,8 +1,8 @@
 import { Pojo } from 'objection';
+import { omit } from 'helper-fns';
 
 import { BaseEntity } from '@src/common/module/base.entity';
 import { User } from '@src/modules/users/entities/user.entity';
-import { omit } from 'helper-fns';
 
 export class Role extends BaseEntity {
   static tableName = 'roles';
@@ -52,14 +52,6 @@ export class Role extends BaseEntity {
    * Scopes
    * ------------------------------------------------------
    * Scopes are used to define commonly used queries that can be re-used in multiple places.
-   */
-
-  /**
-   * ------------------------------------------------------
-   * Misc
-   * ------------------------------------------------------
-   * - jsonSchema is used by objection to validate the data before inserting it into the database (optional)
-   * - $formatJson is used by objection to format the data before sending it to the client (optional)
    */
 
   static get jsonSchema() {
