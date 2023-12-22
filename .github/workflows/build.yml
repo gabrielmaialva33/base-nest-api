@@ -45,6 +45,8 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key hd@20.226.119.146 '
           source /home/hd/.nvm/nvm.sh
           source /home/hd/.bashrc
+          source /home/hd/.profile
+          source /home/hd/.local/share/pnpm/pnpm
           nvm use node
 
           DIR=/home/hd/base-nest-api
@@ -63,7 +65,7 @@ jobs:
           pnpm install && pnpm db:migrate && pnpm build
 
           # Check if the app is running and kill it
-          if [ $(tmux ls | grep -c "base-nest-api") -eq 1 ]
+          if [ $(tmux ls | grep base-nest-api | wc -l) -gt 0 ]
             then
               tmux kill-session -t base-nest-api
               echo "Session killed. 🗡️"
