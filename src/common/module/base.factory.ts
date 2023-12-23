@@ -27,18 +27,6 @@ export abstract class BaseFactory<T extends BaseEntity> {
     return entities;
   }
 
-  async create(data?: Partial<T>): Promise<T> {
-    const entity = this.make(data);
-    return (await this.model.query().insertAndFetch(entity)) as T;
-  }
-
-  async createMany(amount: number, data?: Partial<T>): Promise<T[]> {
-    const createPromises = Array.from({ length: amount }, () =>
-      this.create(data),
-    );
-    return Promise.all(createPromises);
-  }
-
   create$(data?: Partial<T>): Observable<T> {
     const entity = this.make(data);
     return from(this.model.query().insertAndFetch(entity)) as Observable<T>;
@@ -49,5 +37,17 @@ export abstract class BaseFactory<T extends BaseEntity> {
       this.create$(data),
     );
     return forkJoin(observables);
+  }
+
+  async create(data?: Partial<T>): Promise<T> {
+    const entity = this.make(data);
+    return (await this.model.query().insertAndFetch(entity)) as T;
+  }
+
+  async createMany(amount: number, data?: Partial<T>): Promise<T[]> {
+    const createPromises = Array.from({ length: amount }, () =>
+      this.create(data),
+    );
+    return Promise.all(createPromises);
   }
 }

@@ -29,42 +29,14 @@ export interface ListOptions<T> {
 
 export interface IKnexRepository<T extends BaseEntity> {
   /**
-   * Get all the records that match the clause or query.
-   *
-   * @param {Partial<T> | Builder<T>} clauseOrBuilder - The clause or query to filter the records
-   * @param {Builder<T>} builder - The query to filter the records
-   * @returns {Observable<T[]>}
-   *
-   * @example
-   * // Using a clause
-   * const models = this.repository.all({ name: 'example' });
-   * models.subscribe(results => console.log(results));
-   *
-   * @example
-   * // Using a clause and a query
-   * const models = this.repository.all({ name: 'example' }, query => query.orderBy('id', 'desc'));
-   * models.subscribe(results => console.log(results));
-   *
-   * @example
-   * // Using a query
-   * const models = this.repository.all(query => query.orderBy('id', 'desc'));
-   *
-   * @memberof IKnexRepository
-   */
-  all(
-    clauseOrBuilder?: Partial<T> | Builder<T>,
-    builder?: Builder<T>,
-  ): Observable<T[]>;
-
-  /**
-   * Get all the records that match the clause or query and list the results.
+   * Get findClause the records that match the clause or query and list the results.
    * @param {ListOptions<T>} options - The list options
    * @param {Builder<T>} builder - The query to filter the records
    */
   list(options?: ListOptions<T>, builder?: Builder<T>): Observable<T[]>;
 
   /**
-   * Get all the records that match the clause or query and paginate the results.
+   * Get findClause the records that match the clause or query and paginate the results.
    * @param {PaginationOptions} args - The pagination options
    * @param {Builder<T>} builder - The query to filter the records
    * @returns {Observable<PaginateResult<T>>}
@@ -82,6 +54,50 @@ export interface IKnexRepository<T extends BaseEntity> {
   ): Observable<PaginateResult<T>>;
 
   /**
+   * Get all the records that match the clause or query.
+   *
+   * @param {Partial<T> | Builder<T>} clauseOrBuilder - The clause or query to filter the records
+   * @param {Builder<T>} builder - The query to filter the records
+   * @returns {Observable<T[]>}
+   *
+   * @example
+   * // Using a clause
+   * const models = this.repository.findClause({ name: 'example' });
+   * models.subscribe(results => console.log(results));
+   *
+   * @example
+   * // Using a clause and a query
+   * const models = this.repository.findClause({ name: 'example' }, query => query.orderBy('id', 'desc'));
+   * models.subscribe(results => console.log(results));
+   *
+   * @example
+   * // Using a query
+   * const models = this.repository.findClause(query => query.orderBy('id', 'desc'));
+   *
+   * @memberof IKnexRepository
+   */
+  findClause(
+    clauseOrBuilder?: Partial<T> | Builder<T>,
+    builder?: Builder<T>,
+  ): Observable<T[]>;
+
+  /**
+   * Get the first record that matches the key and value.
+   * @param {keyof T} key - The key of the recordx
+   * @param {any} value - The value of the record
+   * @param {Builder<T>} builder - The query to filter the records
+   * @returns {Observable<T>}
+   * @memberof IKnexRepository
+   * @example
+   * const model = this.repository.firstBy('id', 1);
+   * model.subscribe(result => console.log(result));
+   * @example
+   * const model = this.repository.firstBy('id', 1, query => query.orderBy('id', 'desc'));
+   * model.subscribe(result => console.log(result));
+   */
+  findBy(key: keyof T, value: any, builder?: Builder<T>): Observable<T[]>;
+
+  /**
    * Get the first record that matches the clause or query.
    *
    * @param {Partial<T> | Builder<T>} clauseOrBuilder - The clause or query to filter the records
@@ -90,25 +106,41 @@ export interface IKnexRepository<T extends BaseEntity> {
    *
    * @example
    * // Using a clause
-   * const model = this.repository.get({ id: 1 });
+   * const model = this.repository.firstClause({ id: 1 });
    * model.subscribe(result => console.log(result));
    *
    * @example
    * // Using a query
-   * const model = this.repository.get(query => query.orderBy('id', 'desc'));
+   * const model = this.repository.firstClause(query => query.orderBy('id', 'desc'));
    * model.subscribe(result => console.log(result));
    *
    * @example
    * // Using a clause and a query
-   * const model = this.repository.get({ id: 1 }, query => query.orderBy('id', 'desc'));
+   * const model = this.repository.firstClause({ id: 1 }, query => query.orderBy('id', 'desc'));
    * model.subscribe(result => console.log(result));
    *
    * @memberof IKnexRepository
    */
-  getBy(
+  firstClause(
     clauseOrBuilder?: Partial<T> | Builder<T>,
     builder?: Builder<T>,
   ): Observable<T>;
+
+  /**
+   * Get the first record that matches the key and value.
+   * @param {keyof T} key
+   * @param {any} value
+   * @param {Builder<T>} builder
+   * @returns {Observable<T>}
+   * @memberof IKnexRepository
+   * @example
+   * const model = this.repository.firstBy('id', 1);
+   * model.subscribe(result => console.log(result));
+   * @example
+   * const model = this.repository.firstBy('id', 1, query => query.orderBy('id', 'desc'));
+   * model.subscribe(result => console.log(result));
+   */
+  firstBy(key: keyof T, value: any, builder?: Builder<T>): Observable<T>;
 
   /**
    * Get a record by its id.
@@ -117,13 +149,13 @@ export interface IKnexRepository<T extends BaseEntity> {
    * @returns {Observable<T>}
    * @memberof IKnexRepository
    * @example
-   * const model = this.repository.getById(1);
+   * const model = this.repository.find(1);
    * model.subscribe(result => console.log(result));
    * @example
-   * const model = this.repository.getById(1, query => query.orderBy('id', 'desc'));
+   * const model = this.repository.find(1, query => query.orderBy('id', 'desc'));
    * model.subscribe(result => console.log(result));
    */
-  getById(id: number, builder?: Builder<T>): Observable<T>;
+  find(id: number, builder?: Builder<T>): Observable<T>;
 
   /**
    * Create a new record.

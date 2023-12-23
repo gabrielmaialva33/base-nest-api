@@ -1,27 +1,31 @@
 import { Test, TestingModule } from '@nestjs/testing';
-
 import { NotFoundException } from '@nestjs/common';
+import { DateTime } from 'luxon';
 
 import { createMock } from '@golevelup/ts-jest';
 import { of } from 'rxjs';
 import { pick } from 'helper-fns';
 
-import { UsersService } from '@src/modules/users/services/users.service';
-
 import {
   IUserRepository,
   USER_REPOSITORY,
 } from '@src/modules/users/interfaces/user.interface';
+import {
+  IRoleRepository,
+  ROLE_REPOSITORY,
+  RoleType,
+} from '@src/modules/roles/interfaces/roles.interface';
+import { UsersService } from '@src/modules/users/services/users.service';
 import { userFactory } from '@src/database/factories';
 
 describe('UsersService', () => {
   let service: UsersService;
   let mockUserRepository: jest.Mocked<IUserRepository>;
+  let mockRoleRepository: jest.Mocked<IRoleRepository>;
   const mockUsers = userFactory.makeManyStub(10);
 
   beforeAll(async () => {
     jest.clearAllMocks();
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
@@ -29,11 +33,15 @@ describe('UsersService', () => {
           provide: USER_REPOSITORY,
           useValue: createMock<IUserRepository>(),
         },
+        {
+          provide: ROLE_REPOSITORY,
+          useValue: createMock<IRoleRepository>(),
+        },
       ],
     }).compile();
-
     service = module.get<UsersService>(UsersService);
     mockUserRepository = module.get(USER_REPOSITORY);
+    mockRoleRepository = module.get(ROLE_REPOSITORY);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -45,7 +53,6 @@ describe('UsersService', () => {
   describe('list', () => {
     it('should return a list of users', (done) => {
       mockUserRepository.list.mockReturnValue(of(mockUsers));
-
       service.list().subscribe((users) => {
         expect(mockUserRepository.list).toHaveBeenCalled();
         expect(mockUserRepository.list).toHaveBeenCalledTimes(1);
@@ -61,10 +68,8 @@ describe('UsersService', () => {
       mockUserRepository.paginate.mockReturnValue(
         of({ results: mockUsers, total: mockUsers.length }),
       );
-
       service.paginate().subscribe((paginatedUsers) => {
         const { data, pagination } = paginatedUsers;
-
         expect(mockUserRepository.paginate).toHaveBeenCalled();
         expect(mockUserRepository.paginate).toHaveBeenCalledTimes(1);
         expect(paginatedUsers).toEqual({
@@ -104,11 +109,15 @@ describe('UsersService', () => {
     const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should return a user', (done) => {
-      mockUserRepository.getBy.mockReturnValue(of(mockUser));
-
+      mockUserRepository.firstBy.mockReturnValue(of(mockUser));
       service.get(mockUser.id).subscribe((user) => {
-        expect(mockUserRepository.getBy).toHaveBeenCalled();
-        expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toHaveBeenCalled();
+        expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toBeCalledWith(
+          'id',
+          mockUser.id,
+          expect.anything(),
+        );
         expect(user).toEqual(mockUser);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
@@ -116,47 +125,12 @@ describe('UsersService', () => {
     });
 
     it('should not return a user', (done) => {
-      mockUserRepository.getBy.mockReturnValue(of(undefined));
-
+      mockUserRepository.firstBy.mockReturnValue(of(undefined));
       service.get(mockUser.id).subscribe({
         next: () => done.fail('Should not return a user'),
         error: (err) => {
-          expect(mockUserRepository.getBy).toHaveBeenCalled();
-          expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
-          expect(err).toBeDefined();
-          expect(err.status).toEqual(404);
-          expect(err).toBeInstanceOf(NotFoundException);
-          done();
-        },
-        complete: () => done(),
-      });
-    });
-  });
-
-  describe('getByUid', () => {
-    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
-
-    it('should return a user', (done) => {
-      mockUserRepository.getByUid.mockReturnValue(of(mockUser));
-
-      service.getByUid(mockUser.email).subscribe((user) => {
-        expect(mockUserRepository.getByUid).toHaveBeenCalled();
-        expect(mockUserRepository.getByUid).toHaveBeenCalledTimes(1);
-        expect(user).toEqual(mockUser);
-        for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
-        done();
-      });
-    });
-
-    it('should not return a user', (done) => {
-      const getByUidSpy = jest
-        .spyOn(mockUserRepository, 'getByUid')
-        .mockReturnValue(of(undefined));
-
-      service.getByUid(mockUser.username).subscribe({
-        next: () => done.fail('Should not return a user'),
-        error: (err) => {
-          expect(getByUidSpy).toHaveBeenCalled();
+          expect(mockUserRepository.firstBy).toHaveBeenCalled();
+          expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
           expect(err).toBeDefined();
           expect(err.status).toEqual(404);
           expect(err).toBeInstanceOf(NotFoundException);
@@ -169,12 +143,49 @@ describe('UsersService', () => {
 
   describe('create', () => {
     const mockUser = userFactory.makeStub();
+    const mockRole = mockUser.roles[0];
+    const data = pick(mockUser.$toJson(), [
+      'first_name',
+      'last_name',
+      'email',
+      'password',
+      'username',
+      'avatar_url',
+    ]);
 
     it('should create a user', (done) => {
       mockUserRepository.create.mockReturnValue(of(mockUser));
+      mockUserRepository.firstBy.mockReturnValue(of(mockUser));
+      mockRoleRepository.firstBy.mockReturnValue(of(mockRole));
+      mockRoleRepository.attachRoleToUser.mockReturnValue(of(1));
 
-      service.create(mockUser).subscribe((user) => {
+      service.create(data).subscribe((user) => {
         expect(mockUserRepository.create).toHaveBeenCalled();
+        expect(mockUserRepository.create).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.create).toHaveBeenCalledWith(data);
+
+        expect(mockUserRepository.firstBy).toHaveBeenCalled();
+        expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toHaveBeenCalledWith(
+          'id',
+          mockUser.id,
+          expect.anything(),
+        );
+
+        expect(mockRoleRepository.firstBy).toHaveBeenCalled();
+        expect(mockRoleRepository.firstBy).toHaveBeenCalledTimes(1);
+        expect(mockRoleRepository.firstBy).toHaveBeenCalledWith(
+          'name',
+          RoleType.USER,
+        );
+
+        expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalled();
+        expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalledTimes(1);
+        expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalledWith(
+          mockUser,
+          [mockRole.id],
+        );
+
         expect(user).toEqual(mockUser);
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
@@ -184,7 +195,16 @@ describe('UsersService', () => {
 
   describe('edit', () => {
     const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
-    const data = pick(userFactory.make(), [
+    const mockUserWithNewData = mockUser.$set(
+      pick(userFactory.make(), [
+        'first_name',
+        'last_name',
+        'email',
+        'username',
+        'avatar_url',
+      ]),
+    );
+    const data = pick(mockUserWithNewData.$toJson(), [
       'first_name',
       'last_name',
       'email',
@@ -193,14 +213,21 @@ describe('UsersService', () => {
     ]);
 
     it('should edit a user', (done) => {
-      mockUserRepository.getBy.mockReturnValue(of(mockUser));
-      mockUserRepository.update.mockReturnValue(of(mockUser.$set(data)));
+      mockUserRepository.firstClause.mockReturnValue(of(mockUser));
+      mockUserRepository.update.mockReturnValue(of(mockUserWithNewData));
 
-      service.edit(mockUser.id, {}).subscribe((user) => {
-        expect(mockUserRepository.getBy).toHaveBeenCalled();
-        expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
+      service.edit(mockUser.id, data).subscribe((user) => {
+        expect(mockUserRepository.firstBy).toHaveBeenCalled();
+        expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toHaveBeenCalledWith(
+          'id',
+          mockUser.id,
+          expect.anything(),
+        );
+
         expect(mockUserRepository.update).toHaveBeenCalled();
         expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
+
         for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
         done();
       });
@@ -227,16 +254,29 @@ describe('UsersService', () => {
     const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should delete a user', (done) => {
-      mockUserRepository.getBy.mockReturnValue(of(mockUser));
+      mockUserRepository.firstBy.mockReturnValue(of(mockUser));
       mockUserRepository.update.mockReturnValue(
-        of(mockUser.$set({ is_deleted: true })),
+        of(
+          mockUser.$set({
+            is_deleted: true,
+            deleted_at: DateTime.local().toISO(),
+          }),
+        ),
       );
 
       service.delete(mockUser.id).subscribe((result) => {
-        expect(mockUserRepository.getBy).toHaveBeenCalled();
-        expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toHaveBeenCalled();
+        expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toHaveBeenCalledWith(
+          'id',
+          mockUser.id,
+          expect.anything(),
+        );
+
         expect(mockUserRepository.update).toHaveBeenCalled();
         expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.update).toHaveBeenCalledWith(mockUser);
+
         expect(result).toEqual(true);
         done();
       });

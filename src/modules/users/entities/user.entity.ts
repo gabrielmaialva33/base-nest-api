@@ -7,6 +7,7 @@ import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 
 import { BaseEntity } from '@src/common/module/base.entity';
 import { Token } from '@src/modules/tokens/entities/token.entity';
+import { Role } from '@src/modules/roles/entities/role.entity';
 
 export class User extends BaseEntity {
   static tableName = 'users';
@@ -50,7 +51,7 @@ export class User extends BaseEntity {
     },
     roles: {
       relation: BaseEntity.ManyToManyRelation,
-      modelClass: 'role.entity',
+      modelClass: Role,
       join: {
         from: 'users.id',
         through: {
@@ -61,6 +62,8 @@ export class User extends BaseEntity {
       },
     },
   };
+
+  roles: Role[];
 
   /**
    * ------------------------------------------------------

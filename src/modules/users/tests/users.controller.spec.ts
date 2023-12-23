@@ -13,11 +13,16 @@ import {
   USER_REPOSITORY,
 } from '@src/modules/users/interfaces/user.interface';
 
+import {
+  IRoleRepository,
+  ROLE_REPOSITORY,
+} from '@src/modules/roles/interfaces/roles.interface';
 import { userFactory } from '@src/database/factories';
 
 describe('UsersController', () => {
   let controller: UsersController;
   let mockUserRepository: jest.Mocked<IUserRepository>;
+  let mockRoleRepository: jest.Mocked<IRoleRepository>;
   const mockUsers = userFactory.makeManyStub(10);
 
   beforeAll(async () => {
@@ -31,11 +36,16 @@ describe('UsersController', () => {
           provide: USER_REPOSITORY,
           useValue: createMock<IUserRepository>(),
         },
+        {
+          provide: ROLE_REPOSITORY,
+          useValue: createMock<IRoleRepository>(),
+        },
       ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
     mockUserRepository = module.get(USER_REPOSITORY);
+    mockRoleRepository = module.get(ROLE_REPOSITORY);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -92,24 +102,24 @@ describe('UsersController', () => {
     const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should return a user', (done) => {
-      mockUserRepository.getBy.mockReturnValue(of(mockUser));
+      mockUserRepository.firstBy.mockReturnValue(of(mockUser));
 
       controller.get(String(mockUser.id)).subscribe((user) => {
-        expect(mockUserRepository.getBy).toHaveBeenCalled();
-        expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toHaveBeenCalled();
+        expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
         expect(user).toEqual(mockUser);
         done();
       });
     });
 
     it('should throw an error if user not found', (done) => {
-      mockUserRepository.getBy.mockReturnValue(of(null));
+      mockUserRepository.firstBy.mockReturnValue(of(null));
 
       controller.get(String(mockUser.id)).subscribe({
         next: () => done.fail('Should not be called'),
         error: (err) => {
-          expect(mockUserRepository.getBy).toHaveBeenCalled();
-          expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
+          expect(mockUserRepository.firstBy).toHaveBeenCalled();
+          expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
           expect(err).toBeDefined();
           expect(err.status).toEqual(404);
           expect(err).toBeInstanceOf(NotFoundException);
@@ -122,12 +132,31 @@ describe('UsersController', () => {
 
   describe('create', () => {
     const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
+    const mockRole = mockUser.roles[0];
+    const data = pick(mockUser.$toJson(), [
+      'first_name',
+      'last_name',
+      'email',
+      'password',
+      'username',
+      'avatar_url',
+    ]);
 
     it('should create a user', (done) => {
       mockUserRepository.create.mockReturnValue(of(mockUser));
+      mockUserRepository.firstBy.mockReturnValue(of(mockUser));
+      mockRoleRepository.firstBy.mockReturnValue(of(mockRole));
+      mockRoleRepository.attachRoleToUser.mockReturnValue(of(1));
 
-      controller.create(mockUser).subscribe((user) => {
+      controller.create(data).subscribe((user) => {
         expect(mockUserRepository.create).toHaveBeenCalled();
+        expect(mockUserRepository.create).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toHaveBeenCalled();
+        expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
+        expect(mockRoleRepository.firstBy).toHaveBeenCalled();
+        expect(mockRoleRepository.firstBy).toHaveBeenCalledTimes(1);
+        expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalled();
+        expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalledTimes(1);
         expect(user).toEqual(mockUser);
         done();
       });
@@ -145,12 +174,12 @@ describe('UsersController', () => {
     ]);
 
     it('should update a user', (done) => {
-      mockUserRepository.getBy.mockReturnValue(of(mockUser));
+      mockUserRepository.firstBy.mockReturnValue(of(mockUser));
       mockUserRepository.update.mockReturnValue(of(mockUser.$set(data)));
 
       controller.edit(String(mockUser.id), mockUser).subscribe((user) => {
-        expect(mockUserRepository.getBy).toHaveBeenCalled();
-        expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toHaveBeenCalled();
+        expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
         expect(mockUserRepository.update).toHaveBeenCalled();
         expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         expect(user).toEqual(mockUser);
@@ -164,14 +193,14 @@ describe('UsersController', () => {
     const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
 
     it('should delete a user', (done) => {
-      mockUserRepository.getBy.mockReturnValue(of(mockUser));
+      mockUserRepository.firstBy.mockReturnValue(of(mockUser));
       mockUserRepository.update.mockReturnValue(
         of(mockUser.$set({ is_deleted: true })),
       );
 
       controller.delete(String(mockUser.id)).subscribe((result) => {
-        expect(mockUserRepository.getBy).toHaveBeenCalled();
-        expect(mockUserRepository.getBy).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.firstBy).toHaveBeenCalled();
+        expect(mockUserRepository.firstBy).toHaveBeenCalledTimes(1);
         expect(mockUserRepository.update).toHaveBeenCalled();
         expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         expect(result).toEqual(undefined);

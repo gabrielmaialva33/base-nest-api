@@ -68,7 +68,7 @@ export class Role extends BaseEntity {
 
   $formatJson(json: Pojo) {
     json = super.$formatJson(json);
-    json = omit(json, ['created_at']);
+    json = omit(json, ['created_at', 'updated_at']);
     return json;
   }
 }

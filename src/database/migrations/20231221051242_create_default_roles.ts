@@ -1,26 +1,30 @@
-import type { Knex } from 'knex';
-import { Role } from '@src/modules/roles/entities/role.entity';
+import { Knex } from 'knex';
 
-export async function up(knex: Knex): Promise<void> {
-  await knex.into<Role>(Role.tableName).insert([
+import { Role } from '@src/modules/roles/entities/role.entity';
+import { RoleType } from '@src/modules/roles/interfaces/roles.interface';
+
+export const up = async (knex: Knex): Promise<void> => {
+  const roles = [
     {
-      name: 'root',
+      name: RoleType.ROOT,
       slug: 'Root',
       description: 'Root system',
     },
     {
-      name: 'admin',
+      name: RoleType.ADMIN,
       slug: 'Admin',
       description: 'Admin system',
     },
     {
-      name: 'user',
+      name: RoleType.USER,
       slug: 'User',
       description: 'User system',
     },
-  ]);
-}
+  ];
 
-export async function down(knex: Knex): Promise<void> {
-  await knex.from(Role.tableName).delete();
-}
+  await knex<Role>(Role.tableName).insert(roles);
+};
+
+export const down = async (knex: Knex): Promise<void> => {
+  await knex(Role.tableName).delete();
+};

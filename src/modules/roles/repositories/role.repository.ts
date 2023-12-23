@@ -1,7 +1,8 @@
 import { IRoleRepository } from '@src/modules/roles/interfaces/roles.interface';
 import { KnexRepository } from '@src/common/module/knex.repository';
 import { Role } from '@src/modules/roles/entities/role.entity';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { User } from '@src/modules/users/entities/user.entity';
 
 export class RoleRepository
   extends KnexRepository<Role>
@@ -11,7 +12,7 @@ export class RoleRepository
     super(Role);
   }
 
-  getByName(name: string): Observable<Role | undefined> {
-    return this.findOne({ name });
+  attachRoleToUser(user: User, roleIds: number[]): Observable<number> {
+    return from(user.$relatedQuery('roles').relate(roleIds));
   }
 }

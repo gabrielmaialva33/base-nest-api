@@ -22,20 +22,6 @@ export class KnexRepository<T extends BaseEntity>
 
   constructor(protected readonly model: typeof BaseEntity) {}
 
-  all(
-    clauseOrBuilder?: Partial<T> | Builder<T>,
-    builder?: Builder<T>,
-  ): Observable<T[]> {
-    return from(
-      this.model.query().modify((query) => {
-        if (typeof clauseOrBuilder === 'function')
-          query.modify(clauseOrBuilder);
-        else if (clauseOrBuilder) query.where(clauseOrBuilder);
-        if (typeof builder === 'function') query.modify(builder);
-      }),
-    ).pipe(map((result) => result as T[]));
-  }
-
   list(options?: ListOptions<T>, builder?: Builder<T>): Observable<T[]> {
     const { sort = this.DEFAULT_SORT, order = this.DEFAULT_ORDER } =
       options || {};
@@ -92,7 +78,30 @@ export class KnexRepository<T extends BaseEntity>
     );
   }
 
-  getBy(
+  findClause(
+    clauseOrBuilder?: Partial<T> | Builder<T>,
+    builder?: Builder<T>,
+  ): Observable<T[]> {
+    return from(
+      this.model.query().modify((query) => {
+        if (typeof clauseOrBuilder === 'function')
+          query.modify(clauseOrBuilder);
+        else if (clauseOrBuilder) query.where(clauseOrBuilder);
+        if (typeof builder === 'function') query.modify(builder);
+      }),
+    ).pipe(map((result) => result as T[]));
+  }
+
+  findBy(key: keyof T, value: any, builder?: Builder<T>): Observable<T[]> {
+    return from(
+      this.model.query().modify((query) => {
+        query.where(key as any, value);
+        if (typeof builder === 'function') query.modify(builder);
+      }),
+    ).pipe(map((result) => result as T[]));
+  }
+
+  firstClause(
     clauseOrBuilder?: Partial<T> | Builder<T>,
     builder?: Builder<T>,
   ): Observable<T> {
@@ -109,7 +118,19 @@ export class KnexRepository<T extends BaseEntity>
     ).pipe(map((result) => result as T));
   }
 
-  getById(id: number, builder?: Builder<T>): Observable<T> {
+  firstBy(key: keyof T, value: any, builder?: Builder<T>): Observable<T> {
+    return from(
+      this.model
+        .query()
+        .modify((query) => {
+          query.where(key as any, value);
+          if (typeof builder === 'function') query.modify(builder);
+        })
+        .first(),
+    ).pipe(map((result) => result as T));
+  }
+
+  find(id: number, builder?: Builder<T>): Observable<T> {
     return from(
       this.model
         .query()

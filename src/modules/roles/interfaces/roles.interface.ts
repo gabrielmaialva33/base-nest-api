@@ -6,7 +6,16 @@ import { Observable } from 'rxjs';
 export const ROLE_REPOSITORY = Symbol('ROLE_REPOSITORY');
 
 export interface IRoleRepository extends IKnexRepository<Role> {
-  getByName(name: string): Observable<Role>;
+  /**
+   * Attach a role to a user.
+   * @param {User} user - The user to attach the role to.
+   * @param {number[]} roleIds - The role ids to attach to the user.
+   */
+  attachRoleToUser(user: User, roleIds: number[]): Observable<number>;
+}
 
-  attachRoleToUser(user: User, roleIds: number[]): Observable<void>;
+export enum RoleType {
+  ROOT = 'root',
+  ADMIN = 'admin',
+  USER = 'user',
 }

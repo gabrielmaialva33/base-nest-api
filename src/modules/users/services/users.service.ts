@@ -1,25 +1,31 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { map, switchMap } from 'rxjs';
+import { map, mergeMap, switchMap } from 'rxjs';
 import { DateTime } from 'luxon';
 
 import { translate } from '@src/lib/i18n';
 import { createPagination } from '@src/common/module/pagination';
 
-import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
-import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
-import { User } from '@src/modules/users/entities/user.entity';
 import {
   IUserRepository,
   USER_REPOSITORY,
   UserList,
   UserPaginate,
 } from '@src/modules/users/interfaces/user.interface';
+import {
+  IRoleRepository,
+  ROLE_REPOSITORY,
+  RoleType,
+} from '@src/modules/roles/interfaces/roles.interface';
+import { CreateUserDto, UpdateUserDto } from '@src/modules/users/dto';
+import { User } from '@src/modules/users/entities/user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
+    @Inject(ROLE_REPOSITORY)
+    private readonly roleRepository: IRoleRepository,
   ) {}
 
   list(params?: UserList) {
@@ -51,7 +57,10 @@ export class UsersService {
 
   get(id: number) {
     return this.userRepository
-      .getBy({ id }, (qb) => qb.modify(User.scopes.notDeleted))
+      .firstBy('id', id, (qb) => {
+        qb.modify(User.scopes.notDeleted);
+        qb.withGraphFetched('roles');
+      })
       .pipe(
         map((user) => {
           if (!user)
@@ -68,7 +77,9 @@ export class UsersService {
 
   getBy(field: string, value: any) {
     return this.userRepository
-      .getBy({ [field]: value }, (qb) => qb.modify(User.scopes.notDeleted))
+      .firstClause({ [field]: value }, (qb) =>
+        qb.modify(User.scopes.notDeleted),
+      )
       .pipe(
         map((user) => {
           if (!user) throw new NotFoundException({ message: 'User not found' });
@@ -87,7 +98,16 @@ export class UsersService {
   }
 
   create(data: CreateUserDto) {
-    return this.userRepository.create(data);
+    return this.userRepository.create(data).pipe(
+      mergeMap((user) => {
+        return this.roleRepository.firstBy('name', RoleType.USER).pipe(
+          switchMap((role) =>
+            this.roleRepository.attachRoleToUser(user, [role.id]),
+          ),
+          switchMap(() => this.get(user.id)),
+        );
+      }),
+    );
   }
 
   edit(id: number, data: UpdateUserDto) {

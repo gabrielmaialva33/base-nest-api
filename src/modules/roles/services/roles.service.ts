@@ -1,10 +1,9 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import {
   IRoleRepository,
   ROLE_REPOSITORY,
 } from '@src/modules/roles/interfaces/roles.interface';
-import { User } from '@src/modules/users/entities/user.entity';
 
 @Injectable()
 export class RolesService {
@@ -18,10 +17,6 @@ export class RolesService {
   }
 
   get(id: number) {
-    return this.roleRepository.getById(id);
-  }
-
-  attachRoleToUser(user: User, roleIds: number[]) {
-    return this.roleRepository.attachRoleToUser(user, roleIds);
+    return this.roleRepository.find(id);
   }
 }
