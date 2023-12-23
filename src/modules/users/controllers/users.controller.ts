@@ -14,10 +14,13 @@ import { OrderByDirection } from 'objection';
 import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
 import { UsersService } from '@src/modules/users/services/users.service';
+import { RoleType } from '@src/modules/roles/interfaces/roles.interface';
 
 import { Auth } from '@src/common/decorators/auth.decorator';
+import { Roles } from '@src/common/decorators/roles.decorator';
 
 @Auth()
+@Roles(RoleType.ADMIN)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

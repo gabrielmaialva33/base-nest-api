@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 
 import { NestConfigModule } from '@src/lib/config/config.module';
 import { NestOrmModule } from '@src/lib/orm/orm.module';
@@ -10,6 +10,8 @@ import { NestI18nModule } from '@src/lib/i18n/i18n.module';
 
 import { RequestContext, RequestContextModule } from '@src/lib/context';
 import { ContextInterceptor } from '@src/common/interceptors/context.interceptor';
+import { RolesGuard } from '@src/common/guards/roles.guard';
+import { UsersModule } from '@src/modules/users/users.module';
 
 @Module({
   imports: [
@@ -25,6 +27,10 @@ import { ContextInterceptor } from '@src/common/interceptors/context.interceptor
   ],
   controllers: [],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
     {
       provide: APP_INTERCEPTOR,
       useClass: ContextInterceptor,
