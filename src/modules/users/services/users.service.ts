@@ -94,7 +94,7 @@ export class UsersService {
     return this.get(id).pipe(
       switchMap((user) => {
         user.$set(data);
-        return this.userRepository.update(user);
+        return this.save(user);
       }),
     );
   }
