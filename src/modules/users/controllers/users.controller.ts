@@ -20,7 +20,7 @@ import { Auth } from '@src/common/decorators/auth.decorator';
 import { Roles } from '@src/common/decorators/roles.decorator';
 
 @Auth()
-@Roles(RoleType.ADMIN)
+@Roles(RoleType.USER, RoleType.ADMIN)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
