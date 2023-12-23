@@ -5,6 +5,9 @@ import { DateTime } from 'luxon';
 import { translate } from '@src/lib/i18n';
 import { createPagination } from '@src/common/module/pagination';
 
+import { CreateUserDto, UpdateUserDto } from '@src/modules/users/dto';
+import { User } from '@src/modules/users/entities/user.entity';
+
 import {
   IUserRepository,
   USER_REPOSITORY,
@@ -16,8 +19,6 @@ import {
   ROLE_REPOSITORY,
   RoleType,
 } from '@src/modules/roles/interfaces/roles.interface';
-import { CreateUserDto, UpdateUserDto } from '@src/modules/users/dto';
-import { User } from '@src/modules/users/entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -75,28 +76,6 @@ export class UsersService {
       );
   }
 
-  getBy(field: string, value: any) {
-    return this.userRepository
-      .firstClause({ [field]: value }, (qb) =>
-        qb.modify(User.scopes.notDeleted),
-      )
-      .pipe(
-        map((user) => {
-          if (!user) throw new NotFoundException({ message: 'User not found' });
-          return user;
-        }),
-      );
-  }
-
-  getByUid(uid: string) {
-    return this.userRepository.getByUid(uid).pipe(
-      map((user) => {
-        if (!user) throw new NotFoundException({ message: 'User not found' });
-        return user;
-      }),
-    );
-  }
-
   create(data: CreateUserDto) {
     return this.userRepository.create(data).pipe(
       mergeMap((user) => {
@@ -114,13 +93,9 @@ export class UsersService {
     return this.get(id).pipe(
       switchMap((user) => {
         user.$set(data);
-        return this.save(user);
+        return this.userRepository.update(user).pipe(map(() => user));
       }),
     );
-  }
-
-  save(user: User) {
-    return this.userRepository.update(user);
   }
 
   delete(id: number) {

@@ -10,23 +10,26 @@ import { map, switchMap } from 'rxjs';
 import { translate } from '@src/lib/i18n';
 
 import { TokensService } from '@src/modules/tokens/services/tokens.service';
-import { UsersService } from '@src/modules/users/services/users.service';
 import { SignInUserDto } from '@src/modules/sessions/dto/sign-in-user.dto';
 
 import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 import { SignUpUserDto } from '@src/modules/sessions/dto/sign-up-user.dto';
+import {
+  IUserRepository,
+  USER_REPOSITORY,
+} from '@src/modules/users/interfaces/user.interface';
 
 @Injectable()
 export class SessionsService {
   constructor(
     @Inject(TokensService)
     private readonly tokensService: TokensService,
-    @Inject(UsersService)
-    private readonly userService: UsersService,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: IUserRepository,
   ) {}
 
   signIn({ uid, password }: SignInUserDto) {
-    return this.userService.getByUid(uid).pipe(
+    return this.userRepository.getByUid(uid).pipe(
       switchMap((user) => {
         if (!user || user.is_deleted)
           throw new NotFoundException({
@@ -46,7 +49,7 @@ export class SessionsService {
           switchMap(() => {
             const token = this.tokensService.generateRememberMeToken();
             user.$set({ remember_me_token: token });
-            return this.userService.save(user).pipe(map(() => user));
+            return this.userRepository.update(user).pipe(map(() => user));
           }),
           switchMap((match) => {
             if (!match)
@@ -74,11 +77,11 @@ export class SessionsService {
   }
 
   signUp(data: SignUpUserDto) {
-    return this.userService.create(data).pipe(
+    return this.userRepository.create(data).pipe(
       switchMap((user) => {
         const token = this.tokensService.generateRememberMeToken();
         user.$set({ remember_me_token: token });
-        return this.userService.save(user).pipe(map(() => user));
+        return this.userRepository.update(user).pipe(map(() => user));
       }),
       switchMap((user) => {
         return this.tokensService
@@ -99,7 +102,7 @@ export class SessionsService {
   }
 
   signOut(userId: number) {
-    return this.userService.get(userId).pipe(
+    return this.userRepository.find(userId).pipe(
       switchMap((user) => {
         if (!user) throw new NotFoundException();
         return this.tokensService.destroyJwtToken(user.id);
@@ -108,7 +111,7 @@ export class SessionsService {
   }
 
   refreshToken(userId: number) {
-    return this.userService.get(userId).pipe(
+    return this.userRepository.find(userId).pipe(
       switchMap((user) => {
         return this.tokensService
           .generateRefreshToken(user.remember_me_token, {

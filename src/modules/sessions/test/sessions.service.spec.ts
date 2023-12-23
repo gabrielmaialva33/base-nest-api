@@ -6,15 +6,19 @@ import { pick } from 'helper-fns';
 
 import { SessionsService } from '@src/modules/sessions/services/sessions.service';
 import { TokensService } from '@src/modules/tokens/services/tokens.service';
-import { UsersService } from '@src/modules/users/services/users.service';
+
+import { Argon2Utils } from '@src/common/helpers/argon2.utils';
+import {
+  IUserRepository,
+  USER_REPOSITORY,
+} from '@src/modules/users/interfaces/user.interface';
 
 import { userFactory } from '@src/database/factories';
-import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 
 describe('SessionsService', () => {
   let service: SessionsService;
   let mockTokensService: jest.Mocked<TokensService>;
-  let mockUsersService: jest.Mocked<UsersService>;
+  let mockUserRepository: jest.Mocked<IUserRepository>;
 
   const mockUser = userFactory.makeStub({ is_deleted: false, is_active: true });
 
@@ -29,18 +33,18 @@ describe('SessionsService', () => {
           useValue: createMock<TokensService>(),
         },
         {
-          provide: UsersService,
-          useValue: createMock<UsersService>(),
+          provide: USER_REPOSITORY,
+          useValue: createMock<IUserRepository>(),
         },
       ],
     }).compile();
 
     const hash = await Argon2Utils.hash('password');
-    mockUser.$set({ password: hash });
+    mockUser.$setDatabaseJson({ password: hash });
 
     service = module.get<SessionsService>(SessionsService);
     mockTokensService = module.get(TokensService);
-    mockUsersService = module.get(UsersService);
+    mockUserRepository = module.get(USER_REPOSITORY);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -51,8 +55,8 @@ describe('SessionsService', () => {
 
   describe('signIn', () => {
     it('should sign in a user', (done) => {
-      mockUsersService.getByUid.mockReturnValue(of(mockUser));
-      mockUsersService.save.mockReturnValue(of(mockUser));
+      mockUserRepository.getByUid.mockReturnValue(of(mockUser));
+      mockUserRepository.update.mockReturnValue(of(mockUser));
       mockTokensService.generateJwtToken.mockReturnValue(
         of(crypto.randomBytes(32).toString('hex')),
       );
@@ -63,10 +67,10 @@ describe('SessionsService', () => {
           password: 'password',
         })
         .subscribe((result) => {
-          expect(mockUsersService.getByUid).toHaveBeenCalled();
-          expect(mockUsersService.getByUid).toHaveBeenCalledTimes(1);
-          expect(mockUsersService.save).toHaveBeenCalled();
-          expect(mockUsersService.save).toHaveBeenCalledTimes(1);
+          expect(mockUserRepository.getByUid).toHaveBeenCalled();
+          expect(mockUserRepository.getByUid).toHaveBeenCalledTimes(1);
+          expect(mockUserRepository.update).toHaveBeenCalled();
+          expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
           expect(mockTokensService.generateJwtToken).toHaveBeenCalled();
           expect(mockTokensService.generateJwtToken).toHaveBeenCalledTimes(1);
           expect(result.user).toEqual(mockUser);
@@ -90,17 +94,17 @@ describe('SessionsService', () => {
     ]);
 
     it('should sign up a user', (done) => {
-      mockUsersService.create.mockReturnValue(of(mockUser));
-      mockUsersService.save.mockReturnValue(of(mockUser));
+      mockUserRepository.create.mockReturnValue(of(mockUser));
+      mockUserRepository.update.mockReturnValue(of(mockUser));
       mockTokensService.generateJwtToken.mockReturnValue(
         of(crypto.randomBytes(32).toString('hex')),
       );
 
       service.signUp(data).subscribe((result) => {
-        expect(mockUsersService.create).toHaveBeenCalled();
-        expect(mockUsersService.create).toHaveBeenCalledTimes(1);
-        expect(mockUsersService.save).toHaveBeenCalled();
-        expect(mockUsersService.save).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.create).toHaveBeenCalled();
+        expect(mockUserRepository.create).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.update).toHaveBeenCalled();
+        expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
         expect(mockTokensService.generateJwtToken).toHaveBeenCalled();
         expect(mockTokensService.generateJwtToken).toHaveBeenCalledTimes(1);
         expect(result.user).toEqual(mockUser);
@@ -116,7 +120,7 @@ describe('SessionsService', () => {
   describe('signOut', () => {
     it('should sign out a user', (done) => {
       mockTokensService.destroyJwtToken.mockReturnValue(of(1));
-      mockUsersService.get.mockReturnValue(of(mockUser));
+      mockUserRepository.find.mockReturnValue(of(mockUser));
 
       service.signOut(mockUser.id).subscribe((result) => {
         expect(mockTokensService.destroyJwtToken).toHaveBeenCalled();

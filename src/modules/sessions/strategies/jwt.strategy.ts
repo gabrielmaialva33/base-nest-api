@@ -12,8 +12,11 @@ import { lastValueFrom } from 'rxjs';
 import { DateTime } from 'luxon';
 
 import { translate } from '@src/lib/i18n';
-import { UsersService } from '@src/modules/users/services/users.service';
 import { TokensService } from '@src/modules/tokens/services/tokens.service';
+import {
+  IUserRepository,
+  USER_REPOSITORY,
+} from '@src/modules/users/interfaces/user.interface';
 
 interface JwtPayload {
   token: string;
@@ -28,8 +31,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject(ConfigService)
     private readonly config: ConfigService,
-    @Inject(UsersService)
-    private readonly userService: UsersService,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: IUserRepository,
     @Inject(TokensService)
     private readonly tokensService: TokensService,
   ) {
@@ -41,7 +44,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    const user = await lastValueFrom(this.userService.getByUid(payload.uid));
+    const user = await lastValueFrom(this.userRepository.getByUid(payload.uid));
     if (!user || user.is_deleted)
       throw new NotFoundException({
         message: translate('exception.model_not_found', {

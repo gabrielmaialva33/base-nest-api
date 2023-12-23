@@ -1,7 +1,9 @@
 import { QueryBuilder } from 'objection';
 import { DateTime } from 'luxon';
+import * as path from 'path';
 
 import { BaseEntity } from '@src/common/module/base.entity';
+import { User } from '@src/modules/users/entities/user.entity';
 
 export class Token extends BaseEntity {
   public static tableName = 'api_tokens';
@@ -28,13 +30,15 @@ export class Token extends BaseEntity {
   static relationMappings = {
     user: {
       relation: BaseEntity.BelongsToOneRelation,
-      modelClass: 'user.entity',
+      modelClass: path.join(__dirname, '../../users/entities/user.entity'),
       join: {
         from: 'api_tokens.user_id',
         to: 'users.id',
       },
     },
   };
+
+  user: User;
 
   /**
    * ------------------------------------------------------

@@ -1,6 +1,7 @@
 import { Pojo, QueryBuilder } from 'objection';
 import { omit } from 'helper-fns';
 import { DateTime } from 'luxon';
+import * as path from 'path';
 
 import { Env } from '@src/env';
 import { Argon2Utils } from '@src/common/helpers/argon2.utils';
@@ -43,7 +44,7 @@ export class User extends BaseEntity {
   static relationMappings = {
     tokens: {
       relation: BaseEntity.HasManyRelation,
-      modelClass: Token,
+      modelClass: path.join(__dirname, '../../tokens/entities/token.entity'),
       join: {
         from: 'users.id',
         to: 'api_tokens.user_id',
@@ -51,7 +52,7 @@ export class User extends BaseEntity {
     },
     roles: {
       relation: BaseEntity.ManyToManyRelation,
-      modelClass: Role,
+      modelClass: path.join(__dirname, '../../roles/entities/role.entity'),
       join: {
         from: 'users.id',
         through: {

@@ -195,16 +195,7 @@ describe('UsersService', () => {
 
   describe('edit', () => {
     const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
-    const mockUserWithNewData = mockUser.$set(
-      pick(userFactory.make(), [
-        'first_name',
-        'last_name',
-        'email',
-        'username',
-        'avatar_url',
-      ]),
-    );
-    const data = pick(mockUserWithNewData.$toJson(), [
+    const data = pick(mockUser.$toJson(), [
       'first_name',
       'last_name',
       'email',
@@ -213,8 +204,8 @@ describe('UsersService', () => {
     ]);
 
     it('should edit a user', (done) => {
-      mockUserRepository.firstClause.mockReturnValue(of(mockUser));
-      mockUserRepository.update.mockReturnValue(of(mockUserWithNewData));
+      mockUserRepository.firstBy.mockReturnValue(of(mockUser));
+      mockUserRepository.update.mockReturnValue(of(mockUser));
 
       service.edit(mockUser.id, data).subscribe((user) => {
         expect(mockUserRepository.firstBy).toHaveBeenCalled();
@@ -228,23 +219,7 @@ describe('UsersService', () => {
         expect(mockUserRepository.update).toHaveBeenCalled();
         expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
 
-        for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
-        done();
-      });
-    });
-  });
-
-  describe('save', () => {
-    const mockUser = mockUsers[Math.floor(Math.random() * mockUsers.length)];
-
-    it('should save a user', (done) => {
-      mockUserRepository.update.mockReturnValue(of(mockUser));
-
-      service.save(mockUser).subscribe((user) => {
-        expect(mockUserRepository.update).toHaveBeenCalled();
-        expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
-        expect(user).toEqual(mockUser);
-        for (const key in mockUser) expect(user[key]).toEqual(mockUser[key]);
+        for (const key in data) expect(user[key]).toEqual(data[key]);
         done();
       });
     });

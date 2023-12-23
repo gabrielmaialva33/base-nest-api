@@ -1,5 +1,6 @@
 import { Pojo } from 'objection';
 import { omit } from 'helper-fns';
+import * as path from 'path';
 
 import { BaseEntity } from '@src/common/module/base.entity';
 import { User } from '@src/modules/users/entities/user.entity';
@@ -28,7 +29,7 @@ export class Role extends BaseEntity {
   static relationMappings = {
     users: {
       relation: BaseEntity.ManyToManyRelation,
-      modelClass: User,
+      modelClass: path.join(__dirname, '../../users/entities/user.entity'),
       join: {
         from: 'roles.id',
         through: {
@@ -39,6 +40,8 @@ export class Role extends BaseEntity {
       },
     },
   };
+
+  users: User[];
 
   /**
    * ------------------------------------------------------
