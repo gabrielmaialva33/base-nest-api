@@ -180,6 +180,7 @@ export class TokensService {
 export interface JwtPayload {
   id: number;
   uid?: string;
+  roles?: string[];
   rawToken?: string;
 }
 

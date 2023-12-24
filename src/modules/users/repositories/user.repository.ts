@@ -20,6 +20,7 @@ export class UserRepository
           for (const field of User.uid) qb.orWhere(field, uid);
         })
         .whereNot('is_deleted', true)
+        .withGraphFetched('roles')
         .first(),
     ).pipe(map((result) => result as User));
   }

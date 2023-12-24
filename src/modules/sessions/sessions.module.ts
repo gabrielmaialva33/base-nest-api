@@ -8,9 +8,16 @@ import { JwtStrategy } from '@src/modules/sessions/strategies/jwt.strategy';
 import { SessionsService } from '@src/modules/sessions/services/sessions.service';
 import { TokensModule } from '@src/modules/tokens/tokens.module';
 import { UsersModule } from '@src/modules/users/users.module';
+import { RolesModule } from '@src/modules/roles/roles.module';
 
 @Module({
-  imports: [PassportModule, NestJwtModule, TokensModule, UsersModule],
+  imports: [
+    PassportModule,
+    NestJwtModule,
+    TokensModule,
+    UsersModule,
+    RolesModule,
+  ],
   controllers: [SessionsController],
   providers: [SessionsService, LocalStrategy, JwtStrategy],
 })
