@@ -1,0 +1,45 @@
+_id: req_9a194591b91943e0b4e8142f051b5f8e
+type: Request
+parentId: fld_65088d651e1b48eb9f13fd052eaebf84
+modified: 1703376759597
+created: 1703376759597
+url: "{{ _.base_url }}/api/roles"
+name: Paginate roles
+description: ""
+method: GET
+body: {}
+parameters:
+  - name: page
+    disabled: true
+    value: "1"
+  - name: per_page
+    disabled: true
+    value: "10"
+  - name: sort
+    disabled: true
+    value: id
+  - name: order
+    disabled: true
+    value: asc
+  - name: search
+    disabled: true
+    value: admin
+headers:
+  - name: Content-Type
+    disabled: false
+    value: application/json
+  - name: Accept-Language
+    disabled: true
+    value: en-US
+authentication:
+  type: bearer
+  token: "{{ _.bearerToken }}"
+  prefix: ""
+metaSortKey: -1703376759597
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,20 +1,20 @@
-_id: req_e9c5f849c07541a89072418b567b63a6
+_id: req_0af2c0ab64294217a51668c0deeae123
 type: Request
-parentId: fld_ae212391e6564aa5bb78d3831ec560f4
-modified: 1702827842561
-created: 1702827842561
+parentId: fld_f08d23370ee74e168c63bdddb3c16026
+modified: 1703376759594
+created: 1703376759594
 url: "{{ _.base_url }}/api/sign_out"
 name: Sign out
 description: ""
 method: DELETE
-body: { }
-parameters: [ ]
+body: {}
+parameters: []
 headers:
   - name: Content-Type
     disabled: false
     value: application/json
   - name: Accept-Language
-    disabled: false
+    disabled: true
     value: en-US
   - name: Authorization
     disabled: false
@@ -23,7 +23,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1702827842561
+metaSortKey: -1703376759594
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

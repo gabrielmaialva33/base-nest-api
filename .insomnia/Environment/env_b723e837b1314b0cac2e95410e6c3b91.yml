@@ -1,13 +1,13 @@
-_id: env_d0b6a918ccba45208319c5def4f2e579
+_id: env_b723e837b1314b0cac2e95410e6c3b91
 type: Environment
 parentId: env_fdb17db9bb373c10ed29aa850d06f6cfabd6ab8c
-modified: 1703376796832
-created: 1702006645761
-name: Local Server
+modified: 1703376787138
+created: 1703376759592
+name: Develop Server
 data:
-  scheme: http
+  scheme: https
   base_path: ""
-  host: localhost:3000
+  host: api.hidedevelopment.cloud
   bearerToken: bearerToken
 dataPropertyOrder:
   "&":
@@ -15,6 +15,6 @@ dataPropertyOrder:
     - base_path
     - host
     - bearerToken
-color: "#1dc2d7"
+color: "#6c03a5"
 isPrivate: false
-metaSortKey: 1702006645761
+metaSortKey: 1703376759592

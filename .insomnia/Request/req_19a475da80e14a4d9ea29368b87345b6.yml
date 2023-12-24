@@ -1,14 +1,20 @@
-_id: req_d52417f553094cb79c7e6cea66265709
+_id: req_19a475da80e14a4d9ea29368b87345b6
 type: Request
-parentId: fld_97e8f78d454d40d495e72e17100a2259
-modified: 1702827842566
-created: 1702827842566
-url: "{{ _.base_url }}/api/users/all"
-name: List users
+parentId: fld_4277ab3e959b439381071a3421129906
+modified: 1703376759595
+created: 1703376759595
+url: "{{ _.base_url }}/api/users"
+name: Paginate users
 description: ""
 method: GET
-body: { }
+body: {}
 parameters:
+  - name: page
+    disabled: true
+    value: "1"
+  - name: per_page
+    disabled: true
+    value: "10"
   - name: sort
     disabled: true
     value: id
@@ -23,13 +29,13 @@ headers:
     disabled: false
     value: application/json
   - name: Accept-Language
-    disabled: false
+    disabled: true
     value: en-US
 authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1702827842566
+metaSortKey: -1703376759595
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

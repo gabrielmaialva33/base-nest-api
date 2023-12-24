@@ -1,8 +1,8 @@
-_id: req_9b23c1f8868242519308caa18fec8597
+_id: req_79228383b7294a97a9385e6ce5bc573f
 type: Request
-parentId: fld_ae212391e6564aa5bb78d3831ec560f4
-modified: 1702827915797
-created: 1702827842559
+parentId: fld_f08d23370ee74e168c63bdddb3c16026
+modified: 1703376759594
+created: 1703376759594
 url: "{{ _.base_url }}/api/sign_in"
 name: Sign in
 description: ""
@@ -11,19 +11,19 @@ body:
   mimeType: application/json
   text: |-
     {
-    	"uid": "gabriel.alva",
-    	"password": "Dev@551238"
+      "uid": "gabriel.alva",
+      "password": "Dev@551238"
     }
-parameters: [ ]
+parameters: []
 headers:
   - name: Content-Type
     disabled: false
     value: application/json
   - name: Accept-Language
-    disabled: false
+    disabled: true
     value: en-US
-authentication: { }
-metaSortKey: -1702827842559
+authentication: {}
+metaSortKey: -1703376759594
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

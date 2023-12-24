@@ -1,12 +1,12 @@
-_id: req_a0d7fad77e2a4e45912dd1e3906411f3
+_id: req_b9ceac9a199d443a990ebed0e4cb309b
 type: Request
-parentId: fld_97e8f78d454d40d495e72e17100a2259
-modified: 1702827842565
-created: 1702827842565
-url: "{{ _.base_url }}/api/users"
-name: Create user
+parentId: fld_4277ab3e959b439381071a3421129906
+modified: 1703376759596
+created: 1703376759596
+url: "{{ _.base_url }}/api/users/{{ _.id }}"
+name: Edit user
 description: ""
-method: POST
+method: PUT
 body:
   mimeType: application/json
   text: |-
@@ -18,7 +18,7 @@ body:
       "username": "gabriel.alva",
       "password": "Dev@551238"
     }
-parameters: [ ]
+parameters: []
 headers:
   - name: Content-Type
     disabled: false
@@ -27,7 +27,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1702827842565
+metaSortKey: -1703376759596
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
