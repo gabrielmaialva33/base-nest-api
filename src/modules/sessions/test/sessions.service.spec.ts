@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock } from '@golevelup/ts-jest';
-import * as crypto from 'crypto';
 import { of } from 'rxjs';
 import { pick } from 'helper-fns';
+import * as crypto from 'crypto';
 
 import { SessionsService } from '@src/modules/sessions/services/sessions.service';
 import { TokensService } from '@src/modules/tokens/services/tokens.service';
@@ -16,6 +16,7 @@ import {
 import {
   IRoleRepository,
   ROLE_REPOSITORY,
+  RoleType,
 } from '@src/modules/roles/interfaces/roles.interface';
 import { userFactory } from '@src/database/factories';
 
@@ -79,10 +80,25 @@ describe('SessionsService', () => {
         .subscribe((result) => {
           expect(mockUserRepository.getByUid).toHaveBeenCalled();
           expect(mockUserRepository.getByUid).toHaveBeenCalledTimes(1);
+          expect(mockUserRepository.getByUid).toHaveBeenCalledWith(
+            mockUser.email,
+          );
+
           expect(mockUserRepository.update).toHaveBeenCalled();
           expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
+          expect(mockUserRepository.update).toHaveBeenCalledWith(mockUser);
+
           expect(mockTokensService.generateJwtToken).toHaveBeenCalled();
           expect(mockTokensService.generateJwtToken).toHaveBeenCalledTimes(1);
+          expect(mockTokensService.generateJwtToken).toHaveBeenCalledWith({
+            id: mockUser.id,
+            uid: mockUser.email,
+            roles:
+              mockUser.roles.length > 0
+                ? mockUser.roles.map((role) => role.name)
+                : [],
+          });
+
           expect(result.user).toEqual(mockUser);
 
           for (const key in result.user)
@@ -119,16 +135,36 @@ describe('SessionsService', () => {
       service.signUp(data).subscribe((result) => {
         expect(mockUserRepository.create).toHaveBeenCalled();
         expect(mockUserRepository.create).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.create).toHaveBeenCalledWith(data);
+
         expect(mockUserRepository.update).toHaveBeenCalled();
         expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
+        expect(mockUserRepository.update).toHaveBeenCalledWith(mockUser);
 
         expect(mockRoleRepository.firstBy).toHaveBeenCalled();
         expect(mockRoleRepository.firstBy).toHaveBeenCalledTimes(1);
+        expect(mockRoleRepository.firstBy).toHaveBeenCalledWith(
+          'name',
+          RoleType.USER,
+        );
+
         expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalled();
         expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalledTimes(1);
+        expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalledWith(
+          mockUser,
+          [mockRole.id],
+        );
 
         expect(mockTokensService.generateJwtToken).toHaveBeenCalled();
         expect(mockTokensService.generateJwtToken).toHaveBeenCalledTimes(1);
+        expect(mockTokensService.generateJwtToken).toHaveBeenCalledWith({
+          id: mockUser.id,
+          uid: mockUser.email,
+          roles:
+            mockUser.roles.length > 0
+              ? mockUser.roles.map((role) => role.name)
+              : [],
+        });
 
         expect(result.user).toEqual(mockUser);
 
@@ -148,6 +184,10 @@ describe('SessionsService', () => {
       service.signOut(mockUser.id).subscribe((result) => {
         expect(mockTokensService.destroyJwtToken).toHaveBeenCalled();
         expect(mockTokensService.destroyJwtToken).toHaveBeenCalledTimes(1);
+        expect(mockTokensService.destroyJwtToken).toHaveBeenCalledWith(
+          mockUser.id,
+        );
+
         expect(result).toEqual(1);
 
         done();
