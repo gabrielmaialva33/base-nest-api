@@ -13,12 +13,17 @@ import {
   USER_REPOSITORY,
 } from '@src/modules/users/interfaces/user.interface';
 
+import {
+  IRoleRepository,
+  ROLE_REPOSITORY,
+} from '@src/modules/roles/interfaces/roles.interface';
 import { userFactory } from '@src/database/factories';
 
 describe('SessionsService', () => {
   let service: SessionsService;
   let mockTokensService: jest.Mocked<TokensService>;
   let mockUserRepository: jest.Mocked<IUserRepository>;
+  let mockRoleRepository: jest.Mocked<IRoleRepository>;
 
   const mockUser = userFactory.makeStub({ is_deleted: false, is_active: true });
 
@@ -36,6 +41,10 @@ describe('SessionsService', () => {
           provide: USER_REPOSITORY,
           useValue: createMock<IUserRepository>(),
         },
+        {
+          provide: ROLE_REPOSITORY,
+          useValue: createMock<IRoleRepository>(),
+        },
       ],
     }).compile();
 
@@ -45,6 +54,7 @@ describe('SessionsService', () => {
     service = module.get<SessionsService>(SessionsService);
     mockTokensService = module.get(TokensService);
     mockUserRepository = module.get(USER_REPOSITORY);
+    mockRoleRepository = module.get(ROLE_REPOSITORY);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -92,10 +102,16 @@ describe('SessionsService', () => {
       'avatar_url',
       'password',
     ]);
+    const mockRole = mockUser.roles[0];
 
     it('should sign up a user', (done) => {
       mockUserRepository.create.mockReturnValue(of(mockUser));
       mockUserRepository.update.mockReturnValue(of(mockUser));
+      mockUserRepository.find.mockReturnValue(of(mockUser));
+
+      mockRoleRepository.firstBy.mockReturnValue(of(mockRole));
+      mockRoleRepository.attachRoleToUser.mockReturnValue(of(1));
+
       mockTokensService.generateJwtToken.mockReturnValue(
         of(crypto.randomBytes(32).toString('hex')),
       );
@@ -105,8 +121,15 @@ describe('SessionsService', () => {
         expect(mockUserRepository.create).toHaveBeenCalledTimes(1);
         expect(mockUserRepository.update).toHaveBeenCalled();
         expect(mockUserRepository.update).toHaveBeenCalledTimes(1);
+
+        expect(mockRoleRepository.firstBy).toHaveBeenCalled();
+        expect(mockRoleRepository.firstBy).toHaveBeenCalledTimes(1);
+        expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalled();
+        expect(mockRoleRepository.attachRoleToUser).toHaveBeenCalledTimes(1);
+
         expect(mockTokensService.generateJwtToken).toHaveBeenCalled();
         expect(mockTokensService.generateJwtToken).toHaveBeenCalledTimes(1);
+
         expect(result.user).toEqual(mockUser);
 
         for (const key in result.user)
