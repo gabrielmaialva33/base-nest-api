@@ -1,20 +1,18 @@
 _id: env_d0b6a918ccba45208319c5def4f2e579
 type: Environment
 parentId: env_fdb17db9bb373c10ed29aa850d06f6cfabd6ab8c
-modified: 1703376796832
+modified: 1703376867569
 created: 1702006645761
 name: Local Server
 data:
   scheme: http
   base_path: ""
   host: localhost:3000
-  bearerToken: bearerToken
 dataPropertyOrder:
   "&":
     - scheme
     - base_path
     - host
-    - bearerToken
 color: "#1dc2d7"
 isPrivate: false
 metaSortKey: 1702006645761
