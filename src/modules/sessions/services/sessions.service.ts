@@ -5,7 +5,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { from, map, switchMap, tap } from 'rxjs';
+import { from, map, switchMap } from 'rxjs';
 
 import { translate } from '@src/lib/i18n';
 import { TokensService } from '@src/modules/tokens/services/tokens.service';

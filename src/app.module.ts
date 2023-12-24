@@ -11,7 +11,6 @@ import { NestI18nModule } from '@src/lib/i18n/i18n.module';
 import { RequestContext, RequestContextModule } from '@src/lib/context';
 import { ContextInterceptor } from '@src/common/interceptors/context.interceptor';
 import { RolesGuard } from '@src/common/guards/roles.guard';
-import { UsersModule } from '@src/modules/users/users.module';
 
 @Module({
   imports: [

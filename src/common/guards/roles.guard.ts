@@ -7,10 +7,11 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { map } from 'rxjs';
+
 import { RoleType } from '@src/modules/roles/interfaces/roles.interface';
 import { ROLES_KEY } from '@src/common/decorators/roles.decorator';
 import { UsersService } from '@src/modules/users/services/users.service';
-import { map, switchMap } from 'rxjs';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
