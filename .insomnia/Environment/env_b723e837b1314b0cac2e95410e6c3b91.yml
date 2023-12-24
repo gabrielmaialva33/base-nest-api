@@ -1,20 +1,18 @@
 _id: env_b723e837b1314b0cac2e95410e6c3b91
 type: Environment
 parentId: env_fdb17db9bb373c10ed29aa850d06f6cfabd6ab8c
-modified: 1703376787138
+modified: 1703376876611
 created: 1703376759592
 name: Develop Server
 data:
   scheme: https
   base_path: ""
   host: api.hidedevelopment.cloud
-  bearerToken: bearerToken
 dataPropertyOrder:
   "&":
     - scheme
     - base_path
     - host
-    - bearerToken
 color: "#6c03a5"
 isPrivate: false
 metaSortKey: 1703376759592
