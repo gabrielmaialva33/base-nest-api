@@ -116,13 +116,17 @@ describe('SessionsController', () => {
 
       mockSessionsService.signOut.mockReturnValue(of(1));
 
-      controller.signOut().subscribe((response) => {
-        expect(mockSessionsService.signOut).toHaveBeenCalled();
-        expect(mockSessionsService.signOut).toHaveBeenCalledTimes(1);
-        expect(mockSessionsService.signOut).toHaveBeenCalledWith(mockUser.id);
-        expect(response).toEqual(1);
-        done();
-      });
+      controller
+        .signOut({
+          user: mockUser,
+        } as unknown as any)
+        .subscribe((response) => {
+          expect(mockSessionsService.signOut).toHaveBeenCalled();
+          expect(mockSessionsService.signOut).toHaveBeenCalledTimes(1);
+          expect(mockSessionsService.signOut).toHaveBeenCalledWith(mockUser.id);
+          expect(response).toEqual(1);
+          done();
+        });
     });
   });
 
@@ -139,15 +143,19 @@ describe('SessionsController', () => {
         }),
       );
 
-      controller.refreshToken().subscribe((response) => {
-        expect(mockSessionsService.refreshToken).toHaveBeenCalled();
-        expect(mockSessionsService.refreshToken).toHaveBeenCalledTimes(1);
-        expect(mockSessionsService.refreshToken).toHaveBeenCalledWith(
-          mockUser.id,
-        );
-        expect(response).toEqual({ user: mockUser, token: 'token' });
-        done();
-      });
+      controller
+        .refreshToken({
+          user: mockUser,
+        } as unknown as any)
+        .subscribe((response) => {
+          expect(mockSessionsService.refreshToken).toHaveBeenCalled();
+          expect(mockSessionsService.refreshToken).toHaveBeenCalledTimes(1);
+          expect(mockSessionsService.refreshToken).toHaveBeenCalledWith(
+            mockUser.id,
+          );
+          expect(response).toEqual({ user: mockUser, token: 'token' });
+          done();
+        });
     });
   });
 });

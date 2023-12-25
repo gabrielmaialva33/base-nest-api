@@ -2,8 +2,10 @@ import {
   Body,
   Controller,
   Delete,
+  ForbiddenException,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { SessionsService } from '@src/modules/sessions/services/sessions.service';
@@ -11,8 +13,6 @@ import { LocalAuthGuard } from '@src/common/guards/local.auth.guard';
 import { SignInUserDto } from '@src/modules/sessions/dto/sign-in-user.dto';
 import { SignUpUserDto } from '@src/modules/sessions/dto/sign-up-user.dto';
 import { Auth } from '@src/common/decorators/auth.decorator';
-import { User } from '@src/modules/users/entities/user.entity';
-import { RequestContext } from '@src/lib/context/request';
 
 @Controller()
 export class SessionsController {
@@ -31,19 +31,23 @@ export class SessionsController {
 
   @Auth()
   @Delete('/sign_out')
-  signOut() {
-    const user: User = RequestContext.get().currentUser;
-    if (!user) return;
+  signOut(@Req() req: NestifyRequest) {
+    if (!req.user)
+      throw new ForbiddenException(
+        'You are not allowed to perform this action',
+      );
 
-    return this.sessionsService.signOut(user.id);
+    return this.sessionsService.signOut(req.user.id);
   }
 
   @Auth()
   @Patch('/refresh_token')
-  refreshToken() {
-    const user: User = RequestContext.get().currentUser;
-    if (!user) return;
+  refreshToken(@Req() req: NestifyRequest) {
+    if (!req.user)
+      throw new ForbiddenException(
+        'You are not allowed to perform this action',
+      );
 
-    return this.sessionsService.refreshToken(user.id);
+    return this.sessionsService.refreshToken(req.user.id);
   }
 }

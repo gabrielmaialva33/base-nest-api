@@ -217,14 +217,6 @@ paths:
             type: string
             description: Language code (ISO 639-1)
             example: en-US
-        - name: Authorization
-          in: header
-          description: Authorization
-          required: true
-          schema:
-            type: string
-            description: JWT token
-            example: Bearer <token>
       x-codeSamples:
         - lang: shell
           source: |

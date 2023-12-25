@@ -12,7 +12,7 @@ import { RequestContext } from '@src/lib/context/request';
 
 @Injectable()
 export class ContextInterceptor implements NestInterceptor {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly _jwtService: JwtService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
@@ -22,11 +22,6 @@ export class ContextInterceptor implements NestInterceptor {
     async.params = ctx.getRequest<FastifyRequest>().params;
     async.body = ctx.getRequest<FastifyRequest>().body;
     async.query = ctx.getRequest<FastifyRequest>().query;
-
-    // const authorization =
-    // ctx.getRequest<FastifyRequest>().headers.authorization;
-    // const token = authorization ? authorization.split(' ')[1] : '';
-    // async.user = this.jwtService.decode(token);
 
     return next.handle();
   }

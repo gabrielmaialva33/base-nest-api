@@ -9,7 +9,7 @@ export class RealIpMiddleware implements NestMiddleware {
     _response: NestifyResponse,
     next: NestifyNextFunction,
   ) {
-    request.realIp = getClientIp(request)!;
+    request.realIp = getClientIp(request) || request.ip;
     next();
   }
 }
