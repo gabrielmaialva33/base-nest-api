@@ -62,6 +62,19 @@ export const Env = cleanEnv(process.env, {
     desc: 'The mail ses access key',
   }),
   MAIL_SES_REGION: str({ default: 'sa-east-1', desc: 'The mail ses region' }),
+  // Twilio
+  TWILIO_ACCOUNT_SID: str({
+    default: '',
+    desc: 'The twilio account sid',
+  }),
+  TWILIO_AUTH_TOKEN: str({
+    default: '',
+    desc: 'The twilio auth token',
+  }),
+  TWILIO_FROM: str({
+    default: '',
+    desc: 'The twilio from number',
+  }),
 });
 
 export const validateEnv = (config: Record<any, any>) => {

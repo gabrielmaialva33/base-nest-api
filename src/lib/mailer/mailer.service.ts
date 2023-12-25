@@ -8,9 +8,10 @@ import { createTransport } from 'nodemailer';
 import previewEmail from 'preview-email';
 
 import { Server } from '@src/common/@types';
-import { MODULE_OPTIONS_TOKEN } from '@src/lib/mailer/mail.module-definition';
 import { BaseAdapter } from '@src/lib/mailer/adapters';
 import { MailModuleOptions } from '@src/lib/mailer/mailer.options';
+
+import { MODULE_OPTIONS_TOKEN } from '@src/lib/mailer/mail.module-definition';
 
 interface MailOptions extends Partial<SendMailOptions> {
   template: string;

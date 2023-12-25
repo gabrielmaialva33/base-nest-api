@@ -35,6 +35,10 @@ declare global {
       MAIL_SES_KEY: string;
       MAIL_SES_ACCESS_KEY: string;
       MAIL_SES_REGION: string;
+
+      TWILIO_ACCOUNT_SID: string;
+      TWILIO_AUTH_TOKEN: string;
+      TWILIO_FROM: string;
     }
   }
 }
