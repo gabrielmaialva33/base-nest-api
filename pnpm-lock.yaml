@@ -68,6 +68,9 @@ dependencies:
   argon2:
     specifier: ^0.31.2
     version: 0.31.2
+  axios:
+    specifier: ^1.6.2
+    version: 1.6.2
   better-sqlite3:
     specifier: ^9.2.2
     version: 9.2.2
