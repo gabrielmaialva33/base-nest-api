@@ -10,7 +10,7 @@ import {
 import helmet from '@fastify/helmet';
 import compression from '@fastify/compress';
 import multipart from '@fastify/multipart';
-import fastifyStatic from '@fastify/static';
+import staticfy from '@fastify/static';
 
 import { AppUtils } from '@src/common/helpers/app.utils';
 import { ZodValidationPipe } from '@src/lib/validation/zod';
@@ -29,7 +29,7 @@ async function bootstrap() {
    * Security
    * ------------------------------------------------------
    */
-  await app.register(helmet as any, {
+  await app.register(helmet, {
     contentSecurityPolicy: {
       directives: {
         'default-src': ["'self'"],
@@ -50,17 +50,17 @@ async function bootstrap() {
       },
     },
   });
-  await app.register(compression as any, { encodings: ['gzip', 'deflate'] });
-  await app.register(multipart as any, {
+  await app.register(compression, { encodings: ['gzip', 'deflate'] });
+  await app.register(multipart, {
     limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
     throwFileSizeLimit: true,
   });
-  await app.register(fastifyStatic as any, {
+  await app.register(staticfy, {
     root: path.join(__dirname, '..', 'public'),
     prefix: '/public/',
     decorateReply: false,
   });
-  await app.register(fastifyStatic as any, {
+  await app.register(staticfy, {
     root: path.join(__dirname, '..', 'docs'),
     prefix: '/docs/',
     decorateReply: false,

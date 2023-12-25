@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { createMock } from '@golevelup/ts-jest';
 import { of } from 'rxjs';
+import { pick } from 'helper-fns';
 
 import { RequestContext } from '@src/lib/context';
 import { SessionsController } from '@src/modules/sessions/controllers/sessions.controller';
 import { SessionsService } from '@src/modules/sessions/services/sessions.service';
 
 import { userFactory } from '@src/database/factories';
-import { pick } from 'helper-fns';
 
 describe('SessionsController', () => {
   let controller: SessionsController;

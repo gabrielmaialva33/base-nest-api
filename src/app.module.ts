@@ -11,6 +11,7 @@ import { NestI18nModule } from '@src/lib/i18n/i18n.module';
 import { RequestContext, RequestContextModule } from '@src/lib/context';
 import { ContextInterceptor } from '@src/common/interceptors/context.interceptor';
 import { RolesGuard } from '@src/common/guards/roles.guard';
+import { FilesModule } from '@src/modules/files/files.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RolesGuard } from '@src/common/guards/roles.guard';
       isGlobal: true,
     }),
     SharedModule,
+    FilesModule,
   ],
   controllers: [],
   providers: [
