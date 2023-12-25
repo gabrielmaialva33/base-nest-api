@@ -45,13 +45,30 @@
 
 - **[Typescript](https://www.typescriptlang.org/)**
 - **[NestJS](https://nestjs.com/)**
-- **[Knex](http://knexjs.org/)**
-- **[Objection](https://vincit.github.io/objection.js/)**
 - **[PostgreSQL](https://www.postgresql.org/)**
 - **[Sqlite](https://www.sqlite.org/index.html)**
 - **[Docker](https://www.docker.com/)**
 
 <br>
+
+<br>
+
+## :sparkles: Características e Bibliotecas
+- **[Async Storage](https://nodejs.org/api/async_context.html)** - Request context service async storage. (context)
+- **[AWS S3](https://aws.amazon.com/pt/s3/)** - Storage service for static files. (aws)
+- **[Axios](https://axios-http.com/)** - HTTP client. (http)
+- **[Firebase](https://firebase.google.com/)** - Authentication service. (firebase)
+- **[Knex](http://knexjs.org/)** - Query builder. (knex)
+- **[NestJS Cache](https://docs.nestjs.com/techniques/caching)** - Cache service. (cache)
+- **[NestJS Config](https://docs.nestjs.com/techniques/configuration)** - Configuration service. (config)
+- **[NestJS Schedule](https://docs.nestjs.com/techniques/scheduling)** - Schedule service (cron).
+- **[NestJS EventEmitter](https://docs.nestjs.com/techniques/events)** - Event service. (event)
+- **[NestJS I18n](https://nestjs-i18n.com/)** - Internationalization service. (i18n)
+- **[NodeMailer](https://nodemailer.com/about/)** - Email service. (mail)
+- **[Objection](https://vincit.github.io/objection.js/)** - ORM. (orm)
+- **[Twilio](https://www.twilio.com/)** - SMS service. (sms)
+- **[Zod](https://zod.dev/)** - Data validation. (validation)
+
 
 ## :wrench: Ferramentas
 
