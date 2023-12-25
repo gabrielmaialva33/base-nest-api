@@ -1,7 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 
 import { AwsModule } from '@src/lib/aws/aws.module';
-import { AwsS3Service } from '@src/lib/aws/aws.s3.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Global()
