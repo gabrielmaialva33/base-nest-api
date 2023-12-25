@@ -1,29 +1,23 @@
-_id: req_0af2c0ab64294217a51668c0deeae123
+_id: req_548761570fc84a728b5c249826c34c46
 type: Request
-parentId: fld_f08d23370ee74e168c63bdddb3c16026
-modified: 1703376759594
-created: 1703376759594
-url: "{{ _.base_url }}/api/sign_out"
-name: Sign out
+parentId: fld_9199dc1a12ab40dd8e2f0e2f0d66f5f5
+modified: 1703472494901
+created: 1703472494901
+url: "{{ _.base_url }}/api/roles/{{ _.id }}"
+name: Get role
 description: ""
-method: DELETE
+method: GET
 body: {}
 parameters: []
 headers:
   - name: Content-Type
     disabled: false
     value: application/json
-  - name: Accept-Language
-    disabled: true
-    value: en-US
-  - name: Authorization
-    disabled: false
-    value: Bearer <token>
 authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1703376759594
+metaSortKey: -1703472494901
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

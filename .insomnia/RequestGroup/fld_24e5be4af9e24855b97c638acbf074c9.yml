@@ -1,0 +1,10 @@
+_id: fld_24e5be4af9e24855b97c638acbf074c9
+type: RequestGroup
+parentId: wrk_1629d20a4b0444d88a87592d593cee39
+modified: 1703472494898
+created: 1703472494898
+name: File
+description: Operations about files
+environment: {}
+environmentPropertyOrder: null
+metaSortKey: -1703472494898

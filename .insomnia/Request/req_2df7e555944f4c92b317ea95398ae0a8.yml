@@ -1,0 +1,39 @@
+_id: req_2df7e555944f4c92b317ea95398ae0a8
+type: Request
+parentId: fld_c4bae6898a0e495c965fc017fc090aa9
+modified: 1703472494900
+created: 1703472494900
+url: "{{ _.base_url }}/api/users/all"
+name: List users
+description: ""
+method: GET
+body: {}
+parameters:
+  - name: sort
+    disabled: true
+    value: id
+  - name: order
+    disabled: true
+    value: asc
+  - name: search
+    disabled: true
+    value: Gabriel
+headers:
+  - name: Content-Type
+    disabled: false
+    value: application/json
+  - name: Accept-Language
+    disabled: true
+    value: en-US
+authentication:
+  type: bearer
+  token: "{{ _.bearerToken }}"
+  prefix: ""
+metaSortKey: -1703472494900
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

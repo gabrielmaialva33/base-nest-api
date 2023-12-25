@@ -1,15 +1,19 @@
-_id: req_384dcc2c9b734d5cbfe380459ab74a73
+_id: req_73db08a7b84045d3b0a2558264d3481f
 type: Request
-parentId: fld_f08d23370ee74e168c63bdddb3c16026
-modified: 1703376759595
-created: 1703376759595
-url: "{{ _.base_url }}/api/refresh_token"
-name: Refresh token
+parentId: fld_24e5be4af9e24855b97c638acbf074c9
+modified: 1703472494901
+created: 1703472494901
+url: "{{ _.base_url }}/api/files/images"
+name: Upload image
 description: ""
-method: PATCH
-body: {}
+method: POST
+body:
+  mimeType: multipart/form-data
 parameters: []
 headers:
+  - name: Content-Type
+    disabled: false
+    value: multipart/form-data
   - name: Accept-Language
     disabled: true
     value: en-US
@@ -17,7 +21,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1703376759595
+metaSortKey: -1703472494901
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

@@ -1,23 +1,14 @@
-_id: req_713f87386a7a4f3dbf93d1ea7b6652ef
+_id: req_c421bebd25d443c2a962a2cf8e4927ea
 type: Request
-parentId: fld_4277ab3e959b439381071a3421129906
-modified: 1703376759595
-created: 1703376759595
-url: "{{ _.base_url }}/api/users/all"
-name: List users
+parentId: fld_d88c7a36abf14b44bf1782eda3ef1931
+modified: 1703472494899
+created: 1703472494899
+url: "{{ _.base_url }}/api/sign_out"
+name: Sign out
 description: ""
-method: GET
+method: DELETE
 body: {}
-parameters:
-  - name: sort
-    disabled: true
-    value: id
-  - name: order
-    disabled: true
-    value: asc
-  - name: search
-    disabled: true
-    value: Gabriel
+parameters: []
 headers:
   - name: Content-Type
     disabled: false
@@ -25,11 +16,14 @@ headers:
   - name: Accept-Language
     disabled: true
     value: en-US
+  - name: Authorization
+    disabled: false
+    value: Bearer <token>
 authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1703376759595
+metaSortKey: -1703472494899
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

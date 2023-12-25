@@ -1,10 +1,10 @@
-_id: req_375a7ced5c874c1f86c51bbfa07aade0
+_id: req_aadb813c842d47eda9e37dd617d8cd8d
 type: Request
-parentId: fld_f08d23370ee74e168c63bdddb3c16026
-modified: 1703376759594
-created: 1703376759594
-url: "{{ _.base_url }}/api/sign_up"
-name: Sign up
+parentId: fld_c4bae6898a0e495c965fc017fc090aa9
+modified: 1703472494899
+created: 1703472494899
+url: "{{ _.base_url }}/api/users"
+name: Create user
 description: ""
 method: POST
 body:
@@ -26,8 +26,11 @@ headers:
   - name: Accept-Language
     disabled: true
     value: en-US
-authentication: {}
-metaSortKey: -1703376759594
+authentication:
+  type: bearer
+  token: "{{ _.bearerToken }}"
+  prefix: ""
+metaSortKey: -1703472494899
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

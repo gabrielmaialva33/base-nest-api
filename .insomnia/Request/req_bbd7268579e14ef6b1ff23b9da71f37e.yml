@@ -1,10 +1,10 @@
-_id: req_19a475da80e14a4d9ea29368b87345b6
+_id: req_bbd7268579e14ef6b1ff23b9da71f37e
 type: Request
-parentId: fld_4277ab3e959b439381071a3421129906
-modified: 1703376759595
-created: 1703376759595
-url: "{{ _.base_url }}/api/users"
-name: Paginate users
+parentId: fld_9199dc1a12ab40dd8e2f0e2f0d66f5f5
+modified: 1703472494900
+created: 1703472494900
+url: "{{ _.base_url }}/api/roles"
+name: Paginate roles
 description: ""
 method: GET
 body: {}
@@ -23,7 +23,7 @@ parameters:
     value: asc
   - name: search
     disabled: true
-    value: Gabriel
+    value: admin
 headers:
   - name: Content-Type
     disabled: false
@@ -35,7 +35,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1703376759595
+metaSortKey: -1703472494900
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
