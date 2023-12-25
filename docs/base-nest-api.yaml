@@ -2,7 +2,7 @@ openapi: 3.0.3
 servers:
   - url: http://localhost:3000
     description: Local server
-  - url: https://api.hidedevelopment.cloud/
+  - url: https://api.hidedevelopment.cloud
     description: Development server
 info:
   title: Base Nest API
@@ -34,6 +34,8 @@ tags:
     description: Operations about users
   - name: Role
     description: Operations about roles
+  - name: File
+    description: Operations about files
 x-tagGroups:
   - name: Authentication
     tags:
@@ -41,6 +43,10 @@ x-tagGroups:
   - name: User Management
     tags:
       - User
+      - Role
+  - name: File Management
+    tags:
+      - File
 paths:
   /api/sign_in:
     post:
@@ -1010,6 +1016,87 @@ paths:
                 $ref: '#/components/schemas/Role'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/files/images:
+    post:
+      summary: Upload image
+      description: Upload image
+      operationId: file.upload.image
+      tags:
+        - File
+      parameters:
+        - name: Content-Type
+          in: header
+          description: Content-Type
+          required: true
+          schema:
+            type: string
+            example: multipart/form-data
+        - name: Accept-Language
+          in: header
+          description: Accept-Language
+          required: false
+          schema:
+            type: string
+            description: Language code (ISO 639-1)
+            example: en-US
+      security:
+        - bearerToken: [ ]
+      x-codeSamples:
+        - lang: shell
+          source: |
+            curl -X POST "http://localhost:3000/api/files/images" -H "accept: application/json" -H "Authorization: Bearer <token>" -H "Content-Type: multipart/form-data" -F "file=@/path/to/file"
+        - lang: javascript
+          source: |
+            fetch("http://localhost:3000/api/files/images", {
+            method: "POST",
+            headers: {
+                "accept": "application/json",
+                "Authorization": "Bearer <token>",
+                "Content-Type": "multipart/form-data"
+            },
+            body: {
+                "file": "/path/to/file"
+            }
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.log(error));
+      requestBody:
+        description: Image file
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: Image url
+                    example: https://telegra.ph/file/05cba54e6cb16c3ea0d9e.png
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
