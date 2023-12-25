@@ -7,8 +7,8 @@ url: "{{ _.base_url }}/api/sign_out"
 name: Sign out
 description: ""
 method: DELETE
-body: {}
-parameters: []
+body: { }
+parameters: [ ]
 headers:
   - name: Content-Type
     disabled: false

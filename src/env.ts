@@ -44,7 +44,7 @@ export const Env = cleanEnv(process.env, {
     default: 'localhost',
     desc: 'The mail host (required for smtp)',
   }),
-  MAIL_PORT: num({ default: 587, desc: 'The mail port (required for smtp)' }),
+  MAIL_PORT: num({ default: 1025, desc: 'The mail port (required for smtp)' }),
   MAIL_PREVIEW_EMAIL: bool({
     default: false,
     desc: 'The mail preview email',

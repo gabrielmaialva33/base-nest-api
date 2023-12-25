@@ -7,8 +7,8 @@ url: "{{ _.base_url }}/api/roles/{{ _.id }}"
 name: Get role
 description: ""
 method: GET
-body: {}
-parameters: []
+body: { }
+parameters: [ ]
 headers:
   - name: Content-Type
     disabled: false

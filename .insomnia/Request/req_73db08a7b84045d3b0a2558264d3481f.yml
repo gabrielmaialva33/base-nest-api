@@ -9,7 +9,7 @@ description: ""
 method: POST
 body:
   mimeType: multipart/form-data
-parameters: []
+parameters: [ ]
 headers:
   - name: Content-Type
     disabled: false

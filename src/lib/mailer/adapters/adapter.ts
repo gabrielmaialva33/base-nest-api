@@ -6,11 +6,13 @@ import { TemplateEngine } from '@src/common/@types';
 
 export interface Adapter {
   logger: Logger;
+
   compile(template: string, data: Record<string, any>): Promise<string>;
 }
 
 export class BaseAdapter implements Adapter {
   logger: Logger = new Logger(BaseAdapter.name);
+
   constructor(private engine: TemplateEngine) {}
 
   async compile(template: string, data: Record<string, any>): Promise<string> {

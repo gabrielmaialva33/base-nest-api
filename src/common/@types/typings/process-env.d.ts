@@ -22,6 +22,19 @@ declare global {
       DB_PASSWORD: string;
       DB_NAME: string;
       DB_DEBUG: string;
+
+      MAIL_USERNAME: string;
+      MAIL_PASSWORD: string;
+      MAIL_HOST: string;
+      MAIL_PORT: string;
+      MAIL_SERVER: string;
+      MAIL_PREVIEW_EMAIL: string;
+      MAIL_BCC_LIST: string;
+      MAIL_TEMPLATE_DIR: string;
+      MAIL_SENDER_EMAIL: string;
+      MAIL_SES_KEY: string;
+      MAIL_SES_ACCESS_KEY: string;
+      MAIL_SES_REGION: string;
     }
   }
 }

@@ -7,7 +7,7 @@ url: "{{ _.base_url }}/api/roles"
 name: Paginate roles
 description: ""
 method: GET
-body: {}
+body: { }
 parameters:
   - name: page
     disabled: true

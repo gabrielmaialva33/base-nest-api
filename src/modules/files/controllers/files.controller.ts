@@ -5,8 +5,8 @@ import * as process from 'process';
 
 import {
   FileInterceptor,
-  UploadedFile,
   MemoryStorageFile,
+  UploadedFile,
 } from '@blazity/nest-file-fastify';
 
 import { FilesService } from '@src/modules/files/services/files.service';

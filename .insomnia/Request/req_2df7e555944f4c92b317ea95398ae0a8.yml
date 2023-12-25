@@ -7,7 +7,7 @@ url: "{{ _.base_url }}/api/users/all"
 name: List users
 description: ""
 method: GET
-body: {}
+body: { }
 parameters:
   - name: sort
     disabled: true

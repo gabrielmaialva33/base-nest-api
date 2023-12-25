@@ -1,0 +1,13 @@
+<%~ includeFile("partials/base_head.eta") %>
+
+<p>Hello!</p>
+<p>We received a request to reset your password. Please follow the instructions below to reset your password:</p>
+<ol>
+  <li>Click on the following link to reset your password: <a href="<%= it.link %>"><%= it.link %></a></li>
+  <li>Once you click on the link, you will be prompted to enter a new password. Please choose a strong and unique
+    password to ensure the security of your account.
+  </li>
+</ol>
+
+
+<%~ includeFile("partials/base_tail.eta") %>
