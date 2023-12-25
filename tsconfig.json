@@ -24,6 +24,9 @@
     }
   },
   "include": [
-    "src/**/*"
-  ]
+    "test/**/*",
+    "src/**/*",
+    ".eslintrc.js"
+  ],
+  "typeRoots": ["./node_modules/@types", "./src/common/@types/typings"]
 }

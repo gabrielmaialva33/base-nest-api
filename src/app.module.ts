@@ -15,6 +15,7 @@ import { SharedModule } from '@src/modules/shared.module';
 
 import { ContextInterceptor } from '@src/common/interceptors/context.interceptor';
 import { RolesGuard } from '@src/common/guards/roles.guard';
+import { NestMailModule } from '@src/lib/mailer';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { RolesGuard } from '@src/common/guards/roles.guard';
     NestEventModule,
     NestCacheModule,
     NestContextModule,
+    NestMailModule,
     SharedModule,
   ],
   controllers: [],

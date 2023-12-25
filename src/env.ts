@@ -30,6 +30,38 @@ export const Env = cleanEnv(process.env, {
   DB_PASSWORD: str({ default: 'postgres', desc: 'The database password' }),
   DB_NAME: str({ default: 'postgres', desc: 'The database name' }),
   DB_DEBUG: bool({ default: false, desc: 'The database debug mode' }),
+  // Mail
+  MAIL_SERVER: str({ default: 'smtp', desc: 'The mail server (smtp, ses)' }),
+  MAIL_USERNAME: str({
+    default: 'username',
+    desc: 'The mail username (required for smtp)',
+  }),
+  MAIL_PASSWORD: str({
+    default: 'password',
+    desc: 'The mail password (required for smtp)',
+  }),
+  MAIL_HOST: str({
+    default: 'localhost',
+    desc: 'The mail host (required for smtp)',
+  }),
+  MAIL_PORT: num({ default: 587, desc: 'The mail port (required for smtp)' }),
+  MAIL_PREVIEW_EMAIL: bool({
+    default: false,
+    desc: 'The mail preview email',
+  }),
+  MAIL_BCC_LIST: str({ default: '', desc: 'The mail bcc list' }),
+  MAIL_TEMPLATE_DIR: str({
+    default: 'templates',
+    desc: 'The mail template directory',
+  }),
+  MAIL_SENDER_EMAIL: str({ default: '', desc: 'The mail sender email' }),
+  // AWS SES
+  MAIL_SES_KEY: str({ default: '', desc: 'The mail ses key' }),
+  MAIL_SES_ACCESS_KEY: str({
+    default: '',
+    desc: 'The mail ses access key',
+  }),
+  MAIL_SES_REGION: str({ default: 'sa-east-1', desc: 'The mail ses region' }),
 });
 
 export const validateEnv = (config: Record<any, any>) => {
