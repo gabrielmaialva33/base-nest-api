@@ -72,6 +72,7 @@
     "@nestjs/platform-express": "^10.3.0",
     "@nestjs/platform-fastify": "^10.3.0",
     "@nestjs/schedule": "^4.0.0",
+    "@supercharge/request-ip": "^1.2.0",
     "argon2": "^0.31.2",
     "axios": "^1.6.2",
     "better-sqlite3": "^9.2.2",
