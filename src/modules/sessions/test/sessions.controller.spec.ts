@@ -3,7 +3,7 @@ import { createMock } from '@golevelup/ts-jest';
 import { of } from 'rxjs';
 import { pick } from 'helper-fns';
 
-import { RequestContext } from '@src/lib/context';
+import { RequestContext } from '@src/lib/context/request';
 import { SessionsController } from '@src/modules/sessions/controllers/sessions.controller';
 import { SessionsService } from '@src/modules/sessions/services/sessions.service';
 

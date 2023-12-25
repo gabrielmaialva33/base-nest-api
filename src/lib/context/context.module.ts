@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
-import { RequestContextModule } from '@src/lib/context/request-context.module';
-import { RequestContext } from '@src/lib/context/request-context.model';
+import { RequestContextModule } from '@src/lib/context/request/request-context.module';
+import { RequestContext } from '@src/lib/context/request/request-context.model';
 
 @Global()
 @Module({

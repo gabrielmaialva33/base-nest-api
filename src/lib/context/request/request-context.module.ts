@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { RequestContextMiddleware } from './request-context.middleware';
 import { RequestContext } from './request-context.model';
-import { REQUEST_CONTEXT_MODULE_OPTIONS } from '@src/lib/context/request-context.constants';
+import { REQUEST_CONTEXT_MODULE_OPTIONS } from '@src/lib/context/request/request-context.constants';
 
 export interface RequestContextModuleOptions<T extends RequestContext> {
   contextClass: new () => T;

@@ -12,7 +12,7 @@ import { SignInUserDto } from '@src/modules/sessions/dto/sign-in-user.dto';
 import { SignUpUserDto } from '@src/modules/sessions/dto/sign-up-user.dto';
 import { Auth } from '@src/common/decorators/auth.decorator';
 import { User } from '@src/modules/users/entities/user.entity';
-import { RequestContext } from '@src/lib/context';
+import { RequestContext } from '@src/lib/context/request';
 
 @Controller()
 export class SessionsController {

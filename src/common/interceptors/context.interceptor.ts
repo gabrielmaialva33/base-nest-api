@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { FastifyRequest } from 'fastify';
 
 import { JwtService } from '@nestjs/jwt';
-import { RequestContext } from '@src/lib/context';
+import { RequestContext } from '@src/lib/context/request';
 
 @Injectable()
 export class ContextInterceptor implements NestInterceptor {
