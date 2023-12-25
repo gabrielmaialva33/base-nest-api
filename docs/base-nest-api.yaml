@@ -1089,12 +1089,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  url:
-                    type: string
-                    description: Image url
-                    example: https://telegra.ph/file/05cba54e6cb16c3ea0d9e.png
+                $ref: '#/components/schemas/File'
         '400':
           description: Bad Request
           content:
@@ -1188,7 +1183,47 @@ components:
         "has_more": true,
         "has_previous": true
       }
-
+    File:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int64
+          description: File size
+          example: 45095
+        filename:
+          type: string
+          description: File name
+          example: c00d81afdf6d2ae04f3a1e62843b9f6d.jpg
+        originalFilename:
+          type: string
+          description: Original file name
+          example: 2023-11-14 01.46.42.jpg
+        mimetype:
+          type: string
+          description: File mime type
+          example: image/jpeg
+        encoding:
+          type: string
+          description: File encoding
+          example: 7bit
+        fieldname:
+          type: string
+          description: File field name
+          example: file
+        url:
+          type: string
+          description: File url
+          example: http://localhost:3000/public/images/c00d81afdf6d2ae04f3a1e62843b9f6d.jpg
+      example: {
+        "size": 45095,
+        "filename": "c00d81afdf6d2ae04f3a1e62843b9f6d.jpg",
+        "originalFilename": "2023-11-14 01.46.42.jpg",
+        "mimetype": "image/jpeg",
+        "encoding": "7bit",
+        "fieldname": "file",
+        "url": "http://localhost:3000/public/images/c00d81afdf6d2ae04f3a1e62843b9f6d.jpg"
+      }
     User:
       type: object
       properties:
