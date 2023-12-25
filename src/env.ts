@@ -9,6 +9,7 @@ export const Env = cleanEnv(process.env, {
   HOST: str({ default: '0.0.0.0', desc: 'The host to run on' }),
   PORT: num({ default: 3000, desc: 'The port to run on' }),
   API_PREFIX: str({ default: 'api', desc: 'The api prefix' }),
+
   // JWT
   JWT_SECRET: str({ default: 'secret', desc: 'The jwt secret' }),
   JWT_ACCESS_EXPIRY: str({
@@ -19,6 +20,7 @@ export const Env = cleanEnv(process.env, {
     default: '7d',
     desc: 'The jwt refresh token expiry',
   }),
+
   // Database
   DB_CLIENT: str({
     default: 'sqlite',
@@ -30,6 +32,7 @@ export const Env = cleanEnv(process.env, {
   DB_PASSWORD: str({ default: 'postgres', desc: 'The database password' }),
   DB_NAME: str({ default: 'postgres', desc: 'The database name' }),
   DB_DEBUG: bool({ default: false, desc: 'The database debug mode' }),
+
   // Mail
   MAIL_SERVER: str({ default: 'smtp', desc: 'The mail server (smtp, ses)' }),
   MAIL_USERNAME: str({
@@ -55,6 +58,7 @@ export const Env = cleanEnv(process.env, {
     desc: 'The mail template directory',
   }),
   MAIL_SENDER_EMAIL: str({ default: '', desc: 'The mail sender email' }),
+
   // AWS SES
   MAIL_SES_KEY: str({ default: '', desc: 'The mail ses key' }),
   MAIL_SES_ACCESS_KEY: str({
@@ -62,6 +66,7 @@ export const Env = cleanEnv(process.env, {
     desc: 'The mail ses access key',
   }),
   MAIL_SES_REGION: str({ default: 'sa-east-1', desc: 'The mail ses region' }),
+
   // Twilio
   TWILIO_ACCOUNT_SID: str({
     default: '',
@@ -74,6 +79,32 @@ export const Env = cleanEnv(process.env, {
   TWILIO_FROM: str({
     default: '',
     desc: 'The twilio from number',
+  }),
+
+  // AWS S3
+  AWS_S3_BUCKET: str({
+    default: '',
+    desc: 'The aws s3 bucket',
+  }),
+  AWS_S3_ACCESS_KEY_ID: str({
+    default: '',
+    desc: 'The aws s3 access key id',
+  }),
+  AWS_S3_SECRET_ACCESS_KEY: str({
+    default: '',
+    desc: 'The aws s3 secret access key',
+  }),
+  AWS_S3_REGION: str({
+    default: 'sa-east-1',
+    desc: 'The aws s3 region',
+  }),
+  AWS_S3_ENDPOINT: str({
+    default: 'https://s3.sa-east-1.amazonaws.com/',
+    desc: 'The aws s3 endpoint',
+  }),
+  S3_CLOUDFRONT_URL: str({
+    default: '',
+    desc: 'The aws s3 cloudfront url',
   }),
 });
 

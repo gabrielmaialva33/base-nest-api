@@ -17,6 +17,7 @@ import { NestCacheModule } from '@src/lib/cache/cache.module';
 import { NestContextModule } from '@src/lib/context/context.module';
 import { NestMailModule } from '@src/lib/mailer';
 import { NestTwilioModule } from '@src/lib/twilio';
+import { NestAwsModule } from '@src/lib/aws';
 
 import { SharedModule } from '@src/modules/shared.module';
 import { RolesGuard } from '@src/common/guards/roles.guard';
@@ -29,16 +30,17 @@ import { ClearCacheMiddleware } from '@src/common/middlewares';
 
 @Module({
   imports: [
+    NestAwsModule,
+    NestCacheModule,
     NestConfigModule,
-    NestOrmModule,
-    NestJwtModule,
-    NestI18nModule,
-    NestHttpModule,
+    NestContextModule,
     NestCronModule,
     NestEventModule,
-    NestCacheModule,
-    NestContextModule,
+    NestHttpModule,
+    NestI18nModule,
+    NestJwtModule,
     NestMailModule,
+    NestOrmModule,
     NestTwilioModule,
     SharedModule,
   ],

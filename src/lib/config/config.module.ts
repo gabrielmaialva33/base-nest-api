@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { Env, validateEnv } from '@src/env';
 import {
   app,
+  aws,
   database,
   jwt,
   mail,
@@ -15,7 +16,7 @@ import {
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [app, database, jwt, mail, postgres, sqlite, twilio],
+      load: [app, aws, database, jwt, mail, postgres, sqlite, twilio],
       isGlobal: true,
       cache: true,
       expandVariables: true,
