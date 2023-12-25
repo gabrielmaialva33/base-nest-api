@@ -37,3 +37,4 @@ lerna-debug.log*
 # Project files
 .env
 *.sqlite
+public/**/*
