@@ -113,7 +113,7 @@
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.10.6",
     "@types/nodemailer": "^6.4.14",
-    "@types/passport-jwt": "^3.0.13",
+    "@types/passport-jwt": "^4.0.0",
     "@types/passport-local": "^1.0.38",
     "@types/preview-email": "^3.0.4",
     "@types/supertest": "^6.0.2",
