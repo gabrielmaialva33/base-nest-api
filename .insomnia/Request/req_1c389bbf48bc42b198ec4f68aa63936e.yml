@@ -1,15 +1,15 @@
-_id: req_73db08a7b84045d3b0a2558264d3481f
+_id: req_1c389bbf48bc42b198ec4f68aa63936e
 type: Request
-parentId: fld_24e5be4af9e24855b97c638acbf074c9
-modified: 1703472494901
-created: 1703472494901
+parentId: fld_8db31520cbe64a62aa0a7dce0d35e7f6
+modified: 1704645524626
+created: 1704645524626
 url: "{{ _.base_url }}/api/files/images"
 name: Upload image
 description: ""
 method: POST
 body:
   mimeType: multipart/form-data
-parameters: [ ]
+parameters: []
 headers:
   - name: Content-Type
     disabled: false
@@ -21,7 +21,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1703472494901
+metaSortKey: -1704645524626
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

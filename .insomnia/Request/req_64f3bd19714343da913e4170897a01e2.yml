@@ -1,23 +1,26 @@
-_id: req_d2eb26f060854ab185f97e441e45f53c
+_id: req_64f3bd19714343da913e4170897a01e2
 type: Request
-parentId: fld_c4bae6898a0e495c965fc017fc090aa9
-modified: 1703472494900
-created: 1703472494900
-url: "{{ _.base_url }}/api/users/{{ _.id }}"
-name: Delete user
+parentId: fld_4dcf04613e374d2185aeef0d520131a2
+modified: 1704645524623
+created: 1704645524623
+url: "{{ _.base_url }}/api/sign_out"
+name: Sign out
 description: ""
 method: DELETE
-body: { }
-parameters: [ ]
+body: {}
+parameters: []
 headers:
   - name: Content-Type
     disabled: false
     value: application/json
+  - name: Accept-Language
+    disabled: true
+    value: en-US
 authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1703472494900
+metaSortKey: -1704645524623
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

@@ -1,14 +1,14 @@
-_id: req_4d04c1fa529b4285953a92eb60be18d4
+_id: req_2b0a5787738b4814a8daef02b87f6caa
 type: Request
-parentId: fld_d88c7a36abf14b44bf1782eda3ef1931
-modified: 1703472494899
-created: 1703472494899
+parentId: fld_4dcf04613e374d2185aeef0d520131a2
+modified: 1704645524624
+created: 1704645524624
 url: "{{ _.base_url }}/api/refresh_token"
 name: Refresh token
 description: ""
 method: PATCH
-body: { }
-parameters: [ ]
+body: {}
+parameters: []
 headers:
   - name: Accept-Language
     disabled: true
@@ -17,7 +17,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1703472494899
+metaSortKey: -1704645524624
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

@@ -1,8 +1,8 @@
-_id: req_1b426b5443bd438ca48a050eeca6ce58
+_id: req_49c9c59d7d8746cb8bc2b40fc0a5d3a2
 type: Request
-parentId: fld_c4bae6898a0e495c965fc017fc090aa9
-modified: 1703472494900
-created: 1703472494900
+parentId: fld_1da28f221e4f445a98de4caa1a480166
+modified: 1704645524625
+created: 1704645524625
 url: "{{ _.base_url }}/api/users/{{ _.id }}"
 name: Edit user
 description: ""
@@ -18,7 +18,7 @@ body:
       "username": "gabriel.alva",
       "password": "Dev@551238"
     }
-parameters: [ ]
+parameters: []
 headers:
   - name: Content-Type
     disabled: false
@@ -27,7 +27,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1703472494900
+metaSortKey: -1704645524625
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

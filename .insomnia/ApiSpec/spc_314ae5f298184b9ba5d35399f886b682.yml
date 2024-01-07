@@ -1,7 +1,7 @@
 _id: spc_314ae5f298184b9ba5d35399f886b682
 type: ApiSpec
 parentId: wrk_1629d20a4b0444d88a87592d593cee39
-modified: 1703472471516
+modified: 1704645501564
 created: 1701886126179
 fileName: Base Nest API
 contents: >+
@@ -225,14 +225,6 @@ contents: >+
               type: string
               description: Language code (ISO 639-1)
               example: en-US
-          - name: Authorization
-            in: header
-            description: Authorization
-            required: true
-            schema:
-              type: string
-              description: JWT token
-              example: Bearer <token>
         x-codeSamples:
           - lang: shell
             source: |
@@ -784,9 +776,9 @@ contents: >+
 
     /api/roles:
       get:
-        summary: Paginate roles
-        description: Get paginated roles
-        operationId: role.paginate
+        summary: List roles
+        description: Get roles
+        operationId: role.list
         tags:
           - Role
         parameters:
@@ -805,22 +797,6 @@ contents: >+
               type: string
               description: Language code (ISO 639-1)
               example: en-US
-          - name: page
-            in: query
-            description: Page number
-            required: false
-            schema:
-              type: integer
-              format: int64
-              example: 1
-          - name: per_page
-            in: query
-            description: Number of items per page
-            required: false
-            schema:
-              type: integer
-              format: int64
-              example: 10
           - name: sort
             in: query
             description: Sort roles by field
@@ -890,92 +866,6 @@ contents: >+
               application/json:
                 schema:
                   $ref: '#/components/schemas/Error'
-    /api/roles/all:
-      get:
-        summary: List roles
-        description: Get all roles (no pagination)
-        operationId: role.get.all
-        tags:
-          - Role
-        parameters:
-          - name: Content-Type
-            in: header
-            description: Content-Type
-            required: true
-            schema:
-              type: string
-              example: application/json
-          - name: Accept-Language
-            in: header
-            description: Accept-Language
-            required: false
-            schema:
-              type: string
-              description: Language code (ISO 639-1)
-              example: en-US
-          - name: sort
-            in: query
-            description: Sort roles by field
-            required: false
-            schema:
-              type: string
-              enum:
-                - id
-                - name
-                - slug
-                - description
-              example: id
-          - name: order
-            in: query
-            description: Sort roles by order
-            required: false
-            schema:
-              type: string
-              enum:
-                - asc
-                - desc
-                - ASC
-                - DESC
-              example: asc
-          - name: search
-            in: query
-            description: Search roles by field (name, slug, description)
-            required: false
-            schema:
-              type: string
-              example: 'admin'
-        security:
-          - bearerToken: [ ]
-        x-codeSamples:
-          - lang: shell
-            source: |
-              curl -X GET "http://localhost:3000/api/roles/all" -H "accept: application/json"
-          - lang: javascript
-            source: |
-              fetch("http://localhost:3000/api/roles/all", {
-                method: "GET",
-                headers: {
-                  "accept": "application/json"
-                }
-              })
-                .then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => console.log(error));
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Role'
-          '500':
-            description: Internal Server Error
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Error'
     /api/roles/{id}:
       get:
         summary: Get role
@@ -1022,6 +912,60 @@ contents: >+
               application/json:
                 schema:
                   $ref: '#/components/schemas/Role'
+          '404':
+            description: Not Found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+    /api/roles/{role_id}/add-role/{user_id}:
+      patch:
+        summary: Add role to user
+        description: Add role to user
+        operationId: role.add.to.user
+        tags:
+          - Role
+        parameters:
+          - name: role_id
+            in: path
+            description: Role id
+            required: true
+            schema:
+              type: string
+              format: int64
+          - name: user_id
+            in: path
+            description: User id
+            required: true
+            schema:
+              type: string
+              format: int64
+        security:
+          - bearerToken: [ ]
+        x-codeSamples:
+          - lang: shell
+            source: |
+              curl -X PATCH "http://localhost:3000/api/roles/1/add-role/1" -H "accept: application/json"
+          - lang: javascript
+            source: |
+              fetch("http://localhost:3000/api/roles/1/add-role/1", {
+              method: "PATCH",
+              headers: {
+                  "accept": "application/json"
+              }
+              })
+              .then(response => response.json())
+              .then(data => console.log(data))
+              .catch(error => console.log(error));
+        responses:
+          '204':
+            description: No Content
           '404':
             description: Not Found
             content:

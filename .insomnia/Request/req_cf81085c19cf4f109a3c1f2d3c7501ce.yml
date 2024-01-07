@@ -1,13 +1,13 @@
-_id: req_2df7e555944f4c92b317ea95398ae0a8
+_id: req_cf81085c19cf4f109a3c1f2d3c7501ce
 type: Request
-parentId: fld_c4bae6898a0e495c965fc017fc090aa9
-modified: 1703472494900
-created: 1703472494900
-url: "{{ _.base_url }}/api/users/all"
-name: List users
+parentId: fld_8204c88b3605434b962bfa9a55d86846
+modified: 1704645524625
+created: 1704645524625
+url: "{{ _.base_url }}/api/roles"
+name: List roles
 description: ""
 method: GET
-body: { }
+body: {}
 parameters:
   - name: sort
     disabled: true
@@ -17,7 +17,7 @@ parameters:
     value: asc
   - name: search
     disabled: true
-    value: Gabriel
+    value: admin
 headers:
   - name: Content-Type
     disabled: false
@@ -29,7 +29,7 @@ authentication:
   type: bearer
   token: "{{ _.bearerToken }}"
   prefix: ""
-metaSortKey: -1703472494900
+metaSortKey: -1704645524625
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

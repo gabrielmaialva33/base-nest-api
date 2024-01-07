@@ -1,0 +1,24 @@
+_id: req_dac0e8ba72844d2d869f641e6465aa85
+type: Request
+parentId: fld_8204c88b3605434b962bfa9a55d86846
+modified: 1704645524626
+created: 1704645524626
+url: "{{ _.base_url }}/api/roles/{{ _.role_id }}/add-role/{{ _.user_id }}"
+name: Add role to user
+description: ""
+method: PATCH
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.bearerToken }}"
+  prefix: ""
+metaSortKey: -1704645524626
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
