@@ -4,6 +4,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { switchMap } from 'rxjs';
+
+import { User } from '@src/modules/users/entities/user.entity';
 
 import {
   IRoleRepository,
@@ -13,8 +16,6 @@ import {
   IUserRepository,
   USER_REPOSITORY,
 } from '@src/modules/users/interfaces/user.interface';
-import { switchMap } from 'rxjs';
-import { User } from '@src/modules/users/entities/user.entity';
 
 @Injectable()
 export class RolesService {
@@ -30,7 +31,7 @@ export class RolesService {
   }
 
   get(id: number) {
-    return this.roleRepository.find(id);
+    return this.roleRepository.find(+id);
   }
 
   addRole(userId: number, roleId: number) {

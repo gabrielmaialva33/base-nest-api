@@ -22,6 +22,7 @@ describe('UsersService', () => {
   let service: UsersService;
   let mockUserRepository: jest.Mocked<IUserRepository>;
   let mockRoleRepository: jest.Mocked<IRoleRepository>;
+
   const mockUsers = userFactory.makeManyStub(10);
 
   beforeAll(async () => {
@@ -48,6 +49,8 @@ describe('UsersService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+    expect(mockUserRepository).toBeDefined();
+    expect(mockRoleRepository).toBeDefined();
   });
 
   describe('list', () => {

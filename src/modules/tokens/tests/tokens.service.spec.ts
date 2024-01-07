@@ -67,6 +67,9 @@ describe('TokensService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+    expect(mockTokenGeneratorService).toBeDefined();
+    expect(mockJwtService).toBeDefined();
+    expect(mockTokenRepository).toBeDefined();
   });
 
   describe('generateJwtToken', () => {
@@ -102,7 +105,6 @@ describe('TokensService', () => {
 
         expect(mockTokenRepository.create).toHaveBeenCalled();
         expect(mockTokenRepository.create).toHaveBeenCalledTimes(1);
-
         expect(mockTokenRepository.firstClause).toHaveBeenCalled();
         expect(mockTokenRepository.firstClause).toHaveBeenCalledTimes(1);
 
