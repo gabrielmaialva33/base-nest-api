@@ -1,7 +1,8 @@
+import { faker } from '@faker-js/faker';
+
 import { BaseFactory } from '@src/common/module/base.factory';
 import { Token } from '@src/modules/tokens/entities/token.entity';
-import { faker } from '@faker-js/faker';
-import { RoleType } from '@src/modules/roles/interfaces/roles.interface';
+
 import { CryptoUtils } from '@src/common/helpers/crypto.utils';
 import { TokenType } from '@src/modules/tokens/services/tokens.service';
 
@@ -13,7 +14,7 @@ export class TokenFactory extends BaseFactory<Token> {
   make(data?: Partial<Token>): Partial<Token> {
     return {
       token: CryptoUtils.random(60),
-      type: TokenType.ACCESS,
+      type: faker.helpers.enumValue(TokenType),
       ...data,
     };
   }

@@ -1,14 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConfigService } from '@nestjs/config';
 import { createMock } from '@golevelup/ts-jest';
 import { of } from 'rxjs';
 
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import {
   JwtPayload,
   TokensService,
+  TokenType,
 } from '@src/modules/tokens/services/tokens.service';
-import { TokenGeneratorService } from '@src/modules/tokens/services/token-generator.service';
+import { TokensGeneratorService } from '@src/modules/tokens/services/tokens-generator.service';
 import {
   ITokenRepository,
   TOKEN_REPOSITORY,
@@ -16,16 +17,16 @@ import {
 
 import { userFactory } from '@src/database/factories';
 import { tokenFactory } from '@src/database/factories/token.factory';
+import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 
 describe('TokensService', () => {
   let service: TokensService;
-  let mockConfigService: jest.Mocked<ConfigService>;
-  let mockTokenGeneratorService: jest.Mocked<TokenGeneratorService>;
+
+  let mockTokenGeneratorService: jest.Mocked<TokensGeneratorService>;
   let mockTokenRepository: jest.Mocked<ITokenRepository>;
   let mockJwtService: jest.Mocked<JwtService>;
 
   const mockUser = userFactory.makeStub();
-  const mockToken = tokenFactory.makeStub({ user_id: mockUser.id });
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -42,8 +43,8 @@ describe('TokensService', () => {
           },
         },
         {
-          provide: TokenGeneratorService,
-          useValue: createMock<TokenGeneratorService>(),
+          provide: TokensGeneratorService,
+          useValue: createMock<TokensGeneratorService>(),
         },
         {
           provide: JwtService,
@@ -57,10 +58,9 @@ describe('TokensService', () => {
     }).compile();
 
     service = module.get<TokensService>(TokensService);
-    mockConfigService = module.get(ConfigService);
-    mockTokenGeneratorService = module.get(TokenGeneratorService);
-    mockTokenRepository = module.get(TOKEN_REPOSITORY);
+    mockTokenGeneratorService = module.get(TokensGeneratorService);
     mockJwtService = module.get(JwtService);
+    mockTokenRepository = module.get(TOKEN_REPOSITORY);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -70,6 +70,11 @@ describe('TokensService', () => {
   });
 
   describe('generateJwtToken', () => {
+    const mockToken = tokenFactory.makeStub({
+      user_id: mockUser.id,
+      type: TokenType.ACCESS,
+    });
+
     it('should generate a JWT token', (done) => {
       mockTokenGeneratorService.generateHashToken.mockReturnValue(
         of({ rawToken: mockToken.token, hashToken: 'hashToken' }),
@@ -108,7 +113,107 @@ describe('TokensService', () => {
         expect(mockJwtService.sign).toHaveBeenCalledTimes(1);
 
         expect(token).toEqual('token');
+
         done();
+      });
+    });
+  });
+
+  describe('generateRefreshToken', () => {
+    const mockToken = tokenFactory.makeStub({
+      user_id: mockUser.id,
+      type: TokenType.REFRESH,
+    });
+
+    it('should generate a refresh token', (done) => {
+      mockTokenGeneratorService.hashToken.mockReturnValue(of('refreshToken'));
+      mockTokenRepository.create.mockReturnValue(of(mockToken));
+      mockTokenRepository.firstClause.mockReturnValue(of(mockToken));
+      mockTokenRepository.destroy.mockReturnValue(of(1));
+      mockJwtService.sign.mockReturnValue('refreshToken');
+
+      const jwtPayload: JwtPayload = {
+        id: mockUser.id,
+        uid: mockUser.username,
+      };
+
+      service
+        .generateRefreshToken('refreshToken', jwtPayload)
+        .subscribe((token) => {
+          expect(mockTokenGeneratorService.hashToken).toHaveBeenCalled();
+          expect(mockTokenGeneratorService.hashToken).toHaveBeenCalledTimes(1);
+
+          expect(mockTokenRepository.create).toHaveBeenCalled();
+          expect(mockTokenRepository.create).toHaveBeenCalledTimes(1);
+
+          expect(mockTokenRepository.firstClause).toHaveBeenCalled();
+          expect(mockTokenRepository.firstClause).toHaveBeenCalledTimes(1);
+
+          expect(mockTokenRepository.destroy).toHaveBeenCalled();
+          expect(mockTokenRepository.destroy).toHaveBeenCalledTimes(1);
+
+          expect(token).toEqual('refreshToken');
+
+          done();
+        });
+    });
+  });
+
+  describe('generateRememberMeToken', () => {
+    it('should generate a remember me token', (done) => {
+      mockTokenGeneratorService.generateToken.mockReturnValue('token');
+
+      const result = service.generateRememberMeToken();
+
+      expect(mockTokenGeneratorService.generateToken).toHaveBeenCalled();
+      expect(mockTokenGeneratorService.generateToken).toHaveBeenCalledTimes(1);
+
+      expect(result).toEqual('token');
+
+      done();
+    });
+  });
+
+  describe('destroyJwtToken', () => {
+    const mockToken = tokenFactory.makeStub({ user_id: mockUser.id });
+
+    it('should destroy a JWT token', (done) => {
+      mockTokenRepository.firstClause.mockReturnValue(of(mockToken));
+      mockTokenRepository.destroy.mockReturnValue(of(1));
+
+      service.destroyJwtToken(mockUser.id).subscribe((result) => {
+        expect(mockTokenRepository.firstClause).toHaveBeenCalled();
+        expect(mockTokenRepository.firstClause).toHaveBeenCalledTimes(1);
+
+        expect(mockTokenRepository.destroy).toHaveBeenCalled();
+        expect(mockTokenRepository.destroy).toHaveBeenCalledTimes(1);
+
+        expect(result).toEqual(1);
+
+        done();
+      });
+    });
+  });
+
+  describe('validateOpaqueToken', () => {
+    it('should validate an opaque token', (done) => {
+      Argon2Utils.hash$('rawToken').subscribe((hashToken) => {
+        const mockToken = tokenFactory.makeStub({
+          token: hashToken,
+          user_id: mockUser.id,
+        });
+        mockTokenRepository.firstClause.mockReturnValue(of(mockToken));
+
+        service
+          .validateOpaqueToken(mockUser.id, 'rawToken')
+          .subscribe((result) => {
+            expect(mockTokenRepository.firstClause).toHaveBeenCalled();
+            expect(mockTokenRepository.firstClause).toHaveBeenCalledTimes(1);
+
+            expect(result).toEqual(true);
+
+            done();
+          });
       });
     });
   });

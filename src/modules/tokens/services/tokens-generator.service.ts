@@ -8,14 +8,14 @@ import { Argon2Utils } from '@src/common/helpers/argon2.utils';
  * -------------------------------------------------------
  * Token Generator Service - Handles token generation
  * -------------------------------------------------------
- * @class TokenGeneratorService
+ * @class TokensGeneratorService
  * @property {number} tokenLength - Length of the raw token. The hash length will vary
  * @method generateHashToken - Generate a token and hash
  * @method generateHash - Converts value to an argon2 hash
  * -------------------------------------------------------
  */
 @Injectable()
-export class TokenGeneratorService {
+export class TokensGeneratorService {
   /**
    * Generate a token and its corresponding hash.
    * @param tokenLength Length of the token to be generated.

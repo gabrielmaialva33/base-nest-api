@@ -18,8 +18,8 @@ import {
 
 import {
   GenerateToken,
-  TokenGeneratorService,
-} from '@src/modules/tokens/services/token-generator.service';
+  TokensGeneratorService,
+} from '@src/modules/tokens/services/tokens-generator.service';
 import { Argon2Utils } from '@src/common/helpers/argon2.utils';
 
 /**
@@ -44,8 +44,8 @@ export class TokensService {
     private readonly configService: ConfigService,
     @Inject(JwtService)
     private readonly jwtService: JwtService,
-    @Inject(TokenGeneratorService)
-    private readonly tokenGenerator: TokenGeneratorService,
+    @Inject(TokensGeneratorService)
+    private readonly tokenGenerator: TokensGeneratorService,
     @Inject(TOKEN_REPOSITORY)
     private readonly tokenRepository: ITokenRepository,
   ) {}
@@ -62,36 +62,33 @@ export class TokensService {
       map((token) => this.buildTokenObject(token, payload)),
       switchMap((tokenData) => this.saveToken(tokenData)),
       map((rawToken) => this.createJwt(rawToken, payload)),
-      // catchError((error) => {
-      //   Logger.error(error.message, 'TokenService');
-      //   throw new InternalServerErrorException({
-      //     message: 'Not able to login',
-      //   });
-      // }),
+      catchError((error) => {
+        Logger.error(error.message, 'TokenService');
+        throw new InternalServerErrorException({
+          message: 'Not able to login',
+        });
+      }),
     );
   }
 
   generateRefreshToken(rawToken: string, payload: JwtPayload) {
-    return this.tokenGenerator
-      .hashToken(rawToken)
-      .pipe()
-      .pipe(
-        map((token) =>
-          this.buildTokenObject(
-            { rawToken, hashToken: token },
-            payload,
-            TokenType.REFRESH,
-          ),
+    return this.tokenGenerator.hashToken(rawToken).pipe(
+      map((token) =>
+        this.buildTokenObject(
+          { rawToken, hashToken: token },
+          payload,
+          TokenType.REFRESH,
         ),
-        switchMap((tokenData) => this.saveToken(tokenData)),
-        map((rawToken) => this.createJwt(rawToken, payload, TokenType.REFRESH)),
-        catchError((error) => {
-          Logger.error(error.message, 'TokenService');
-          throw new InternalServerErrorException({
-            message: 'Not able to login',
-          });
-        }),
-      );
+      ),
+      switchMap((tokenData) => this.saveToken(tokenData)),
+      map((rawToken) => this.createJwt(rawToken, payload, TokenType.REFRESH)),
+      catchError((error) => {
+        Logger.error(error.message, 'TokenService');
+        throw new InternalServerErrorException({
+          message: 'Not able to login',
+        });
+      }),
+    );
   }
 
   generateRememberMeToken() {
@@ -116,26 +113,11 @@ export class TokensService {
     payload: JwtPayload,
     type: TokenType = TokenType.ACCESS,
   ): TokenData {
-    console.log({ token, payload, type }, 'buildTokenObject');
-    console.log(this.expiresIn, 'this.expiresIn');
     const expiresAt =
       type === TokenType.ACCESS
         ? this.getExpiresAtDate(this.expiresIn)
         : this.getExpiresAtDate(this.refreshExpiresIn);
 
-    console.log(expiresAt, 'expiresAt');
-
-    console.log(
-      {
-        name: 'Opaque Access Token | Authentication',
-        type,
-        token: token.hashToken,
-        rawToken: token.rawToken,
-        userId: payload.id,
-        expiresAt,
-      },
-      'buildTokenObject',
-    );
     return {
       name: 'Opaque Access Token | Authentication',
       type,
@@ -147,7 +129,6 @@ export class TokensService {
   }
 
   private saveToken(tokenData: TokenData) {
-    console.log(tokenData, 'tokenData');
     const payload = {
       name: tokenData.name || 'Opaque Access Token | Authentication',
       type: tokenData.type || this.tokenType,
@@ -190,7 +171,6 @@ export class TokensService {
     if (!expiresIn) return;
     const milliseconds =
       typeof expiresIn === 'string' ? ms(expiresIn) : expiresIn;
-    console.log(milliseconds, 'milliseconds');
     return DateTime.local().plus({ milliseconds });
   }
 }
