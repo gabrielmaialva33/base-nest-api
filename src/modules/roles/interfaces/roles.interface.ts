@@ -10,8 +10,25 @@ export interface IRoleRepository extends IKnexRepository<Role> {
    * Attach a role to a user.
    * @param {User} user - The user to attach the role to.
    * @param {number[]} roleIds - The role ids to attach to the user.
+   * @returns {Observable<number>}
    */
   attachRoleToUser(user: User, roleIds: number[]): Observable<number>;
+
+  /**
+   * Detach a role from a user.
+   * @param {User} user - The user to detach the role from.
+   * @param {number[]} roleIds - The role ids to detach from the user.
+   * @returns {Observable<number>}
+   */
+  detachRoleFromUser(user: User, roleIds: number[]): Observable<number>;
+
+  /**
+   * Sync a role to a user.
+   * @param {User} user - The user to sync the role to.
+   * @param {number[]} roleIds - The role ids to sync to the user.
+   * @returns {Observable<void>}
+   */
+  syncRoleToUser(user: User, roleIds: number[]): Observable<void>;
 }
 
 export enum RoleType {

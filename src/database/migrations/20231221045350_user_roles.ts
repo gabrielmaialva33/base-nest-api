@@ -7,6 +7,8 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('user_id').notNullable();
     table.integer('role_id').notNullable();
 
+    table.unique(['user_id', 'role_id']);
+
     table.timestamps(true, true);
 
     table.foreign('user_id').references('id').inTable('users');

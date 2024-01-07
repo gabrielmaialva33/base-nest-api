@@ -3,6 +3,8 @@ import { from, map, Observable } from 'rxjs';
 import { KnexRepository } from '@src/common/module/knex.repository';
 import { IUserRepository } from '@src/modules/users/interfaces/user.interface';
 import { User } from '@src/modules/users/entities/user.entity';
+import { Role } from '@src/modules/roles/entities/role.entity';
+import { undefined } from 'zod';
 
 export class UserRepository
   extends KnexRepository<User>

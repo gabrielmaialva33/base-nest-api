@@ -5,6 +5,7 @@ import {
 import { User } from '@src/modules/users/entities/user.entity';
 import { Observable } from 'rxjs';
 import { PaginationOptions } from '@src/common/module/pagination';
+import { Role } from '@src/modules/roles/entities/role.entity';
 
 export const USER_REPOSITORY = Symbol('USER_REPOSITORY');
 
