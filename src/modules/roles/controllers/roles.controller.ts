@@ -1,8 +1,9 @@
 import { Controller, Get, Param, Patch } from '@nestjs/common';
 
-import { RolesService } from '@src/modules/roles/services/roles.service';
 import { Auth } from '@src/common/decorators/auth.decorator';
 import { Roles } from '@src/common/decorators/roles.decorator';
+
+import { RolesService } from '@src/modules/roles/services/roles.service';
 import { RoleType } from '@src/modules/roles/interfaces/roles.interface';
 
 @Auth()
