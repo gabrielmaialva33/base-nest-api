@@ -11,7 +11,12 @@ import {
 
 import { FilesService } from '@src/modules/files/services/files.service';
 import { FastifyRequest } from 'fastify';
+import { Auth } from '@src/common/decorators/auth.decorator';
+import { Roles } from '@src/common/decorators/roles.decorator';
+import { RoleType } from '@src/modules/roles/interfaces/roles.interface';
 
+@Auth()
+@Roles(RoleType.USER, RoleType.ADMIN, RoleType.ROOT)
 @Controller('files/images')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}

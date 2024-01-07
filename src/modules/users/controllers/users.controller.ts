@@ -56,6 +56,7 @@ export class UsersController {
     return this.usersService.get(+id);
   }
 
+  @Roles(RoleType.ADMIN)
   @Post()
   create(@Body() data: CreateUserDto) {
     return this.usersService.create(data);
