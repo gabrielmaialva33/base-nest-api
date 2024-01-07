@@ -6,11 +6,13 @@ import {
 } from '@nestjs/common';
 import { switchMap } from 'rxjs';
 
+import { Role } from '@src/modules/roles/entities/role.entity';
 import { User } from '@src/modules/users/entities/user.entity';
 
 import {
   IRoleRepository,
   ROLE_REPOSITORY,
+  RoleList,
 } from '@src/modules/roles/interfaces/roles.interface';
 import {
   IUserRepository,
@@ -26,8 +28,11 @@ export class RolesService {
     private readonly userRepository: IUserRepository,
   ) {}
 
-  list() {
-    return this.roleRepository.list();
+  list(params?: RoleList) {
+    const { search, ...options } = params || {};
+    return this.roleRepository.list(options, (qb) => {
+      if (search) qb.modify(Role.scopes.search, search);
+    });
   }
 
   get(id: number) {

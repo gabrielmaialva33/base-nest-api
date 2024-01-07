@@ -1,9 +1,10 @@
-import { Pojo } from 'objection';
+import { Pojo, QueryBuilder } from 'objection';
 import { omit } from 'helper-fns';
 import * as path from 'path';
 
 import { BaseEntity } from '@src/common/module/base.entity';
 import { User } from '@src/modules/users/entities/user.entity';
+import { Env } from '@src/env';
 
 export class Role extends BaseEntity {
   static tableName = 'roles';
@@ -56,6 +57,14 @@ export class Role extends BaseEntity {
    * ------------------------------------------------------
    * Scopes are used to define commonly used queries that can be re-used in multiple places.
    */
+  static scopes = {
+    search: (builder: QueryBuilder<Role>, search: string) =>
+      builder.where((builder) => {
+        const like = Env.DB_CLIENT === 'pg' ? 'ilike' : 'like';
+        for (const field of this.searchBy)
+          builder.orWhere(field, `${like}`, `%${search}%`);
+      }),
+  };
 
   static get jsonSchema() {
     return {
@@ -74,4 +83,6 @@ export class Role extends BaseEntity {
     json = omit(json, ['created_at', 'updated_at']);
     return json;
   }
+
+  static searchBy = ['name', 'slug'];
 }
