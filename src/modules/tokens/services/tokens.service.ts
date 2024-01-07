@@ -62,12 +62,12 @@ export class TokensService {
       map((token) => this.buildTokenObject(token, payload)),
       switchMap((tokenData) => this.saveToken(tokenData)),
       map((rawToken) => this.createJwt(rawToken, payload)),
-      catchError((error) => {
-        Logger.error(error.message, 'TokenService');
-        throw new InternalServerErrorException({
-          message: 'Not able to login',
-        });
-      }),
+      // catchError((error) => {
+      //   Logger.error(error.message, 'TokenService');
+      //   throw new InternalServerErrorException({
+      //     message: 'Not able to login',
+      //   });
+      // }),
     );
   }
 
@@ -116,10 +116,26 @@ export class TokensService {
     payload: JwtPayload,
     type: TokenType = TokenType.ACCESS,
   ): TokenData {
+    console.log({ token, payload, type }, 'buildTokenObject');
+    console.log(this.expiresIn, 'this.expiresIn');
     const expiresAt =
       type === TokenType.ACCESS
         ? this.getExpiresAtDate(this.expiresIn)
         : this.getExpiresAtDate(this.refreshExpiresIn);
+
+    console.log(expiresAt, 'expiresAt');
+
+    console.log(
+      {
+        name: 'Opaque Access Token | Authentication',
+        type,
+        token: token.hashToken,
+        rawToken: token.rawToken,
+        userId: payload.id,
+        expiresAt,
+      },
+      'buildTokenObject',
+    );
     return {
       name: 'Opaque Access Token | Authentication',
       type,
@@ -131,6 +147,7 @@ export class TokensService {
   }
 
   private saveToken(tokenData: TokenData) {
+    console.log(tokenData, 'tokenData');
     const payload = {
       name: tokenData.name || 'Opaque Access Token | Authentication',
       type: tokenData.type || this.tokenType,
@@ -173,6 +190,7 @@ export class TokensService {
     if (!expiresIn) return;
     const milliseconds =
       typeof expiresIn === 'string' ? ms(expiresIn) : expiresIn;
+    console.log(milliseconds, 'milliseconds');
     return DateTime.local().plus({ milliseconds });
   }
 }

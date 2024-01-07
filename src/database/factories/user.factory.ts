@@ -6,8 +6,8 @@ import { faker } from '@faker-js/faker';
 import { BaseFactory } from '@src/common/module/base.factory';
 import { User } from '@src/modules/users/entities/user.entity';
 import { Role } from '@src/modules/roles/entities/role.entity';
-import { roleFactory } from '@src/database/factories/role.factory';
 import { RoleType } from '@src/modules/roles/interfaces/roles.interface';
+import { roleFactory } from '@src/database/factories/role.factory';
 
 class UserFactory extends BaseFactory<User> {
   constructor() {
