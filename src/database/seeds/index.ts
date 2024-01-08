@@ -1,8 +1,10 @@
 import { Knex } from 'knex';
-import { Role } from '@src/modules/roles/entities/role.entity';
+
 import { Argon2Utils } from '@src/common/helpers/argon2.utils';
-import { User } from '@src/modules/users/entities/user.entity';
 import { userFactory } from '@src/database/factories';
+
+import { User } from '@src/modules/users/entities/user.entity';
+import { Role } from '@src/modules/roles/entities/role.entity';
 
 export async function seed(knex: Knex): Promise<void> {
   const roles = await knex
@@ -11,10 +13,7 @@ export async function seed(knex: Knex): Promise<void> {
     .orderBy('created_at', 'asc');
 
   const password = await Argon2Utils.hash('Dev@551238');
-
-  const usersData: any[] = userFactory.makeMany(100, {
-    password,
-  });
+  const usersData: any[] = userFactory.makeMany(100, { password });
 
   const users = await knex
     .into<User>(User.tableName)
