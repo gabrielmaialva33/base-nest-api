@@ -18,9 +18,9 @@ class UserFactory extends BaseFactory<User> {
     return {
       first_name: faker.person.firstName(),
       last_name: faker.person.lastName(),
-      email: faker.internet.email(),
+      email: faker.internet.email().toLocaleLowerCase(),
       password: faker.internet.password(),
-      username: faker.internet.userName(),
+      username: faker.internet.userName().toLocaleLowerCase(),
       avatar_url: `https://api.multiavatar.com/${faker.internet.userName()}.png`,
       remember_me_token: crypto.randomBytes(32).toString('hex'),
       last_login_at: DateTime.fromJSDate(faker.date.past()).toISO(),

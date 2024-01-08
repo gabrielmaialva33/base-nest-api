@@ -43,7 +43,7 @@ export async function up(knex: Knex): Promise<void> {
 
   const userRoles = users.map((user, index) => ({
     user_id: user.id,
-    role_id: roles[index % roles.length].id, // Garantir que o índice esteja dentro do array de roles
+    role_id: roles[index % roles.length].id,
   }));
 
   await knex.into('user_roles').insert(userRoles);
