@@ -24,7 +24,7 @@ jobs:
       - uses: pnpm/action-setup@v2
         name: Install pnpm
         with:
-          version: 8.12.1
+          version: 8.14.0
 
       - name: pnmp, build, and test
         run: |
@@ -67,8 +67,8 @@ jobs:
           rm -rf $DIR/dist
           git checkout main && git fetch --all && git reset --hard origin/main && git pull origin main
 
-          # Install dependencies, build
-          pnpm install && pnpm db:prune:sqlite && pnpm db:migrate && pnpm build
+          # Install dependencies, prune the database, run migrations and seeds, and build the app
+          pnpm install && pnpm db:prune:sqlite && pnpm db:migrate && pnpm db:seed && pnpm build
 
           # Check if the app is running and kill it
           if [ $(tmux ls | grep base-nest-api | wc -l) -gt 0 ]
