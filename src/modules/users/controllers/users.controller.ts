@@ -20,7 +20,7 @@ import { Auth } from '@src/common/decorators/auth.decorator';
 import { Roles } from '@src/common/decorators/roles.decorator';
 
 @Auth()
-@Roles(RoleType.USER, RoleType.ADMIN)
+@Roles(RoleType.ROOT, RoleType.ADMIN, RoleType.USER)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -56,7 +56,7 @@ export class UsersController {
     return this.usersService.get(+id);
   }
 
-  @Roles(RoleType.ADMIN)
+  @Roles(RoleType.ROOT, RoleType.ADMIN)
   @Post()
   create(@Body() data: CreateUserDto) {
     return this.usersService.create(data);
