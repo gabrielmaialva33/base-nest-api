@@ -8,12 +8,12 @@ import { RoleType } from '@src/modules/roles/interfaces/roles.interface';
 import { OrderByDirection } from 'objection';
 
 @Auth()
-@Roles(RoleType.ADMIN, RoleType.ROOT)
+@Roles(RoleType.ROOT, RoleType.ADMIN)
 @Controller('roles')
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
-  @Roles(RoleType.USER, RoleType.ADMIN, RoleType.ROOT)
+  @Roles(RoleType.ROOT, RoleType.ADMIN, RoleType.USER)
   @Get()
   list(
     @Query('sort') sort: string = 'id',
@@ -23,7 +23,7 @@ export class RolesController {
     return this.rolesService.list({ sort, order, search });
   }
 
-  @Roles(RoleType.USER, RoleType.ADMIN, RoleType.ROOT)
+  @Roles(RoleType.ROOT, RoleType.ADMIN, RoleType.USER)
   @Get(':id')
   get(@Param('id') id: string) {
     return this.rolesService.get(+id);

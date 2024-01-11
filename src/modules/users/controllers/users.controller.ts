@@ -9,8 +9,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { map } from 'rxjs';
-
 import { OrderByDirection } from 'objection';
+
 import { CreateUserDto } from '@src/modules/users/dto/create-user.dto';
 import { UpdateUserDto } from '@src/modules/users/dto/update-user.dto';
 import { UsersService } from '@src/modules/users/services/users.service';
