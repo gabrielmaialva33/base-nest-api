@@ -98,6 +98,9 @@ export class User extends BaseEntity {
             builder.orWhere(field, `${like}`, `%${search}%`);
         });
       }),
+
+    withRelations: (builder: QueryBuilder<User>) =>
+      builder.withGraphFetched('[roles]'),
   };
 
   /**
