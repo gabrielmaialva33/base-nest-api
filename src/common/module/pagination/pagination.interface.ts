@@ -60,7 +60,26 @@ export interface PaginationMeta {
    * whether there are previous pages
    */
   has_previous: boolean;
-
+  /**
+   * whether the current page is empty
+   */
+  is_empty: boolean;
+  /**
+   * first page url
+   */
+  first_page_url?: string;
+  /**
+   * last page url ex: ?page=1&per_page=10
+   */
+  last_page_url?: string;
+  /**
+   * current page url
+   */
+  next_page_url?: string;
+  /**
+   * previous page url
+   */
+  previous_page_url?: string;
   /**
    * any other meta information
    */

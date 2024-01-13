@@ -39,6 +39,15 @@ export function createPagination<T>({
     last: +page < +totalPages ? +totalPages : null,
     has_more: +page < +totalPages,
     has_previous: +page > 1,
+    is_empty: data.length === 0,
+    first_page_url: `?page=1&per_page=${per_page}`,
+    next_page_url:
+      (+page < +totalPages && `?page=${+page + 1}&per_page=${per_page}`) ||
+      null,
+    last_page_url:
+      (totalPages && `?page=${totalPages}&per_page=${per_page}`) || null,
+    previous_page_url:
+      (+page > 1 && `?page=${+page - 1}&per_page=${per_page}`) || null,
     ...rest,
   };
 
