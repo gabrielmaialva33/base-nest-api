@@ -91,6 +91,11 @@ describe('UsersController', () => {
             last: null,
             has_more: false,
             has_previous: false,
+            is_empty: false,
+            first_page_url: '?page=1&per_page=10',
+            last_page_url: '?page=1&per_page=10',
+            next_page_url: null,
+            previous_page_url: null,
           },
         });
         expect(paginatedUsers.data).toEqual(mockUsers);
