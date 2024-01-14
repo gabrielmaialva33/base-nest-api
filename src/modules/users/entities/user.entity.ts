@@ -89,17 +89,16 @@ export class User extends BaseEntity {
    */
   static scopes = {
     notDeleted: (builder: QueryBuilder<User>) =>
-      builder.whereNot('is_deleted', true),
+      builder.whereNot(`$${this.tableName}.is_deleted`, true),
     search: (builder: QueryBuilder<User>, search: string) =>
       builder.where((builder) => {
         const like = Env.DB_CLIENT === 'pg' ? 'ilike' : 'like';
         builder.andWhere((builder) => {
           for (const field of this.searchBy)
-            builder.orWhere(field, `${like}`, `%${search}%`);
+            builder.orWhere(`${this.tableName}.${field}`, like, `%${search}%`);
         });
       }),
-
-    withRelations: (builder: QueryBuilder<User>) =>
+    relations: (builder: QueryBuilder<User>) =>
       builder.withGraphFetched('[roles]'),
   };
 

@@ -33,7 +33,7 @@ export class UsersService {
     const { search, ...options } = params || {};
     return this.userRepository.list(options, (qb) => {
       qb.modify(User.scopes.notDeleted);
-      qb.modify(User.scopes.withRelations);
+      qb.modify(User.scopes.relations);
       if (search) qb.modify(User.scopes.search, search);
     });
   }
@@ -43,7 +43,7 @@ export class UsersService {
     return this.userRepository
       .paginate(options, (qb) => {
         qb.modify(User.scopes.notDeleted);
-        qb.modify(User.scopes.withRelations);
+        qb.modify(User.scopes.relations);
         if (search) qb.modify(User.scopes.search, search);
       })
       .pipe(

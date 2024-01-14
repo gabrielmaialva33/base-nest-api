@@ -63,7 +63,7 @@ export class Role extends BaseEntity {
         const like = Env.DB_CLIENT === 'pg' ? 'ilike' : 'like';
         builder.andWhere((builder) => {
           for (const field of this.searchBy)
-            builder.orWhere(field, `${like}`, `%${search}%`);
+            builder.orWhere(`${this.tableName}.${field}`, like, `%${search}%`);
         });
       }),
   };

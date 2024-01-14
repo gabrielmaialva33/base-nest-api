@@ -55,7 +55,11 @@ export class Token extends BaseEntity {
    */
   static scopes = {
     notExpired: (builder: QueryBuilder<Token>) =>
-      builder.where('expires_at', '>', DateTime.local().toISO()),
+      builder.where(
+        `$${this.tableName}.expires_at`,
+        '>',
+        DateTime.local().toISO(),
+      ),
   };
 
   /**
