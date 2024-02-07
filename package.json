@@ -50,7 +50,7 @@
     "db:prune:sqlite": "rimraf ./src/database/database.sqlite"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.490.0",
+    "@aws-sdk/client-s3": "^3.507.0",
     "@aws-sdk/client-ses": "^3.490.0",
     "@blazity/nest-file-fastify": "^1.0.0",
     "@fastify/compress": "^6.5.0",
