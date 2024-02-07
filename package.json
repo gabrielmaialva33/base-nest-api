@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.490.0",
-    "@aws-sdk/client-ses": "^3.490.0",
+    "@aws-sdk/client-ses": "^3.507.0",
     "@blazity/nest-file-fastify": "^1.0.0",
     "@fastify/compress": "^6.5.0",
     "@fastify/cors": "8.5.0",
