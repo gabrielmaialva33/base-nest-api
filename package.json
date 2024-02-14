@@ -81,7 +81,7 @@
     "dotenv": "^16.3.1",
     "envalid": "^8.0.0",
     "fast-glob": "^3.3.2",
-    "fastify": "4.25.1",
+    "fastify": "4.26.1",
     "firebase-admin": "^12.0.0",
     "helper-fns": "^2.6.43",
     "knex": "^3.1.0",
