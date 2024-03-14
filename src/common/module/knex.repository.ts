@@ -212,4 +212,22 @@ export class KnexRepository<T extends BaseEntity>
         HttpStatus.BAD_REQUEST,
       );
   }
+
+  findOrCreate(
+    searchPayload: PartialModelObject<T>,
+    createPayload: PartialModelObject<T>,
+    builder?: Builder<T>,
+  ): Observable<T> {
+    return from(
+      this.model.transaction(async (trx) => {
+        const query = this.model.query(trx);
+        if (builder && typeof builder === 'function') query.modify(builder);
+
+        const result = await query.where(searchPayload).first();
+        if (result) return result;
+
+        return query.insert(createPayload).returning('*').first();
+      }),
+    ).pipe(map((result) => result as T));
+  }
 }

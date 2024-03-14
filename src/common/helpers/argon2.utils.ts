@@ -25,7 +25,7 @@ export const Argon2Utils = {
    */
   hashPassword: async (password: string): Promise<string> => {
     try {
-      const hash = await argon2.hash(password, { saltLength: 32 });
+      const hash = await argon2.hash(password, { hashLength: 32 });
       return hash;
     } catch (error) {
       logger.error(

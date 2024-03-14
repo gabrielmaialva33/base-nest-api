@@ -196,6 +196,12 @@ export interface IKnexRepository<T extends BaseEntity> {
     builder?: Builder<T>,
   ): Observable<T[]>;
 
+  findOrCreate(
+    searchPayload: PartialModelObject<T>,
+    createPayload: PartialModelObject<T>,
+    builder?: Builder<T>,
+  ): Observable<T>;
+
   /**
    * Update a record.
    *
