@@ -30,8 +30,6 @@ async function bootstrap() {
    * ------------------------------------------------------
    */
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   await app.register(helmet, {
     contentSecurityPolicy: {
       directives: {
@@ -54,26 +52,19 @@ async function bootstrap() {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   await app.register(compression, { encodings: ['gzip', 'deflate'] });
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   await app.register(multipart, {
     limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
     throwFileSizeLimit: true,
   });
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   await app.register(staticfy, {
     root: path.join(__dirname, '..', 'public'),
     prefix: '/public/',
     decorateReply: false,
   });
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+
   await app.register(staticfy, {
     root: path.join(__dirname, '..', 'docs'),
     prefix: '/docs/',
