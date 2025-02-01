@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [ 20.x ]
+        node-version: [ 22.x ]
 
     steps:
       - uses: actions/checkout@v4
@@ -32,66 +32,66 @@ jobs:
           pnpm build
           pnpm test
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to Azure
-        env:
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-
-        run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 400 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key hd@20.226.119.146 '
-          # Load nvm and dependencies
-          source /home/hd/.nvm/nvm.sh
-          source /home/hd/.bashrc
-          source /home/hd/.profile
-          export PNPM_HOME="/home/hd/.local/share/pnpm"
-          case ":$PATH:" in
-            *":$PNPM_HOME:"*) ;;
-            *) export PATH="$PNPM_HOME:$PATH" ;;
-          esac
-          nvm use node
-
-          # Ensure the directory exists
-          DIR=/home/hd/base-nest-api
-          if [ ! -d $DIR ]
-            then
-              git clone https://github.com/gabrielmaialva33/base-nest-api.git $DIR
-          else
-            echo "Directory $DIR already exists"
-          fi
-
-          cd $DIR
-          rm -rf $DIR/dist
-          git checkout main && git fetch --all && git reset --hard origin/main && git pull origin main
-
-          # Install dependencies, prune the database, run migrations and seeds, and build the app
-          pnpm install && pnpm db:prune:sqlite && pnpm db:migrate && pnpm db:seed && pnpm build
-
-          # Check if the app is running and kill it
-          if [ $(tmux ls | grep base-nest-api | wc -l) -gt 0 ]
-            then
-              tmux kill-session -t base-nest-api
-              echo "Session killed. 🗡️"
-          else
-            echo "No session to kill. 🤷"
-          fi
-
-          # Start the app
-          tmux new-session -d -s base-nest-api 'pnpm start:prod'
-          echo "Session started. 🚀"
-
-          # Check if the app is running
-          if [ $(tmux ls | grep -c "base-nest-api") -eq 1 ]
-              then
-              echo "App is running. ✅"
-          else
-              echo "App is not running. ❌"
-              exit 1
-          fi
-
-          echo "Deployed successfully. 🎉"
-          exit 0
-          '
+#  deploy:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Deploy to Azure
+#        env:
+#          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+#
+#        run: |
+#          echo "$PRIVATE_KEY" > private_key && chmod 400 private_key
+#          ssh -o StrictHostKeyChecking=no -i private_key hd@20.226.119.146 '
+#          # Load nvm and dependencies
+#          source /home/hd/.nvm/nvm.sh
+#          source /home/hd/.bashrc
+#          source /home/hd/.profile
+#          export PNPM_HOME="/home/hd/.local/share/pnpm"
+#          case ":$PATH:" in
+#            *":$PNPM_HOME:"*) ;;
+#            *) export PATH="$PNPM_HOME:$PATH" ;;
+#          esac
+#          nvm use node
+#
+#          # Ensure the directory exists
+#          DIR=/home/hd/base-nest-api
+#          if [ ! -d $DIR ]
+#            then
+#              git clone https://github.com/gabrielmaialva33/base-nest-api.git $DIR
+#          else
+#            echo "Directory $DIR already exists"
+#          fi
+#
+#          cd $DIR
+#          rm -rf $DIR/dist
+#          git checkout main && git fetch --all && git reset --hard origin/main && git pull origin main
+#
+#          # Install dependencies, prune the database, run migrations and seeds, and build the app
+#          pnpm install && pnpm db:prune:sqlite && pnpm db:migrate && pnpm db:seed && pnpm build
+#
+#          # Check if the app is running and kill it
+#          if [ $(tmux ls | grep base-nest-api | wc -l) -gt 0 ]
+#            then
+#              tmux kill-session -t base-nest-api
+#              echo "Session killed. 🗡️"
+#          else
+#            echo "No session to kill. 🤷"
+#          fi
+#
+#          # Start the app
+#          tmux new-session -d -s base-nest-api 'pnpm start:prod'
+#          echo "Session started. 🚀"
+#
+#          # Check if the app is running
+#          if [ $(tmux ls | grep -c "base-nest-api") -eq 1 ]
+#              then
+#              echo "App is running. ✅"
+#          else
+#              echo "App is not running. ❌"
+#              exit 1
+#          fi
+#
+#          echo "Deployed successfully. 🎉"
+#          exit 0
+#          '
