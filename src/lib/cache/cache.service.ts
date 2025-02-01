@@ -1,39 +1,105 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
-import type { Observable } from 'rxjs';
-import { concatMap, from, map, toArray } from 'rxjs';
+import { Observable, from, concatMap, map, toArray, switchMap } from 'rxjs';
+
+const CACHE_INDEX_KEY = '__cache_keys_index__';
 
 @Injectable()
 export class CacheService {
   constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
 
   /**
-   * It deletes all cache keys that match the given regular expression
-   * @param regexString - The regex string to match against the cache keys.
-   * @returns A boolean value.
+   * Adds a key to the cache index.
+   * This is required since `keys()` is not natively available.
+   * @param key - The key to be tracked.
+   */
+  private async trackKey(key: string): Promise<void> {
+    const keys: string[] = (await this.cacheManager.get(CACHE_INDEX_KEY)) || [];
+    if (!keys.includes(key)) {
+      keys.push(key);
+      await this.cacheManager.set(CACHE_INDEX_KEY, keys);
+    }
+  }
+
+  /**
+   * Removes a key from the cache index.
+   * @param key - The key to be removed.
+   */
+  private async untrackKey(key: string): Promise<void> {
+    const keys: string[] = (await this.cacheManager.get(CACHE_INDEX_KEY)) || [];
+    const updatedKeys = keys.filter((k) => k !== key);
+    await this.cacheManager.set(CACHE_INDEX_KEY, updatedKeys);
+  }
+
+  /**
+   * Retrieves all stored cache keys.
+   * @returns A promise resolving to an array of keys.
+   */
+  private async getAllKeys(): Promise<string[]> {
+    return (await this.cacheManager.get(CACHE_INDEX_KEY)) || [];
+  }
+
+  /**
+   * Deletes all cache keys that match a given regex pattern.
+   * @param regexString - The regex pattern to match keys.
+   * @returns An Observable that emits `true` when keys are deleted.
    */
   deleteMatch(regexString: string): Observable<boolean> {
-    return from(this.cacheManager.store.keys()).pipe(
+    return from(this.getAllKeys()).pipe(
       concatMap((keys: string[]) => {
         const regex = new RegExp(regexString, 'i');
-        const match = keys.filter((key: string) => regex.test(key));
-
-        return from(match);
+        const matchingKeys = keys.filter((key) => regex.test(key));
+        return from(matchingKeys);
       }),
-      concatMap((key: string) => {
-        return from(this.cacheManager.del(key));
-      }),
+      concatMap((key: string) =>
+        from(this.cacheManager.del(key)).pipe(map(() => key)),
+      ),
       toArray(),
-      map(() => true),
+      switchMap((deletedKeys) =>
+        from(
+          Promise.all(deletedKeys.map((key) => this.untrackKey(key))).then(
+            () => true,
+          ),
+        ),
+      ),
     );
   }
 
   /**
-   * Reset the cache.
-   * @returns A promise that resolves to void.
+   * Stores a key-value pair in the cache and tracks the key.
+   * @param key - The cache key.
+   * @param value - The cache value.
+   * @param ttl - Optional time-to-live in milliseconds.
+   */
+  async set(key: string, value: any, ttl?: number): Promise<void> {
+    await this.cacheManager.set(key, value, ttl);
+    await this.trackKey(key);
+  }
+
+  /**
+   * Retrieves a value from the cache.
+   * @param key - The cache key.
+   * @returns The cached value or null if not found.
+   */
+  async get<T>(key: string): Promise<T | null> {
+    return await this.cacheManager.get<T>(key);
+  }
+
+  /**
+   * Deletes a specific key from the cache and updates the index.
+   * @param key - The key to delete.
+   */
+  async del(key: string): Promise<void> {
+    await this.cacheManager.del(key);
+    await this.untrackKey(key);
+  }
+
+  /**
+   * Clears the entire cache and resets the key index.
    */
   async resetCache(): Promise<void> {
-    return this.cacheManager.reset();
+    await this.cacheManager.clear();
+    await this.cacheManager.set(CACHE_INDEX_KEY, []);
   }
 }
