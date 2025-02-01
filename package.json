@@ -1,6 +1,6 @@
 {
   "name": "base-nest-api",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "This is a base project for NestJS API",
   "author": {
     "email": "gabrielmaialva33@gmail.com",
