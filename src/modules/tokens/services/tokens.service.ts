@@ -170,8 +170,8 @@ export class TokensService {
   private getExpiresAtDate(expiresIn?: string | number): DateTime | undefined {
     if (!expiresIn) return;
     const milliseconds =
-      typeof expiresIn === 'string' ? ms(expiresIn) : expiresIn;
-    return DateTime.local().plus({ milliseconds });
+      typeof expiresIn === 'string' ? ms(Number(expiresIn)) : expiresIn;
+    return DateTime.local().plus({ milliseconds: milliseconds as number });
   }
 }
 
