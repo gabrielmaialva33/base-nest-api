@@ -24,7 +24,7 @@
     "zod"
   ],
   "engines": {
-    "node": ">=20.12.1"
+    "node": ">=22.13.1"
   },
   "private": true,
   "license": "LICENSE",
