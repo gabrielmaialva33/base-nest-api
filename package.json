@@ -119,7 +119,7 @@
     "@types/passport-local": "^1.0.38",
     "@types/preview-email": "^3.1.0",
     "@types/supertest": "^6.0.2",
-    "@typescript-eslint/eslint-plugin": "^8.22.0",
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
     "@typescript-eslint/parser": "^8.22.0",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
